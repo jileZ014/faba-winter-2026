@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Clash of the Barbarians 2026</title>
+</head>
+<body>
+    <h1>AZ Flight Basketball League</h1>
+    <h2>Site is Working!</h2>
+    <p>If you can see this, the deployment is successful.</p>
+    <p>Current time: <span id="time"></span></p>
+    
+    <h3>Quick Links:</h3>
+    <ul>
+        <li><a href="/login.html">Login Page</a></li>
+        <li><a href="/admin.html">Admin Dashboard</a></li>
+        <li><a href="/coach.html">Coach Dashboard</a></li>
+        <li><a href="/scorekeeper-v2.html">Scorekeeper Dashboard</a></li>
+    </ul>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        console.log('✅ Page loaded successfully at:', window.location.href);
+        console.log('✅ No redirects or errors');
+    </script>
+</body>
+</html>

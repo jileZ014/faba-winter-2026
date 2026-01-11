@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Import - Clash of the Barbarians 2026</title>
+    <style>body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }</style>
+</head>
+<body>
+    <h1>🏀 Quick Data Import for Clash of the Barbarians 2026</h1>
+    <div id="log"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.innerHTML = new Date().toLocaleTimeString() + ': ' + msg;
+            div.style.color = type === 'error' ? '#ff0000' : type === 'success' ? '#00ff00' : '#ffff00';
+            document.getElementById('log').appendChild(div);
+        }
+
+        async function quickImport() {
+            log('🚀 Starting quick data import...', 'info');
+            
+            try {
+                // Import a few sample teams
+                const teams = [
+                    { name: 'PHX Fire', division: '4th Grade', wins: 1, losses: 0, pointsFor: 44, pointsAgainst: 20, gamesPlayed: 1 },
+                    { name: 'FOE Elite', division: '4th Grade', wins: 1, losses: 0, pointsFor: 44, pointsAgainst: 20, gamesPlayed: 1 },
+                    { name: 'Skilled Game White', division: '8th Grade', wins: 2, losses: 0, pointsFor: 117, pointsAgainst: 47, gamesPlayed: 2 },
+                    { name: 'Dime Academy Red', division: '8th Grade', wins: 2, losses: 0, pointsFor: 119, pointsAgainst: 56, gamesPlayed: 2 },
+                    { name: 'Blue Chip Elite UA Future Black', division: '7th Grade', wins: 2, losses: 0, pointsFor: 125, pointsAgainst: 62, gamesPlayed: 2 }
+                ];
+
+                for (const team of teams) {
+                    await db.collection('teams').add(team);
+                    log('✅ Added team: ' + team.name, 'success');
+                }
+
+                // Import sample games
+                const games = [
+                    {
+                        team1: 'PHX Fire', team2: 'Zone 6', score1: 27, score2: 15,
+                        division: '4th Grade', status: 'completed', location: 'Court 1',
+                        date: new Date('2026-11-15T12:00:00'), time: '12:00 PM', week: 1
+                    },
+                    {
+                        team1: 'Skilled Game White', team2: 'AZ Flight Grind', score1: 51, score2: 24,
+                        division: '8th Grade', status: 'completed', location: 'Court 4',
+                        date: new Date('2026-11-15T16:00:00'), time: '4:00 PM', week: 1
+                    },
+                    {
+                        team1: 'Blue Chip Elite UA Future Black', team2: 'PHX Fire', score1: 60, score2: 43,
+                        division: '7th Grade', status: 'completed', location: 'Court 3',
+                        date: new Date('2026-11-15T13:00:00'), time: '1:00 PM', week: 1
+                    }
+                ];
+
+                for (const game of games) {
+                    await db.collection('games').add(game);
+                    log('✅ Added game: ' + game.team1 + ' vs ' + game.team2, 'success');
+                }
+
+                log('🎉 Quick import completed successfully!', 'success');
+                log('Visit the main site to see the data: https://cotb26.netlify.app/', 'success');
+
+            } catch (error) {
+                log('❌ Import failed: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+
+        // Auto-start import
+        setTimeout(quickImport, 1000);
+    </script>
+</body>
+</html>

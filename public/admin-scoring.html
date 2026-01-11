@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Scoring - COTB26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .header {
+            background: #1e293b;
+            padding: 20px;
+            border-bottom: 2px solid #FFD700;
+        }
+        .header h1 {
+            color: #FFD700;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .header p { color: #94a3b8; font-size: 14px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* Auth Section */
+        .auth-section {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .auth-section.authenticated { background: #166534; }
+        .auth-btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .auth-btn:hover { background: #e6c200; }
+        .auth-btn.logout { background: #dc2626; color: #fff; }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .filter-group { display: flex; gap: 5px; align-items: center; }
+        .filter-group label { color: #94a3b8; font-size: 14px; margin-right: 5px; }
+        .filter-btn {
+            background: #334155;
+            border: 1px solid #475569;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover { background: #475569; }
+        .filter-btn.active { background: #FFD700; color: #000; border-color: #FFD700; }
+
+        /* Pool Status */
+        .pool-status {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .pool-status h3 { color: #FFD700; margin-bottom: 10px; font-size: 16px; }
+        .pool-status-grid { display: flex; flex-wrap: wrap; gap: 15px; }
+        .pool-item {
+            background: #334155;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .pool-item.complete { background: #166534; }
+        .pool-item .count { color: #FFD700; font-weight: 600; }
+        .seed-btn {
+            background: #059669;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .seed-btn:hover { background: #047857; }
+        .seed-btn:disabled { background: #475569; cursor: not-allowed; }
+
+        /* Games List */
+        .games-list { display: flex; flex-direction: column; gap: 10px; }
+        .game-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 100px 150px 100px 1fr auto;
+            align-items: center;
+            gap: 15px;
+        }
+        .game-card:hover { border-color: #FFD700; }
+        .game-card.final { border-left: 4px solid #22c55e; }
+        .game-card.live { border-left: 4px solid #ef4444; }
+        .game-time { color: #FFD700; font-weight: 600; font-size: 14px; }
+        .game-court { color: #94a3b8; font-size: 13px; }
+        .game-division {
+            background: #334155;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #FFD700;
+            text-align: center;
+        }
+        .game-type {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+        .game-matchup {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .team-block {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .team-name { font-weight: 500; }
+        .team-score {
+            background: #334155;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            min-width: 40px;
+            text-align: center;
+        }
+        .team-score.winner { background: #166534; }
+        .vs { color: #64748b; font-size: 12px; }
+        .game-status {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-scheduled { background: #334155; color: #94a3b8; }
+        .status-final { background: #166534; color: #fff; }
+        .edit-btn {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .edit-btn:hover { background: #2563eb; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.hidden { display: none; }
+        .modal {
+            background: #1e293b;
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .modal h2 {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        .modal-subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+        .score-input {
+            width: 80px !important;
+            text-align: center;
+            font-size: 24px !important;
+            font-weight: 700;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-cancel { background: #475569; color: #fff; }
+        .btn-save { background: #3b82f6; color: #fff; }
+        .btn-final { background: #22c55e; color: #fff; }
+        .btn:hover { opacity: 0.9; }
+
+        .loading { text-align: center; padding: 40px; color: #94a3b8; }
+
+        /* ========================================
+           MOBILE RESPONSIVE STYLES
+           ======================================== */
+
+        /* Tablet breakpoint */
+        @media (max-width: 900px) {
+            .game-card {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .game-matchup {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Mobile breakpoint */
+        @media (max-width: 600px) {
+            .header {
+                padding: 15px 10px;
+            }
+            .header h1 {
+                font-size: 18px;
+            }
+            .header p {
+                font-size: 12px;
+            }
+            .container {
+                padding: 10px;
+            }
+
+            /* Auth Section */
+            .auth-section {
+                padding: 15px 10px;
+            }
+            .auth-btn {
+                padding: 14px 20px;
+                font-size: 16px;
+                min-height: 48px;
+                width: 100%;
+            }
+
+            /* Filters - stack vertically */
+            .filters {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .filter-group {
+                flex-wrap: wrap;
+                width: 100%;
+            }
+            .filter-group label {
+                width: 100%;
+                margin-bottom: 8px;
+                font-size: 13px;
+            }
+            .filter-btn {
+                flex: 1;
+                min-width: calc(33% - 5px);
+                padding: 12px 8px;
+                font-size: 13px;
+                min-height: 44px;
+                text-align: center;
+            }
+
+            /* Pool Status */
+            .pool-status {
+                padding: 12px;
+            }
+            .pool-status h3 {
+                font-size: 14px;
+            }
+            .pool-status-grid {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .pool-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px;
+                font-size: 14px;
+            }
+            .seed-btn {
+                padding: 10px 14px;
+                margin-left: 8px;
+                min-height: 44px;
+            }
+
+            /* Game Cards - vertical stack */
+            .games-list {
+                gap: 12px;
+            }
+            .game-card {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
+            }
+            .game-card > div:first-child {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .game-time {
+                font-size: 16px;
+            }
+            .game-court {
+                font-size: 12px;
+            }
+            .game-division {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+            .game-type {
+                font-size: 10px;
+            }
+            .game-matchup {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 10px 0;
+            }
+            .team-block {
+                justify-content: space-between;
+                width: 100%;
+                padding: 8px 0;
+            }
+            .team-name {
+                font-size: 15px;
+            }
+            .team-score {
+                padding: 8px 16px;
+                font-size: 18px;
+                min-width: 50px;
+            }
+            .vs {
+                display: none;
+            }
+            .game-status {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            .edit-btn {
+                width: 100%;
+                padding: 14px;
+                font-size: 16px;
+                min-height: 48px;
+            }
+
+            /* Modal - Full screen on mobile */
+            .modal-overlay {
+                align-items: flex-end;
+                padding: 0;
+            }
+            .modal {
+                max-width: 100%;
+                width: 100%;
+                border-radius: 20px 20px 0 0;
+                padding: 20px 15px 30px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            .modal h2 {
+                font-size: 20px;
+            }
+            .modal-subtitle {
+                font-size: 12px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+            .form-group input, .form-group select {
+                padding: 14px;
+                font-size: 16px;
+                min-height: 48px;
+            }
+            .form-row {
+                gap: 10px;
+            }
+            .score-input {
+                width: 100% !important;
+                font-size: 28px !important;
+                padding: 16px !important;
+                min-height: 60px;
+            }
+            .modal-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn {
+                width: 100%;
+                padding: 16px;
+                font-size: 16px;
+                min-height: 52px;
+            }
+        }
+
+        /* Small phone breakpoint */
+        @media (max-width: 375px) {
+            .header h1 {
+                font-size: 16px;
+            }
+            .filter-btn {
+                min-width: calc(50% - 5px);
+                font-size: 12px;
+                padding: 10px 6px;
+            }
+            .team-name {
+                font-size: 14px;
+            }
+        }
+
+        /* Prevent iOS zoom on input focus */
+        @media screen and (max-width: 600px) {
+            input[type="text"],
+            input[type="password"],
+            input[type="number"],
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .filter-btn:active,
+            .auth-btn:active,
+            .edit-btn:active,
+            .btn:active,
+            .seed-btn:active {
+                transform: scale(0.98);
+                opacity: 0.9;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>COTB26 Admin - Game Scoring</h1>
+            <p>Enter scores, update standings, and manage bracket seeding</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Login Section -->
+        <div id="loginSection" class="auth-section">
+            <h3 style="color: #FFD700; margin-bottom: 15px;">Admin Login</h3>
+            <div style="max-width: 300px; margin: 0 auto;">
+                <div class="form-group">
+                    <input type="text" id="loginUsername" placeholder="Username" style="margin-bottom: 10px;">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" onkeypress="if(event.key==='Enter')doLogin()">
+                </div>
+                <p id="loginError" style="color: #ef4444; font-size: 14px; margin-bottom: 10px; display: none;">Invalid username or password</p>
+                <button class="auth-btn" onclick="doLogin()">Login</button>
+            </div>
+        </div>
+
+        <!-- Logged In Header -->
+        <div id="authSection" class="auth-section authenticated" style="display: none;">
+            <p id="authStatus">Logged in as: Admin</p>
+            <button class="auth-btn logout" onclick="doLogout()">Logout</button>
+        </div>
+
+        <!-- Main Content (hidden until auth) -->
+        <div id="mainContent" style="display: none;">
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Division:</label>
+                    <button class="filter-btn active" data-division="all">All</button>
+                    <button class="filter-btn" data-division="10U (5th)">10U</button>
+                    <button class="filter-btn" data-division="11U (5th)">11U</button>
+                    <button class="filter-btn" data-division="12U (6th)">12U</button>
+                    <button class="filter-btn" data-division="13U (7th)">13U</button>
+                    <button class="filter-btn" data-division="14U (8th)">14U</button>
+                </div>
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <button class="filter-btn active" data-status="all">All</button>
+                    <button class="filter-btn" data-status="scheduled">Scheduled</button>
+                    <button class="filter-btn" data-status="final">Final</button>
+                </div>
+            </div>
+
+            <!-- Pool Status -->
+            <div class="pool-status">
+                <h3>Pool Play Progress</h3>
+                <div id="poolStatusGrid" class="pool-status-grid">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Games List -->
+            <div id="gamesList" class="games-list">
+                <div class="loading">Loading games...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Edit Game</h2>
+            <p class="modal-subtitle" id="modalSubtitle">10U (5th) - Pool Play</p>
+
+            <input type="hidden" id="editGameId">
+
+            <div class="form-group">
+                <label>Home Team</label>
+                <select id="editHomeTeam"></select>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex:1">
+                    <label>Home Score</label>
+                    <input type="number" id="editHomeScore" class="score-input" min="0" value="0">
+                </div>
+                <div class="form-group" style="flex:1">
+                    <label>Away Score</label>
+                    <input type="number" id="editAwayScore" class="score-input" min="0" value="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Away Team</label>
+                <select id="editAwayTeam"></select>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-save" onclick="saveGame(false)">Save Draft</button>
+                <button class="btn btn-final" onclick="saveGame(true)">Save & Mark Final</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase config - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let allGames = [];
+        let allTeams = [];
+        let currentFilter = { division: 'all', status: 'all' };
+
+        // Simple Auth - hardcoded credentials
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'barbarian2026';
+
+        function doLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('cotb26_admin_auth', 'true');
+                errorEl.style.display = 'none';
+                showAuthenticatedState();
+            } else {
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function doLogout() {
+            sessionStorage.removeItem('cotb26_admin_auth');
+            showLoginState();
+        }
+
+        function showAuthenticatedState() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'block';
+            loadData();
+        }
+
+        function showLoginState() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        // Check auth on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('cotb26_admin_auth') === 'true') {
+                showAuthenticatedState();
+            } else {
+                showLoginState();
+            }
+        });
+
+        // Load data
+        async function loadData() {
+            try {
+                // Load teams
+                const teamsSnap = await db.collection('teams').get();
+                allTeams = [];
+                teamsSnap.forEach(doc => allTeams.push({ id: doc.id, ...doc.data() }));
+
+                // Load games
+                const gamesSnap = await db.collection('games').get();
+                allGames = [];
+                gamesSnap.forEach(doc => allGames.push({ id: doc.id, ...doc.data() }));
+
+                // Sort by time
+                allGames.sort((a, b) => {
+                    const timeA = parseTime(a.time);
+                    const timeB = parseTime(b.time);
+                    return timeA - timeB;
+                });
+
+                renderGames();
+                renderPoolStatus();
+            } catch (err) {
+                console.error('Error loading data:', err);
+            }
+        }
+
+        function parseTime(timeStr) {
+            if (!timeStr) return 0;
+            const [time, period] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
+            if (period === 'PM' && hours !== 12) hours += 12;
+            if (period === 'AM' && hours === 12) hours = 0;
+            return hours * 60 + minutes;
+        }
+
+        // Filters
+        document.querySelectorAll('.filter-btn[data-division]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn[data-division]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter.division = btn.dataset.division;
+                renderGames();
+            });
+        });
+
+        document.querySelectorAll('.filter-btn[data-status]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn[data-status]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter.status = btn.dataset.status;
+                renderGames();
+            });
+        });
+
+        // Render games
+        function renderGames() {
+            const container = document.getElementById('gamesList');
+            let games = allGames;
+
+            if (currentFilter.division !== 'all') {
+                games = games.filter(g => g.division === currentFilter.division);
+            }
+            if (currentFilter.status !== 'all') {
+                games = games.filter(g => g.status === currentFilter.status);
+            }
+
+            if (games.length === 0) {
+                container.innerHTML = '<div class="loading">No games match your filters</div>';
+                return;
+            }
+
+            container.innerHTML = games.map(game => {
+                const homeScore = game.homeScore || 0;
+                const awayScore = game.awayScore || 0;
+                const isFinal = game.status === 'final';
+                const homeWinner = isFinal && homeScore > awayScore;
+                const awayWinner = isFinal && awayScore > homeScore;
+
+                return `
+                    <div class="game-card ${isFinal ? 'final' : ''}">
+                        <div>
+                            <div class="game-time">${game.time || ''}</div>
+                            <div class="game-court">${game.court || ''}</div>
+                        </div>
+                        <div>
+                            <div class="game-division">${game.division || ''}</div>
+                            <div class="game-type">${game.gameType || ''}</div>
+                        </div>
+                        <div class="game-matchup">
+                            <div class="team-block">
+                                <span class="team-name">${game.homeTeamName || game.homeTeam || 'TBD'}</span>
+                                <span class="team-score ${homeWinner ? 'winner' : ''}">${homeScore}</span>
+                            </div>
+                            <span class="vs">vs</span>
+                            <div class="team-block">
+                                <span class="team-score ${awayWinner ? 'winner' : ''}">${awayScore}</span>
+                                <span class="team-name">${game.awayTeamName || game.awayTeam || 'TBD'}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="game-status ${isFinal ? 'status-final' : 'status-scheduled'}">
+                                ${isFinal ? 'FINAL' : 'Scheduled'}
+                            </span>
+                        </div>
+                        <button class="edit-btn" onclick="openEditModal('${game.id}')">Edit</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Pool status
+        function renderPoolStatus() {
+            const container = document.getElementById('poolStatusGrid');
+            const divisions = ['10U (5th)', '11U (5th)', '12U (6th)', '13U (7th)', '14U (8th)'];
+
+            const html = divisions.map(div => {
+                const poolGames = allGames.filter(g => g.division === div && g.gameType === 'Pool Play');
+                const finalGames = poolGames.filter(g => g.status === 'final');
+                const complete = poolGames.length > 0 && finalGames.length === poolGames.length;
+                const divShort = div.split(' ')[0];
+
+                let seedBtn = '';
+                if (complete) {
+                    seedBtn = `<button class="seed-btn" onclick="autoSeed('${div}')">Auto-Seed</button>`;
+                }
+
+                return `
+                    <div class="pool-item ${complete ? 'complete' : ''}">
+                        ${divShort}: <span class="count">${finalGames.length}/${poolGames.length}</span>
+                        ${complete ? ' ✓' : ''} ${seedBtn}
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        // Edit modal
+        function openEditModal(gameId) {
+            const game = allGames.find(g => g.id === gameId);
+            if (!game) return;
+
+            document.getElementById('editGameId').value = gameId;
+            document.getElementById('modalSubtitle').textContent = `${game.division} - ${game.gameType} | ${game.time} | ${game.court}`;
+            document.getElementById('editHomeScore').value = game.homeScore || 0;
+            document.getElementById('editAwayScore').value = game.awayScore || 0;
+
+            // Populate team dropdowns
+            const divisionTeams = allTeams.filter(t => t.division === game.division);
+            const teamOptions = '<option value="TBD">TBD</option>' +
+                divisionTeams.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+
+            document.getElementById('editHomeTeam').innerHTML = teamOptions;
+            document.getElementById('editAwayTeam').innerHTML = teamOptions;
+            document.getElementById('editHomeTeam').value = game.homeTeamName || game.homeTeam || 'TBD';
+            document.getElementById('editAwayTeam').value = game.awayTeamName || game.awayTeam || 'TBD';
+
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        async function saveGame(markFinal) {
+            const gameId = document.getElementById('editGameId').value;
+            const homeTeam = document.getElementById('editHomeTeam').value;
+            const awayTeam = document.getElementById('editAwayTeam').value;
+            const homeScore = parseInt(document.getElementById('editHomeScore').value) || 0;
+            const awayScore = parseInt(document.getElementById('editAwayScore').value) || 0;
+
+            const game = allGames.find(g => g.id === gameId);
+            const oldStatus = game.status;
+            const wasPoolPlay = game.gameType === 'Pool Play';
+
+            try {
+                // Update game
+                const updateData = {
+                    homeTeam: homeTeam,
+                    homeTeamName: homeTeam,
+                    awayTeam: awayTeam,
+                    awayTeamName: awayTeam,
+                    homeScore: homeScore,
+                    awayScore: awayScore
+                };
+                if (markFinal) {
+                    updateData.status = 'final';
+                }
+
+                await db.collection('games').doc(gameId).update(updateData);
+
+                // Update standings if marking as final and it's pool play
+                if (markFinal && wasPoolPlay && oldStatus !== 'final') {
+                    await updateStandings(game.division, homeTeam, awayTeam, homeScore, awayScore);
+                }
+
+                closeModal();
+                await loadData();
+
+                // Check for auto-population of championship
+                if (markFinal && (game.gameType === 'Bracket')) {
+                    await checkChampionshipAutoPopulate(game.division);
+                }
+
+            } catch (err) {
+                alert('Error saving: ' + err.message);
+            }
+        }
+
+        async function updateStandings(division, homeTeam, awayTeam, homeScore, awayScore) {
+            if (homeTeam === 'TBD' || awayTeam === 'TBD') return;
+
+            const homeWon = homeScore > awayScore;
+
+            // Find teams
+            const homeTeamDoc = allTeams.find(t => t.name === homeTeam && t.division === division);
+            const awayTeamDoc = allTeams.find(t => t.name === awayTeam && t.division === division);
+
+            if (homeTeamDoc) {
+                await db.collection('teams').doc(homeTeamDoc.id).update({
+                    wins: firebase.firestore.FieldValue.increment(homeWon ? 1 : 0),
+                    losses: firebase.firestore.FieldValue.increment(homeWon ? 0 : 1),
+                    pointsFor: firebase.firestore.FieldValue.increment(homeScore),
+                    pointsAgainst: firebase.firestore.FieldValue.increment(awayScore)
+                });
+            }
+
+            if (awayTeamDoc) {
+                await db.collection('teams').doc(awayTeamDoc.id).update({
+                    wins: firebase.firestore.FieldValue.increment(homeWon ? 0 : 1),
+                    losses: firebase.firestore.FieldValue.increment(homeWon ? 1 : 0),
+                    pointsFor: firebase.firestore.FieldValue.increment(awayScore),
+                    pointsAgainst: firebase.firestore.FieldValue.increment(homeScore)
+                });
+            }
+        }
+
+        // Auto-seed brackets - CROSS-BRACKET FORMAT
+        // 4-team divisions: G1 Winner vs G2 Loser, G2 Winner vs G1 Loser
+        // 3 or 5-team divisions: Top 2 by record/PF go to Championship
+        async function autoSeed(division) {
+            const poolGames = allGames.filter(g =>
+                g.division === division &&
+                g.gameType === 'Pool Play' &&
+                g.status === 'final'
+            ).sort((a, b) => parseTime(a.time) - parseTime(b.time));
+
+            const teams = allTeams.filter(t => t.division === division);
+            const bracketGames = allGames.filter(g =>
+                g.division === division &&
+                g.gameType === 'Bracket'
+            ).sort((a, b) => parseTime(a.time) - parseTime(b.time));
+
+            const championship = allGames.find(g =>
+                g.division === division &&
+                g.gameType === 'Championship'
+            );
+
+            // 3-TEAM DIVISIONS (13U) - Top 2 go straight to Championship
+            if (teams.length === 3) {
+                if (poolGames.length < 3) {
+                    alert('Not all pool games complete for 3-team division');
+                    return;
+                }
+
+                // Rank teams by record, then Points For as tiebreaker
+                teams.sort((a, b) => {
+                    if ((b.wins || 0) !== (a.wins || 0)) return (b.wins || 0) - (a.wins || 0);
+                    return (b.pointsFor || 0) - (a.pointsFor || 0);
+                });
+
+                if (championship) {
+                    await db.collection('games').doc(championship.id).update({
+                        homeTeam: teams[0].name,
+                        homeTeamName: teams[0].name,
+                        awayTeam: teams[1].name,
+                        awayTeamName: teams[1].name
+                    });
+
+                    alert(`Championship seeded (3-team):\n#1 ${teams[0].name} vs #2 ${teams[1].name}\n\n(3rd place: ${teams[2].name})`);
+                    await loadData();
+                }
+                return;
+            }
+
+            // 5-TEAM DIVISIONS (14U) - Top 2 go straight to Championship
+            if (teams.length === 5) {
+                // Each team plays 2 games, check if pool play is complete
+                const completedPoolGames = poolGames.length;
+                if (completedPoolGames < 5) { // 5 pool games for 5 teams (each plays 2)
+                    alert(`Pool play not complete. ${completedPoolGames}/5 games finished.`);
+                    return;
+                }
+
+                // Rank teams by record, then Points For as tiebreaker
+                teams.sort((a, b) => {
+                    if ((b.wins || 0) !== (a.wins || 0)) return (b.wins || 0) - (a.wins || 0);
+                    return (b.pointsFor || 0) - (a.pointsFor || 0);
+                });
+
+                if (championship) {
+                    await db.collection('games').doc(championship.id).update({
+                        homeTeam: teams[0].name,
+                        homeTeamName: teams[0].name,
+                        awayTeam: teams[1].name,
+                        awayTeamName: teams[1].name
+                    });
+
+                    alert(`Championship seeded (5-team):\n#1 ${teams[0].name} vs #2 ${teams[1].name}\n\nRemaining: ${teams.slice(2).map(t => t.name).join(', ')}`);
+                    await loadData();
+                }
+                return;
+            }
+
+            // 4-TEAM DIVISIONS (10U, 11U, 12U) - CROSS-BRACKET SEEDING
+            if (teams.length === 4) {
+                if (poolGames.length < 2) {
+                    alert('Not enough completed pool games to seed (need 2)');
+                    return;
+                }
+
+                // Pool Game 1 (first chronologically) and Pool Game 2 (second)
+                const game1 = poolGames[0];
+                const game2 = poolGames[1];
+
+                console.log('Pool Game 1:', game1.homeTeamName, game1.homeScore, 'vs', game1.awayTeamName, game1.awayScore);
+                console.log('Pool Game 2:', game2.homeTeamName, game2.homeScore, 'vs', game2.awayTeamName, game2.awayScore);
+
+                // Determine winners and losers from each pool game
+                const g1HomeWon = game1.homeScore > game1.awayScore;
+                const g2HomeWon = game2.homeScore > game2.awayScore;
+
+                // Game 1 Winner and Loser
+                const g1Winner = g1HomeWon
+                    ? (game1.homeTeamName || game1.homeTeam)
+                    : (game1.awayTeamName || game1.awayTeam);
+                const g1Loser = g1HomeWon
+                    ? (game1.awayTeamName || game1.awayTeam)
+                    : (game1.homeTeamName || game1.homeTeam);
+
+                // Game 2 Winner and Loser
+                const g2Winner = g2HomeWon
+                    ? (game2.homeTeamName || game2.homeTeam)
+                    : (game2.awayTeamName || game2.awayTeam);
+                const g2Loser = g2HomeWon
+                    ? (game2.awayTeamName || game2.awayTeam)
+                    : (game2.homeTeamName || game2.homeTeam);
+
+                console.log('G1 Winner:', g1Winner, '| G1 Loser:', g1Loser);
+                console.log('G2 Winner:', g2Winner, '| G2 Loser:', g2Loser);
+
+                // *** CROSS-BRACKET MATCHUPS ***
+                // Bracket #1: Winner of Pool Game 1 vs Loser of Pool Game 2
+                // Bracket #2: Winner of Pool Game 2 vs Loser of Pool Game 1
+                const bracket1Home = g1Winner;  // Pool Game 1 Winner
+                const bracket1Away = g2Loser;   // Pool Game 2 Loser
+                const bracket2Home = g2Winner;  // Pool Game 2 Winner
+                const bracket2Away = g1Loser;   // Pool Game 1 Loser
+
+                console.log('Bracket #1:', bracket1Home, 'vs', bracket1Away);
+                console.log('Bracket #2:', bracket2Home, 'vs', bracket2Away);
+
+                // Update Bracket Game 1
+                if (bracketGames.length >= 1) {
+                    await db.collection('games').doc(bracketGames[0].id).update({
+                        homeTeam: bracket1Home,
+                        homeTeamName: bracket1Home,
+                        awayTeam: bracket1Away,
+                        awayTeamName: bracket1Away
+                    });
+                    console.log('Updated Bracket #1 in Firebase:', bracketGames[0].id);
+                }
+
+                // Update Bracket Game 2
+                if (bracketGames.length >= 2) {
+                    await db.collection('games').doc(bracketGames[1].id).update({
+                        homeTeam: bracket2Home,
+                        homeTeamName: bracket2Home,
+                        awayTeam: bracket2Away,
+                        awayTeamName: bracket2Away
+                    });
+                    console.log('Updated Bracket #2 in Firebase:', bracketGames[1].id);
+                }
+
+                alert(`CROSS-BRACKET Seeding Complete!\n\nPool Play Results:\n• Game 1 (${game1.time}): ${game1.homeTeamName} ${game1.homeScore} - ${game1.awayTeamName} ${game1.awayScore}\n  Winner: ${g1Winner} | Loser: ${g1Loser}\n• Game 2 (${game2.time}): ${game2.homeTeamName} ${game2.homeScore} - ${game2.awayTeamName} ${game2.awayScore}\n  Winner: ${g2Winner} | Loser: ${g2Loser}\n\nCross-Bracket Matchups:\n• Bracket #1: ${bracket1Home} (G1 Winner) vs ${bracket1Away} (G2 Loser)\n• Bracket #2: ${bracket2Home} (G2 Winner) vs ${bracket2Away} (G1 Loser)`);
+                await loadData();
+                return;
+            }
+
+            // Fallback for other team counts
+            alert(`Unexpected team count (${teams.length}) for ${division}. Manual seeding required.`);
+        }
+
+        // Auto-populate championship
+        async function checkChampionshipAutoPopulate(division) {
+            const bracketGames = allGames.filter(g =>
+                g.division === division &&
+                g.gameType === 'Bracket' &&
+                g.status === 'final'
+            );
+
+            const allBrackets = allGames.filter(g => g.division === division && g.gameType === 'Bracket');
+
+            if (bracketGames.length === allBrackets.length && allBrackets.length > 0) {
+                // All bracket games complete, find winners
+                const winners = bracketGames.map(g =>
+                    g.homeScore > g.awayScore ? g.homeTeamName : g.awayTeamName
+                );
+
+                const championship = allGames.find(g =>
+                    g.division === division &&
+                    g.gameType === 'Championship'
+                );
+
+                if (championship && winners.length >= 2) {
+                    await db.collection('games').doc(championship.id).update({
+                        homeTeam: winners[0],
+                        homeTeamName: winners[0],
+                        awayTeam: winners[1],
+                        awayTeamName: winners[1]
+                    });
+
+                    alert(`Championship auto-populated:\n${winners[0]} vs ${winners[1]}`);
+                    await loadData();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

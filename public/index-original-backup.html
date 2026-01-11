@@ -1,0 +1,4205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clash of the Barbarians 2026 - January 10, 2026 | Warrior Tournament Series</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Arizona's premier youth basketball tournament with live scoring, team management, and league administration. Professional basketball league management system.">
+    <meta name="keywords" content="basketball, league, Arizona, youth sports, live scoring, team management, scorekeeper, coach portal">
+    <meta name="author" content="Arizona Flight Basketball Club">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Clash of the Barbarians 2026 - January 10, 2026">
+    <meta property="og:description" content="Arizona's premier youth basketball tournament management system with live scoring and team management.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cotb26.gametriq.com">
+    <meta property="og:image" content="https://cotb26.gametriq.com/assets/images/og-image.jpg">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="West Valley Basketball League">
+    <meta name="twitter:description" content="Professional youth basketball league management with live scoring and team management.">
+    <meta name="twitter:image" content="https://cotb26.gametriq.com/assets/images/twitter-card.jpg">
+
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="AZ Flight">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="West Valley">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- External Dependencies -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Teko:wght@300;400;500;600;700&family=Oswald:wght@200;300;400;500;600;700&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Local Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/utilities.css">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="js/app.js" as="script">
+    <link rel="preload" href="css/style.css" as="style">
+</head>
+<body>
+    <!-- Loading Screen to Prevent Content Flash -->
+    <div id="authLoadingScreen" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000000;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #FFFFFF;
+    ">
+        <div style="
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        ">
+            <div style="
+                width: 40px;
+                height: 40px;
+                background: #FF4500;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                animation: spin 2s linear infinite;
+            "><i class="fas fa-basketball-ball"></i></div>
+            <div style="
+                font-family: 'Arial Black', sans-serif;
+                font-size: 1.5rem;
+                font-weight: 900;
+                letter-spacing: 2px;
+            ">AZ FLIGHT</div>
+        </div>
+        <div style="
+            font-size: 1rem;
+            color: #94a3b8;
+            animation: pulse 2s ease-in-out infinite;
+        ">Loading...</div>
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 0.6; }
+                50% { opacity: 1; }
+            }
+
+            /* Icon styling for better appearance */
+            .fa-basketball-ball {
+                color: #FF6B35;
+                margin-right: 8px;
+            }
+
+            .fa-trophy {
+                color: #FFD700;
+                margin-right: 8px;
+            }
+
+            .fa-map-marker-alt {
+                color: #3B82F6;
+                margin-right: 8px;
+            }
+
+            .fa-building {
+                color: #6B7280;
+                margin-right: 8px;
+            }
+
+            .fa-star {
+                color: #FFD700;
+                margin-right: 8px;
+            }
+
+            .fa-circle.text-danger {
+                font-size: 0.8em;
+                animation: pulse 2s infinite;
+            }
+
+            /* Ticker animation */
+            .ticker-item .fa-basketball-ball {
+                animation: bounce 2s infinite;
+            }
+
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-3px); }
+            }
+
+            /* Live indicator styling */
+            .live-indicator {
+                color: #dc2626;
+                font-weight: bold;
+            }
+
+            .live-indicator .fa-circle {
+                animation: pulse 2s infinite;
+            }
+        </style>
+    </div>
+
+    <!-- Skip to main content for accessibility -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- PUBLIC PAGE -->
+    <div id="publicPage" class="page active" style="display: none;">
+        <header class="header" role="banner">
+            <div class="container">
+                <nav class="nav" role="navigation" aria-label="Main navigation">
+                    <div class="logo">
+                        <img id="headerLogo" src="" alt="League Logo" style="width: 40px; height: 40px; border-radius: 50%; display: none;">
+                        <i class="fas fa-basketball-ball" id="defaultIcon" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1 id="leagueName">WEST VALLEY</h1>
+                            <span>BASKETBALL LEAGUE</span>
+                            <div class="powered-by">POWERED BY AZ FLIGHT</div>
+                        </div>
+                    </div>
+                    <div class="nav-menu">
+                        <a href="#home" class="nav-link" aria-current="page">Home</a>
+                        <a href="#standings" class="nav-link">Standings</a>
+                        <a href="#schedule" class="nav-link">Schedule</a>
+                        <a href="#stats" class="nav-link">Stats</a>
+                        <button class="btn-login" id="loginBtn" type="button" aria-label="Open staff login modal">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>STAFF LOGIN</span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main" role="main">
+            <!-- HERO SECTION -->
+            <section id="home" class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span>FALL 2026 SEASON</span>
+                        </div>
+                        <h1 class="hero-title">
+                            <span class="hero-line1 gradient-text">WEST VALLEY</span>
+                            <span class="hero-line2 outline-text">HOOPERS LEAGUE</span>
+                        </h1>
+                        <p class="hero-tagline">Where Phoenix future legends develop and grow</p>
+                        <div class="hero-stats" role="group" aria-label="League statistics">
+                            <div class="stat stat-item">
+                                <div class="stat-number"><span id="stat-teams">16</span></div>
+                                <div class="stat-label">Teams</div>
+                            </div>
+                            <div class="stat stat-item">
+                                <div class="stat-number"><span id="stat-players">192</span></div>
+                                <div class="stat-label">Players</div>
+                            </div>
+                            <div class="stat stat-item">
+                                <div class="stat-number"><span id="stat-games">48</span></div>
+                                <div class="stat-label">Games</div>
+                            </div>
+                            <div class="stat stat-item">
+                                <div class="stat-number"><span id="stat-divisions">5</span></div>
+                                <div class="stat-label">Divisions</div>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <button class="btn-primary" type="button" onclick="scrollToSection('standings')" aria-describedby="standings-desc">
+                                VIEW STANDINGS
+                            </button>
+                            <button class="btn-secondary" type="button" onclick="scrollToSection('schedule')" aria-describedby="schedule-desc">
+                                SEE SCHEDULE
+                            </button>
+                            <div id="standings-desc" class="sr-only">View current league standings and team rankings</div>
+                            <div id="schedule-desc" class="sr-only">View upcoming games and recent results</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LIVE STATS TICKER -->
+            <section class="stats-ticker">
+                <div class="ticker-content">
+                    <span class="ticker-item"><i class="fas fa-basketball-ball"></i> Phoenix Suns defeated Lakers 115-108</span>
+                    <span class="ticker-item"><i class="fas fa-trophy text-warning"></i> Player of the Game: Kevin Durant - 32 points</span>
+                    <span class="ticker-item"><i class="fas fa-star"></i> Season High: Most 3-pointers in a single game (18)</span>
+                    <span class="ticker-item"><i class="fas fa-basketball-ball"></i> League Leaders: Warriors (12-3) maintain top spot</span>
+                    <span class="ticker-item"><i class="fas fa-basketball-ball"></i> Playoff Race: 8 teams within 2 games of 8th seed</span>
+                    <span class="ticker-item"><i class="fas fa-basketball-ball"></i> Phoenix Suns defeated Lakers 115-108</span>
+                    <span class="ticker-item"><i class="fas fa-trophy text-warning"></i> Player of the Game: Kevin Durant - 32 points</span>
+                    <span class="ticker-item"><i class="fas fa-star"></i> Season High: Most 3-pointers in a single game (18)</span>
+                    <span class="ticker-item"><i class="fas fa-basketball-ball"></i> League Leaders: Warriors (12-3) maintain top spot</span>
+                    <span class="ticker-item"><i class="fas fa-basketball-ball"></i> Playoff Race: 8 teams within 2 games of 8th seed</span>
+                </div>
+            </section>
+
+            <!-- STANDINGS SECTION -->
+            <section id="standings" class="section standings">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>LEAGUE STANDINGS</h2>
+                        <p>Current season records across all divisions</p>
+                    </div>
+                    <div class="division-tabs" role="tablist" aria-label="Division standings" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center;">
+                        <button class="division-tab active" role="tab" aria-selected="true" data-division="4th" type="button" style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">4th Grade</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="5th" type="button" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">5th Grade</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="6th" type="button" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">6th Grade</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="7th" type="button" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">7th Grade</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="8th" type="button" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s;">8th Grade</button>
+                    </div>
+                    <div class="standings-table" role="tabpanel" aria-labelledby="standings-heading">
+                        <table role="table" aria-label="Team standings for selected division">
+                            <thead>
+                                <tr>
+                                    <th scope="col" aria-sort="none">Rank</th>
+                                    <th scope="col" aria-sort="none">Team</th>
+                                    <th scope="col" abbr="Wins" aria-sort="none">W</th>
+                                    <th scope="col" abbr="Losses" aria-sort="none">L</th>
+                                    <th scope="col" abbr="Percentage" aria-sort="none">PCT</th>
+                                    <th scope="col" abbr="Games Behind" aria-sort="none">GB</th>
+                                </tr>
+                            </thead>
+                            <tbody id="standingsBody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCHEDULE SECTION -->
+            <section id="schedule" class="section schedule">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>GAME SCHEDULE</h2>
+                        <p>Upcoming games and recent results</p>
+                    </div>
+                    <!-- Week tabs for schedule filtering -->
+                    <div class="schedule-tabs">
+                        <button class="schedule-tab active" onclick="loadWeekSchedule('all')">All Weeks</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('1')">Week 1</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('2')">Week 2</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('3')">Week 3</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('4')">Week 4</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('5')">Week 5</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('6')">Week 6</button>
+                        <button class="schedule-tab" onclick="loadWeekSchedule('7')">Week 7 - Playoffs</button>
+                    </div>
+                    <div class="schedule-container">
+                        <!-- Games will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- PLAYER STATS SECTION - FIXED BY DAVID KIM & MARCUS RODRIGUEZ -->
+            <section id="stats" class="section stats-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>PLAYOFF LEADERBOARD</h2>
+                        <p>Playoff averages by division</p>
+                    </div>
+                    
+                    <!-- Division Tabs -->
+                    <div class="division-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 2rem; justify-content: center;">
+                        <button class="div-tab active" onclick="loadDivisionStats('4th')" style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">4th Grade</button>
+                        <button class="div-tab" onclick="loadDivisionStats('5th')" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer;">5th Grade</button>
+                        <button class="div-tab" onclick="loadDivisionStats('6th')" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer;">6th Grade</button>
+                        <button class="div-tab" onclick="loadDivisionStats('7th')" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer;">7th Grade</button>
+                        <button class="div-tab" onclick="loadDivisionStats('8th')" style="padding: 0.5rem 1rem; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer;">8th Grade</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                                <span>SCORING (PPG)</span>
+                            </h3>
+                            <div class="stat-list" id="scoringLeaders" role="list" aria-label="Top scoring players">
+                                <div style="color: #94a3b8; padding: 1rem;">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="stat-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-hands" aria-hidden="true"></i>
+                                <span>REBOUNDS (RPG)</span>
+                            </h3>
+                            <div class="stat-list" id="reboundingLeaders" role="list" aria-label="Top rebounding players">
+                                <div style="color: #94a3b8; padding: 1rem;">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="stat-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-bolt" aria-hidden="true"></i>
+                                <span>ASSISTS (APG)</span>
+                            </h3>
+                            <div class="stat-list" id="assistLeaders" role="list" aria-label="Top assist players">
+                                <div style="color: #94a3b8; padding: 1rem;">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal hidden" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="logo">
+                    <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                    <div class="brand-text">
+                        <h1>AZ FLIGHT</h1>
+                        <span>STAFF ACCESS</span>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeLogin" type="button" aria-label="Close login modal">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="loginTitle">SELECT YOUR ROLE</h2>
+                <p>Choose your dashboard to access league management tools</p>
+                <div class="role-grid">
+                    <div class="role-card" data-role="scorekeeper" role="button" tabindex="0" aria-label="Access scorekeeper dashboard">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i>
+                        <h3>SCOREKEEPER</h3>
+                        <p>Live game scoring and statistics tracking</p>
+                    </div>
+                    <div class="role-card" data-role="coach" role="button" tabindex="0" aria-label="Access coach dashboard">
+                        <i class="fas fa-users" aria-hidden="true"></i>
+                        <h3>COACH</h3>
+                        <p>Team and player management</p>
+                    </div>
+                    <div class="role-card" data-role="admin" role="button" tabindex="0" aria-label="Access admin dashboard">
+                        <i class="fas fa-cog" aria-hidden="true"></i>
+                        <h3>ADMIN</h3>
+                        <p>League management and administration</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SELECTION PAGE -->
+    <div id="gameSelectionPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Dashboard navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>SCOREKEEPER</span>
+                        </div>
+                    </div>
+                    <button class="btn-back" id="backFromGameSelection" type="button" aria-label="Return to home page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> BACK
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="selection-header">
+                    <h1>SELECT TODAY'S GAME</h1>
+                    <p><time datetime="2026-09-20">Saturday, September 20, 2026</time></p>
+                </div>
+                <div class="games-list" id="gamesList" role="list" aria-label="Available games">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SCOREKEEPER DASHBOARD -->
+    <div id="scorekeeperPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Scorekeeper navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>LIVE SCORING</span>
+                        </div>
+                    </div>
+                    <button class="btn-back" id="backFromScorekeeper" type="button" aria-label="Return to game selection">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> GAMES
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="scorekeeper-content">
+                    <div class="game-info">
+                        <h2 id="currentGameTeams">DESERT HAWKS VS VALLEY VIPERS</h2>
+                        <div class="current-score" role="group" aria-label="Current game score">
+                            <span id="homeScore" aria-label="Home team score">0</span>
+                            <span class="score-divider" aria-hidden="true">-</span>
+                            <span id="awayScore" aria-label="Away team score">0</span>
+                        </div>
+                    </div>
+                    <div class="teams-container">
+                        <!-- Home Team -->
+                        <section class="team-section" aria-labelledby="homeTeamName">
+                            <div class="team-header">
+                                <h3 id="homeTeamName">DESERT HAWKS</h3>
+                                <div class="team-fouls" role="group" aria-label="Home team fouls">
+                                    <span class="fouls-label">TEAM FOULS:</span>
+                                    <span class="fouls-count" id="homeTeamFouls" aria-live="polite">0</span>
+                                </div>
+                            </div>
+                            <div class="players-list" id="homePlayers" role="list" aria-label="Home team players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
+                        <!-- Away Team -->
+                        <section class="team-section" aria-labelledby="awayTeamName">
+                            <div class="team-header">
+                                <h3 id="awayTeamName">VALLEY VIPERS</h3>
+                                <div class="team-fouls" role="group" aria-label="Away team fouls">
+                                    <span class="fouls-label">TEAM FOULS:</span>
+                                    <span class="fouls-count" id="awayTeamFouls" aria-live="polite">0</span>
+                                </div>
+                            </div>
+                            <div class="players-list" id="awayPlayers" role="list" aria-label="Away team players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
+                    </div>
+                    <div class="scorekeeper-actions">
+                        <button class="btn-save" id="saveGameBtn" type="button" aria-label="Save current game data">
+                            <i class="fas fa-save" aria-hidden="true"></i> SAVE GAME & SYNC
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- COACH DASHBOARD -->
+    <div id="coachPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Coach navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>COACH PORTAL</span>
+                        </div>
+                    </div>
+                    <select class="team-selector" id="teamSelector" aria-label="Select team to manage">
+                        <option value="4th-hawks">4th Grade - Desert Hawks</option>
+                        <option value="5th-thunder">5th Grade - Phoenix Thunder</option>
+                        <option value="6th-suns">6th Grade - Scottsdale Suns</option>
+                        <option value="7th-storm">7th Grade - Mesa Storm</option>
+                        <option value="8th-panthers">8th Grade - Peoria Panthers</option>
+                    </select>
+                    <button class="btn-back" id="backFromCoach" type="button" aria-label="Return to home page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> BACK
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="dashboard-content">
+                    <div class="dashboard-sections">
+                        <section class="dashboard-section" aria-labelledby="playerManagementTitle">
+                            <div class="dashboard-section-header">
+                                <h3 id="playerManagementTitle">PLAYER MANAGEMENT</h3>
+                                <button class="btn-add" id="addPlayerBtn" type="button" aria-label="Add new player">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> ADD PLAYER
+                                </button>
+                            </div>
+                            <div class="table-container">
+                                <table class="players-table" role="table" aria-label="Team players">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Photo</th>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Position</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="coachPlayersTable">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section class="dashboard-section" aria-labelledby="teamPerformanceTitle">
+                            <div class="dashboard-section-header">
+                                <h3 id="teamPerformanceTitle">TEAM PERFORMANCE</h3>
+                            </div>
+                            <div class="performance-grid" role="list" aria-label="Team performance statistics">
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">8</div>
+                                    <div class="perf-label">Wins</div>
+                                </div>
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">2</div>
+                                    <div class="perf-label">Losses</div>
+                                </div>
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">72.5</div>
+                                    <div class="perf-label">Avg Points</div>
+                                </div>
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">38.2</div>
+                                    <div class="perf-label">Avg Rebounds</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Admin navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>ADMIN CONTROL</span>
+                        </div>
+                    </div>
+                    <button class="btn-back" id="backFromAdmin" type="button" aria-label="Return to home page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> BACK
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="dashboard-content">
+                    <div class="admin-grid">
+                        <section class="admin-card" aria-labelledby="leagueOverviewTitle">
+                            <h3 id="leagueOverviewTitle">LEAGUE OVERVIEW</h3>
+                            <div class="overview-stats" role="list" aria-label="League statistics">
+                                <div class="overview-stat" role="listitem">
+                                    <div class="overview-stat-value"><span id="stat-teams">16</span></div>
+                                    <div class="overview-stat-label">Teams</div>
+                                </div>
+                                <div class="overview-stat" role="listitem">
+                                    <div class="overview-stat-value"><span id="stat-players">192</span></div>
+                                    <div class="overview-stat-label">Players</div>
+                                </div>
+                                <div class="overview-stat" role="listitem">
+                                    <div class="overview-stat-value"><span id="stat-games">48</span></div>
+                                    <div class="overview-stat-label">Games</div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="admin-card" aria-labelledby="teamManagementTitle">
+                            <h3 id="teamManagementTitle">TEAM MANAGEMENT</h3>
+                            <div class="admin-actions" role="list" aria-label="Team management actions">
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-users" aria-hidden="true"></i>
+                                    <span>MANAGE TEAMS</span>
+                                </button>
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                    <span>ADD TEAM</span>
+                                </button>
+                            </div>
+                        </section>
+                        <section class="admin-card" aria-labelledby="scheduleManagementTitle">
+                            <h3 id="scheduleManagementTitle">SCHEDULE MANAGEMENT</h3>
+                            <div class="admin-actions" role="list" aria-label="Schedule management actions">
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-calendar" aria-hidden="true"></i>
+                                    <span>MANAGE SCHEDULE</span>
+                                </button>
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                    <span>SCHEDULE GAME</span>
+                                </button>
+                            </div>
+                        </section>
+                        <section class="admin-card" aria-labelledby="dataManagementTitle">
+                            <h3 id="dataManagementTitle">DATA MANAGEMENT</h3>
+                            <div class="admin-actions" role="list" aria-label="Data management actions">
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-download" aria-hidden="true"></i>
+                                    <span>EXPORT DATA</span>
+                                </button>
+                                <button class="admin-btn danger" type="button" role="listitem">
+                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                                    <span>RESET LEAGUE</span>
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Configuration Scripts (Load First) -->
+    <script src="config/app.config.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+
+    <!-- Main Application Script -->
+    <script src="js/app-final.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+       // TEMPORARILY DISABLED - Causing cache issues
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+// TEMPORARILY DISABLED - Causing cache issues
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+//         navigator.serviceWorker.register('/sw.js')
+//             .then(registration => {
+//                 console.log('Service Worker registered successfully:', registration.scope);
+//             })
+//             .catch(error => {
+//                 console.log('Service Worker registration failed:', error);
+//             });
+//     });
+// }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show custom install UI (optional)
+            console.log('💡 App can be installed');
+        });
+
+        // Handle app installation
+        window.addEventListener('appinstalled', () => {
+            console.log('📱 PWA was installed');
+            deferredPrompt = null;
+        });
+    </script>
+
+    <!-- Analytics (Add when ready) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<script>
+  // Firebase configuration - FABA Winter 2026
+  const firebaseConfig = {
+    apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+    authDomain: "faba-winter-2026.firebaseapp.com",
+    projectId: "faba-winter-2026",
+    storageBucket: "faba-winter-2026.firebasestorage.app",
+    messagingSenderId: "932225692280",
+    appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+  };
+  
+  // Initialize Firebase if available
+  if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+    window.auth = firebase.auth();
+    window.storage = firebase.storage();
+    console.log('�"� Firebase initialized successfully');
+    
+    // Optional: Enable offline persistence
+    // Optional: Enable offline persistence
+    window.db.enablePersistence()
+        .catch((err) => {
+            if (err.code === 'failed-precondition') {
+                console.warn('Persistence failed: Multiple tabs open');
+            } else if (err.code === 'unimplemented') {
+                console.warn('Persistence not available in this browser');
+            }
+        });
+  }
+
+  /* ===================================
+     LEAGUE LOGO LOADING - PHASE 4
+     =================================== */
+
+  // Load League Logo
+  async function loadLeagueLogo() {
+      try {
+          if (!window.db) return;
+          
+          const brandingDoc = await window.db.collection('settings').doc('branding').get();
+          
+          if (brandingDoc.exists && brandingDoc.data().logoUrl) {
+              const logoUrl = brandingDoc.data().logoUrl;
+              console.log('Loading custom logo:', logoUrl);
+              
+              // Replace basketball icon with logo
+              const logoElements = document.querySelectorAll('.logo-icon');
+              logoElements.forEach(el => {
+                  el.innerHTML = `<img src="${logoUrl}" alt="League Logo" style="max-height: 50px; max-width: 150px; object-fit: contain;">`;
+              });
+          }
+      } catch (error) {
+          console.log('Using default logo');
+      }
+  }
+
+  // Load logo on page load
+  document.addEventListener('DOMContentLoaded', () => {
+      loadLeagueLogo();
+  });
+
+  console.log('League Logo Loading System - Phase 4 Complete');
+</script>
+<!-- Firestore data loading functions -->
+<script>
+// Division display helper - UPDATED BY DR. EMILY CHEN
+function getDivisionDisplay(division) {
+    const divisionMap = {
+        '4th': '4th Grade',
+        '5th': '5th Grade',
+        '6th': '6th Grade',
+        '7th': '7th Grade',
+        '8th': '8th Grade',
+        // Barbarian mappings for migration
+        '10U': '4th Grade',
+        '12U': '6th Grade', 
+        '14U': '8th Grade',
+        '16U': '10th Grade'
+    };
+    return divisionMap[division] || division;
+}
+
+// CROSS-DIVISION standings loader - Phase 6.1: Update Standings Logic for Cross-Division
+async function loadStandings() {
+    console.log('Loading standings from Firebase...');
+    
+    try {
+        const db = firebase.firestore();
+        
+        // Get ALL teams
+        const teamsSnapshot = await db.collection('teams').get();
+        console.log(`Found ${teamsSnapshot.size} teams in Firebase`);
+        
+        if (teamsSnapshot.empty) {
+            console.log('No teams found');
+            let tbody = document.getElementById('standingsBody');
+            if (!tbody) {
+                tbody = document.querySelector('.standings-table tbody');
+            }
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No teams found</td></tr>';
+            }
+            return;
+        }
+        
+        // Group teams by division
+        const teamsByDivision = {
+            '4th': [],
+            '5th': [],
+            '6th': [],
+            '7th': [],
+            '8th': []
+        };
+        
+        teamsSnapshot.forEach(doc => {
+            const team = { id: doc.id, ...doc.data() };
+            const division = team.primaryDivision || team.division;
+            
+            if (teamsByDivision[division]) {
+                // Use actual wins/losses from Firebase instead of calculating
+                const wins = team.wins || 0;
+                const losses = team.losses || 0;
+                const totalGames = wins + losses;
+                const pct = totalGames > 0 ? (wins / totalGames).toFixed(3) : '.000';
+                
+                console.log(`Team ${team.name}: ${wins}-${losses} (${pct})`);
+                
+                teamsByDivision[division].push({
+                    id: team.id,
+                    name: team.name,
+                    coach: team.coach || '',
+                    wins: wins,
+                    losses: losses,
+                    pct: pct
+                });
+            }
+        });
+        
+        // Sort each division by wins, then by win percentage (data already calculated above)
+        Object.keys(teamsByDivision).forEach(division => {
+            // Sort by wins, then by win percentage
+            teamsByDivision[division].sort((a, b) => {
+                if (b.wins !== a.wins) return b.wins - a.wins;
+                return parseFloat(b.pct) - parseFloat(a.pct);
+            });
+            
+            // Calculate games behind
+            if (teamsByDivision[division].length > 0) {
+                const leader = teamsByDivision[division][0];
+                teamsByDivision[division].forEach((team, index) => {
+                    if (index === 0) {
+                        team.gb = '-';
+                    } else {
+                        const gb = ((leader.wins - team.wins) + (team.losses - leader.losses)) / 2;
+                        team.gb = gb === 0 ? '-' : gb.toFixed(1);
+                    }
+                    team.rank = index + 1;
+                });
+            }
+        });
+        
+        // Store globally for tab switching
+        window.standingsData = teamsByDivision;
+        
+        // Update division tabs
+        updateDivisionTabs(teamsByDivision);
+        
+        // Show first division with data
+        const activeTab = document.querySelector('.division-tab.active');
+        if (activeTab) {
+            const division = activeTab.dataset.division;
+            showDivision(division, teamsByDivision[division] || []);
+        }
+        
+        console.log('Cross-division standings loaded:', teamsByDivision);
+        
+    } catch (error) {
+        console.error('Error loading standings:', error);
+        let tbody = document.getElementById('standingsBody');
+        if (!tbody) {
+            tbody = document.querySelector('.standings-table tbody');
+        }
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="6" style="color: red;">Error loading standings</td></tr>';
+        }
+    }
+}
+
+// Update division tabs based on available data
+function updateDivisionTabs(teamsByDivision) {
+    const tabsContainer = document.querySelector('[role="tablist"]');
+    if (!tabsContainer) return;
+    
+    // Get all tab buttons
+    const tabs = tabsContainer.querySelectorAll('[role="tab"]');
+    
+    tabs.forEach(tab => {
+        // FIXED BY SARAH WILLIAMS: Use data-division attribute instead of textContent
+        const division = tab.dataset.division;
+        
+        // Add click handler
+        tab.onclick = () => {
+            // Update selected state and styling
+            tabs.forEach(t => {
+                t.setAttribute('aria-selected', 'false');
+                t.classList.remove('active');
+                t.style.background = '#1e293b'; // Inactive color
+            });
+            tab.setAttribute('aria-selected', 'true');
+            tab.classList.add('active');
+            tab.style.background = '#3b82f6'; // Active color
+            
+            // Show division data - use the correct division key
+            const teams = teamsByDivision[division] || [];
+            showDivision(division, teams);
+        };
+        
+        // Add indicator if division has teams
+        if (teamsByDivision[division] && teamsByDivision[division].length > 0) {
+            tab.style.fontWeight = 'bold';
+        }
+    });
+}
+
+// Display standings for a specific division
+function showDivision(division, teams) {
+    // Use ID first, then fallback to other selectors
+    let tbody = document.getElementById('standingsBody');
+    if (!tbody) {
+        tbody = document.querySelector('.standings-table tbody');
+    }
+    if (!tbody) {
+        tbody = document.querySelector('table[role="table"] tbody');
+    }
+    if (!tbody) {
+        console.error('Standings table body not found');
+        return;
+    }
+    
+    // Clear existing rows
+    tbody.innerHTML = '';
+    
+    if (!teams || teams.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                    No teams in ${division} division
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Add team rows
+    teams.forEach(team => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="text-align: center; font-weight: bold;">${team.rank}</td>
+            <td style="font-weight: 600;">
+                <div>${team.name || 'Unnamed Team'}</div>
+            </td>
+            <td style="text-align: center; color: #22c55e;">${team.wins || 0}</td>
+            <td style="text-align: center; color: #ef4444;">${team.losses || 0}</td>
+            <td style="text-align: center;">${team.pct}</td>
+            <td style="text-align: center;">${team.gb}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Week filtering functionality - Calculate week number from game date
+function calculateWeekNumber(gameDate) {
+    // Season starts September 13, 2026 (Week 1)
+    const seasonStart = new Date('2026-09-13');
+    const gameDateTime = gameDate ? (gameDate.toDate ? gameDate.toDate() : new Date(gameDate)) : new Date();
+    
+    // Calculate days difference
+    const daysDiff = Math.floor((gameDateTime - seasonStart) / (1000 * 60 * 60 * 24));
+    
+    // Calculate base week number
+    let weekNumber = Math.floor(daysDiff / 7) + 1;
+    
+    // Week 4 was a bye week (Oct 4-10), so adjust weeks after that
+    // If the game is on or after Oct 11 (28 days from season start), subtract 1
+    if (daysDiff >= 28) {
+        weekNumber = weekNumber - 1;
+    }
+    
+    const finalWeek = weekNumber >= 8 ? 8 : (weekNumber < 1 ? 1 : weekNumber);
+    
+    // Debug logging for week calculation
+    console.log(`Game date: ${gameDateTime.toDateString()} -> Week ${finalWeek} (${daysDiff} days from season start)`);
+    
+    return finalWeek;
+}
+
+// Filter games by selected week
+function filterGamesByWeek(games, weekNumber) {
+    console.log('filterGamesByWeek() called with weekNumber:', weekNumber, 'for', games.length, 'games');
+    
+    if (!weekNumber || weekNumber === 'all' || weekNumber === 'undefined') {
+        console.log('Returning all games (no filter applied)');
+        return games; // Show all games
+    }
+    
+    const week = parseInt(weekNumber);
+    console.log('Filtering for week:', week);
+    
+    const filteredGames = games.filter(game => {
+        const gameWeek = game.week;
+        const matches = gameWeek === week;
+        if (matches) {
+            console.log(`Game ${game.homeTeam} vs ${game.awayTeam}: week ${gameWeek} matches filter`);
+        }
+        return matches;
+    });
+    
+    console.log(`FILTER RESULT: ${games.length} total games -> ${filteredGames.length} games for week ${week}`);
+    return filteredGames;
+}
+
+// Track currently selected week filter
+let currentWeekFilter; // Undefined initially - will be set to 'all' by initialization
+let currentDivisionFilter = 'all';
+let userHasSelectedWeek = false; // Track if user has made a week selection
+
+// ULTRA-SIMPLE Schedule loader - just works
+async function loadSchedule(divisionFilter) {
+    if (!divisionFilter) divisionFilter = 'all';
+    currentDivisionFilter = divisionFilter; // Track current division filter
+    console.log('loadSchedule() called with divisionFilter: ' + divisionFilter);
+    console.log('loadSchedule() - currentWeekFilter state: ' + currentWeekFilter);
+    console.log('loadSchedule() - userHasSelectedWeek: ' + userHasSelectedWeek);
+
+    var container = document.querySelector('.schedule-container');
+    if (!container) {
+        console.error('Schedule container not found');
+        return;
+    }
+    
+    container.innerHTML = '<p style="text-align: center; color: #94a3b8;">Loading...</p>';
+    
+    try {
+        if (!window.db) {
+            console.error('Firebase not ready');
+            setTimeout(function() { loadSchedule(divisionFilter); }, 1000);
+            return;
+        }
+        
+        var gamesSnapshot = await window.db.collection('games').get();
+        
+        if (gamesSnapshot.empty) {
+            container.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 2rem;">No games scheduled</p>';
+            return;
+        }
+        
+        var games = [];
+        gamesSnapshot.forEach(function(doc) {
+            var data = doc.data();
+            games.push({ 
+                id: doc.id, 
+                homeTeam: data.homeTeam,
+                awayTeam: data.awayTeam,
+                homeTeamName: data.homeTeamName,
+                awayTeamName: data.awayTeamName,
+                location: data.location,
+                division: data.division,
+                gameDate: data.gameDate,
+                status: data.status,           // FIXED: Add status field
+                homeScore: data.homeScore,     // FIXED: Add homeScore field  
+                awayScore: data.awayScore,     // FIXED: Add awayScore field
+                mvp: data.mvp,                 // FIXED: Add MVP field for schedule display
+                week: calculateWeekNumber(data.gameDate || data.scheduledFor) // WEEK FILTERING: Add week number
+            });
+        });
+        
+        // Sort games by date
+        games.sort(function(a, b) {
+            var dateA = a.gameDate ? (a.gameDate.toDate ? a.gameDate.toDate() : new Date(a.gameDate)) : new Date(0);
+            var dateB = b.gameDate ? (b.gameDate.toDate ? b.gameDate.toDate() : new Date(b.gameDate)) : new Date(0);
+            return dateA - dateB;
+        });
+        
+        // Filter by division if needed
+if (divisionFilter !== 'all') {
+    games = games.filter(function(game) {
+        return game.division === divisionFilter;
+    });
+}
+
+        // WEEK FILTERING: Filter by selected week
+        const weekFilter = currentWeekFilter || 'all'; // Default to 'all' if undefined
+        console.log('BEFORE filtering - Total games: ' + games.length + ', currentWeekFilter: ' + currentWeekFilter + ', weekFilter: ' + weekFilter);
+        games = filterGamesByWeek(games, weekFilter);
+        console.log('AFTER filtering - Filtered games: ' + games.length + ' for Week ' + weekFilter);
+        console.log('Week filtering complete - currentWeekFilter=' + currentWeekFilter + ', userHasSelectedWeek=' + userHasSelectedWeek);
+        
+        container.innerHTML = '';
+        
+        if (games.length === 0) {
+            // Don't show "No games found" message for Week 7 - playoffs will display
+            if (currentWeekFilter !== 7 && currentWeekFilter !== '7') {
+                var weekText = currentWeekFilter === 'all' ? 'selected filters' : 'Week ' + currentWeekFilter;
+                container.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 2rem;">No games found for ' + weekText + '</p>';
+            } else {
+                // Week 7 - Leave container empty for playoff brackets to be added
+                container.innerHTML = '';
+                console.log('📋 Week 7 - No regular games (playoff brackets will display)');
+                
+                // CRITICAL FIX: Re-render playoff brackets for Week 7
+                try {
+                    console.log('🔧 Fix: Re-rendering playoff brackets for Week 7');
+                    await loadPlayoffBrackets();
+                    console.log('✅ Playoff brackets restored successfully');
+                } catch (error) {
+                    console.error('❌ Error re-rendering brackets:', error);
+                }
+            }
+            return;
+        }
+        
+        // 🚨 CRITICAL FIX: Skip game rendering for Week 7 playoffs
+        if (currentWeekFilter === 7 || currentWeekFilter === '7') {
+            console.log('⛔ Week 7 selected - skipping regular game display (brackets will show instead)');
+            container.innerHTML = ''; // Clear any existing content
+            // Don't render games - brackets will be added separately
+            // EXIT function here before rendering games
+            return;
+        }
+        
+        for (const game of games) {
+            var gameCard = document.createElement('div');
+            
+            // FIXED: Different styling for completed vs scheduled games
+            var isCompleted = game.status === 'completed';
+            var borderColor = isCompleted ? '#10b981' : '#f59e0b'; // Green for completed, orange for scheduled
+            gameCard.style.cssText = 'background: #1e293b; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border-left: 4px solid ' + borderColor + ';';
+            
+            var gameDate = game.gameDate ? (game.gameDate.toDate ? game.gameDate.toDate() : new Date(game.gameDate)) : new Date();
+            
+            // Extract team names with multiple fallback options (Fix #6)
+            const homeTeam = game.homeTeam?.name || game.homeTeamName || 'Home Team';
+            const awayTeam = game.awayTeam?.name || game.awayTeamName || 'Away Team';
+            
+            console.log(`Schedule: ${homeTeam} vs ${awayTeam}`);
+            var location = game.location || 'Location TBD';
+            
+            // FIXED: Add completed status indicator
+            var statusBadge = '';
+            if (isCompleted) {
+                statusBadge = '<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-left: 0.5rem;">COMPLETED</span>';
+            }
+            
+            // FIXED: Add final score display for completed games
+            var scoreDisplay = '';
+            var teamMatchup = homeTeam + ' vs ' + awayTeam;
+            
+            if (isCompleted && game.homeScore !== undefined && game.awayScore !== undefined) {
+                // Show final score with winner highlighted
+                var homeWon = game.homeScore > game.awayScore;
+                var winnerStyle = 'font-weight: bold; color: #10b981;';
+                var loserStyle = 'color: #94a3b8;';
+                
+                teamMatchup = '<span style="' + (homeWon ? winnerStyle : loserStyle) + '">' + homeTeam + '</span>' +
+                              ' vs ' +
+                              '<span style="' + (homeWon ? loserStyle : winnerStyle) + '">' + awayTeam + '</span>';
+                
+                scoreDisplay = '<div style="font-weight: bold; font-size: 1.2rem; color: #3b82f6; margin: 0.5rem 0;">Final Score: ' + 
+                               game.homeScore + ' - ' + game.awayScore + '</div>';
+            }
+            
+            // FIXED: Add MVP display for completed games
+            var mvpDisplay = '';
+            if (isCompleted && game.mvp) {
+                mvpDisplay = '<div style="background: #334155; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; border-left: 3px solid #fbbf24;">' +
+                            '<i class="fas fa-star text-warning"></i> Player of the Game: ' + game.mvp.playerName + ' ' +
+                            '(' + game.mvp.points + ' pts, ' + game.mvp.rebounds + ' reb, ' + game.mvp.assists + ' ast)' +
+                            '</div>';
+            }
+            
+            gameCard.innerHTML = '<div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 0.5rem;">' +
+                                 gameDate.toLocaleDateString() + ' at ' + 
+                                 gameDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+                                 statusBadge +
+                                 '</div>' +
+                                 '<div style="font-weight: 600; font-size: 1.1rem; color: #f1f5f9; margin-bottom: 0.5rem;">' +
+                                 teamMatchup +
+                                 '</div>' +
+                                 scoreDisplay +
+                                 mvpDisplay +
+                                 '<div style="color: #94a3b8; font-size: 0.875rem;">Location: ' + location + '</div>';
+            
+            container.appendChild(gameCard);
+        }
+        
+        console.log('Loaded ' + games.length + ' games');
+        
+    } catch (error) {
+        console.error('Schedule error:', error);
+        container.innerHTML = '<p style="text-align: center; color: #ef4444; padding: 2rem;">Error loading schedule</p>';
+    }
+    
+    // ==== CRITICAL FIX: Re-render playoff brackets if on Week 7 ====
+    // This prevents brackets from disappearing when real-time updates trigger
+    console.log('🔍 DEBUG: currentWeekFilter value:', currentWeekFilter, '(type:', typeof currentWeekFilter, ')');
+    console.log('🔍 DEBUG: userHasSelectedWeek:', userHasSelectedWeek);
+    
+    if (currentWeekFilter === 7 || currentWeekFilter === '7' || currentWeekFilter === 7) {
+        console.log('📋 Week 7 detected - re-rendering playoff brackets...');
+        
+        // Small delay to ensure schedule container is fully rendered
+        setTimeout(async () => {
+            try {
+                console.log('🎯 About to call loadPlayoffBrackets()...');
+                await loadPlayoffBrackets();  // Re-render the brackets
+                console.log('✅ Playoff brackets re-rendered successfully');
+            } catch (error) {
+                console.error('❌ Error re-rendering brackets:', error);
+            }
+        }, 200);  // Increased delay to be safe
+    } else {
+        console.log('❌ Week 7 NOT detected - currentWeekFilter:', currentWeekFilter);
+    }
+    // ==== END CRITICAL FIX ====
+}
+
+// Week start dates (8 Saturdays) - Phase 2.2: Week-Based Schedule Display
+const SEASON_WEEKS = [
+    { week: 1, date: '2026-10-05', label: 'October 5, 2026' },
+    { week: 2, date: '2026-10-12', label: 'October 12, 2026' },
+    { week: 3, date: '2026-10-19', label: 'October 19, 2026' },
+    { week: 4, date: '2026-10-26', label: 'October 26, 2026' },
+    { week: 5, date: '2026-11-02', label: 'November 2, 2026' },
+    { week: 6, date: '2026-11-09', label: 'November 9, 2026' },
+    { week: 7, date: '2026-11-16', label: 'November 16, 2026' },
+    { week: 8, date: '2026-11-23', label: 'November 23, 2026 - PLAYOFFS' }
+];
+
+async function loadWeekSchedule(weekNumber) {
+    // Update active tab styling
+    document.querySelectorAll('.schedule-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Find the clicked tab and add active class
+    const clickedTab = event ? event.target : document.querySelector('.schedule-tab[onclick*="' + weekNumber + '"]');
+    if (clickedTab) {
+        clickedTab.classList.add('active');
+    }
+    
+    // WEEK FILTERING: Update current week filter and reload schedule
+    userHasSelectedWeek = true; // Mark that user has made a selection
+    currentWeekFilter = weekNumber.toString();
+    console.log('?? loadWeekSchedule() - Week filter changed to: ' + currentWeekFilter + ' (user selection)');
+    console.log('?? loadWeekSchedule() - About to call loadSchedule() with currentWeekFilter=' + currentWeekFilter);
+    
+    // Reload schedule with current division filter and new week filter
+    await loadSchedule(currentDivisionFilter);
+}
+
+async function displayAllWeeks() {
+    const scheduleContainer = document.querySelector('.schedule-container');
+    scheduleContainer.innerHTML = '';
+    
+    for (const week of SEASON_WEEKS) {
+        const weekSection = await createWeekSection(week);
+        scheduleContainer.appendChild(weekSection);
+    }
+}
+
+async function displayWeek(weekNumber) {
+    const week = SEASON_WEEKS.find(w => w.week === weekNumber);
+    const weekSection = await createWeekSection(week);
+    
+    const scheduleContainer = document.querySelector('.schedule-container');
+    scheduleContainer.innerHTML = '';
+    scheduleContainer.appendChild(weekSection);
+}
+
+async function createWeekSection(week) {
+    // Get games for this Saturday
+    const weekStart = new Date(week.date);
+    weekStart.setHours(0, 0, 0, 0);
+    
+    const weekEnd = new Date(week.date);
+    weekEnd.setHours(23, 59, 59, 999);
+    
+    const gamesSnapshot = await db.collection('games')
+        .where('scheduledFor', '>=', weekStart)
+        .where('scheduledFor', '<=', weekEnd)
+        .orderBy('scheduledFor', 'asc')
+        .get();
+    
+    const games = [];
+    gamesSnapshot.forEach(doc => {
+        games.push({ id: doc.id, ...doc.data() });
+    });
+    
+    // Create week section HTML
+    const section = document.createElement('div');
+    section.className = 'week-section';
+    section.style.cssText = 'margin-bottom: 2rem; border: 1px solid #475569; border-radius: 8px; overflow: hidden;';
+    
+    const completed = games.filter(g => g.status === 'completed').length;
+    const total = games.length;
+    
+    section.innerHTML = `
+        <div class="week-header" onclick="toggleWeek(${week.week})" style="background: #1e293b; padding: 1rem; cursor: pointer; border-bottom: 1px solid #475569;">
+            <h3 style="margin: 0; color: #f1f5f9;">WEEK ${week.week} � ${week.label}</h3>
+            <p style="margin: 0.5rem 0 0 0; color: #94a3b8;">${completed} of ${total} games completed</p>
+            <span class="collapse-icon" style="float: right; color: #94a3b8;">?</span>
+        </div>
+        <div class="week-games" id="week-${week.week}-games" style="padding: 1rem; background: #0f172a;">
+            ${await renderWeekGames(games)}
+        </div>
+    `;
+    
+    return section;
+}
+
+async function renderWeekGames(games) {
+    if (games.length === 0) {
+        return '<p style="text-align: center; color: #94a3b8;">No games scheduled for this week</p>';
+    }
+    
+    let html = '';
+    
+    for (const game of games) {
+        const homeTeam = await getTeam(game.homeTeamId);
+        const awayTeam = await getTeam(game.awayTeamId);
+        
+        if (!homeTeam || !awayTeam) continue;
+        
+        // Get full names with organization
+        const homeOrg = await getOrganization(homeTeam.organizationId);
+        const awayOrg = await getOrganization(awayTeam.organizationId);
+        
+        const homeFullName = homeOrg ? `${homeOrg.name} ${homeTeam.name}` : homeTeam.fullName || homeTeam.name;
+        const awayFullName = awayOrg ? `${awayOrg.name} ${awayTeam.name}` : awayTeam.fullName || awayTeam.name;
+        
+        const gameDate = game.scheduledFor?.toDate ? game.scheduledFor.toDate() : new Date(game.scheduledFor);
+        const timeStr = gameDate.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit' 
+        });
+        
+        // Status icon
+        let statusIcon = '??';
+        if (game.status === 'completed') statusIcon = '?';
+        if (game.status === 'in-progress') statusIcon = '??';
+        
+        // Cross-division badge
+        const crossDivBadge = game.isCrossDivision 
+            ? `<span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">? CROSS-DIVISION (counts for ${game.countsForStandings})</span>`
+            : '';
+        
+        // Score display (only for completed games)
+        let scoreDisplay = 'vs';
+        if (game.status === 'completed') {
+            scoreDisplay = `${game.homeScore} - ${game.awayScore}`;
+        }
+        
+        // MVP display (only for completed games)
+        let mvpDisplay = '';
+        if (game.status === 'completed' && game.mvp) {
+            mvpDisplay = `
+                <div style="background: #334155; padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; border-left: 3px solid #fbbf24;">
+                    <i class="fas fa-star text-warning"></i> Player of the Game: ${game.mvp.playerName} 
+                    (${game.mvp.points} pts, ${game.mvp.rebounds} reb, ${game.mvp.assists} ast)
+                </div>
+            `;
+        }
+        
+        html += `
+            <div style="background: #1e293b; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                <div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 0.5rem;">${statusIcon} ${timeStr}</div>
+                <div style="font-weight: 600; font-size: 1.1rem; color: #f1f5f9; margin-bottom: 0.5rem;">
+                    ${homeFullName} ${scoreDisplay} ${awayFullName}
+                </div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">
+                    <i class="fas fa-building"></i> ${game.location || 'Location TBD'} | ${game.division || game.countsForStandings}
+                    ${crossDivBadge}
+                </div>
+                ${mvpDisplay}
+            </div>
+        `;
+    }
+    
+    return html;
+}
+
+async function getTeam(teamId) {
+    if (!teamId) return null;
+    try {
+        const doc = await db.collection('teams').doc(teamId).get();
+        return doc.exists ? { id: doc.id, ...doc.data() } : null;
+    } catch (error) {
+        console.error('Error fetching team:', error);
+        return null;
+    }
+}
+
+async function getOrganization(orgId) {
+    if (!orgId) return null;
+    try {
+        const doc = await db.collection('organizations').doc(orgId).get();
+        return doc.exists ? { id: doc.id, ...doc.data() } : null;
+    } catch (error) {
+        console.error('Error fetching organization:', error);
+        return null;
+    }
+}
+
+function toggleWeek(weekNumber) {
+    const gamesDiv = document.getElementById(`week-${weekNumber}-games`);
+    const icon = gamesDiv.previousElementSibling.querySelector('.collapse-icon');
+    
+    if (gamesDiv.style.display === 'none') {
+        gamesDiv.style.display = 'block';
+        icon.textContent = '?';
+    } else {
+        gamesDiv.style.display = 'none';
+        icon.textContent = '?';
+    }
+}
+
+// Load player stats
+// FIXED BY DAVID KIM - Division-based stats with per-game averages
+async function loadPlayerStats() {
+    try {
+        console.log('?? Initializing division-based stats...');
+        // Load default division on page load
+        await loadDivisionStats('4th');
+        return true; // Always return something
+    } catch (error) {
+        console.error('Error in loadPlayerStats:', error);
+        return false; // Return false on error
+    }
+}
+
+// ===== REAL-TIME LEADERBOARD LISTENER =====
+function setupLeaderboardListeners() {
+    // Listen for gameStats updates for real-time stat updates
+    const db = firebase.firestore();
+    
+    db.collection('gameStats')
+        .orderBy('updatedAt', 'desc')
+        .limit(50)
+        .onSnapshot(snapshot => {
+            console.log('?? Stats updated, refreshing leaderboards...');
+            
+            // Delay to allow Firebase to fully process all related updates
+            setTimeout(() => {
+                if (typeof loadPlayerStats === 'function') {
+                    loadPlayerStats();
+                }
+            }, 1000);
+        }, error => {
+            console.error('Leaderboard listener error:', error);
+        });
+    
+    console.log('? Real-time leaderboard listeners setup complete');
+}
+
+// FIXED Load stats for a specific division - Phase 7.1: Fix Player Leaders Display
+async function loadDivisionStats(division) {
+    console.log(`?? Loading ${division} grade stats with organization support...`);
+    const db = firebase.firestore();
+    
+    // Update active tab styling
+    document.querySelectorAll('.div-tab').forEach(tab => {
+        tab.style.background = '#1e293b';
+        if (tab.textContent.includes(division)) {
+            tab.style.background = '#3b82f6';
+        }
+    });
+    
+    try {
+        // First get all teams in this division using primaryDivision field
+        const teamsSnap = await db.collection('teams')
+            .where('primaryDivision', '==', division)
+            .get();
+            
+        if (teamsSnap.empty) {
+            // Fallback to old division field for backward compatibility
+            const teamsSnapFallback = await db.collection('teams')
+                .where('division', '==', division)
+                .get();
+                
+            if (teamsSnapFallback.empty) {
+                ['scoringLeaders', 'reboundingLeaders', 'assistLeaders'].forEach(id => {
+                    const container = document.getElementById(id);
+                    if (container) {
+                        container.innerHTML = '<div style="color: #94a3b8; padding: 1rem; text-align: center;">No teams in this division</div>';
+                    }
+                });
+                return;
+            }
+        }
+        
+        // Get team IDs and names with organization info
+        const teamIds = [];
+        const teamInfo = {};
+        const organizationIds = new Set();
+        
+        const activeTeamsSnap = teamsSnap.empty ? 
+            await db.collection('teams').where('division', '==', division).get() : 
+            teamsSnap;
+            
+        activeTeamsSnap.forEach(doc => {
+            const team = doc.data();
+            teamIds.push(doc.id);
+            teamInfo[doc.id] = {
+                name: team.name,
+                organizationId: team.organizationId
+            };
+            if (team.organizationId) {
+                organizationIds.add(team.organizationId);
+            }
+        });
+        
+        if (teamIds.length === 0) {
+            ['scoringLeaders', 'reboundingLeaders', 'assistLeaders'].forEach(id => {
+                const container = document.getElementById(id);
+                if (container) {
+                    container.innerHTML = '<div style="color: #94a3b8; padding: 1rem; text-align: center;">No teams in this division</div>';
+                }
+            });
+            return;
+        }
+        
+        // Get organization names for full team display
+        const organizationNames = {};
+        if (organizationIds.size > 0) {
+            const orgsSnap = await db.collection('organizations')
+                .where(firebase.firestore.FieldPath.documentId(), 'in', Array.from(organizationIds))
+                .get();
+                
+            orgsSnap.forEach(doc => {
+                organizationNames[doc.id] = doc.data().name;
+            });
+        }
+        
+        // Get all players from teams in this division
+        const playersSnap = await db.collection('players')
+            .where('teamId', 'in', teamIds)
+            .get();
+        
+        if (playersSnap.empty) {
+            ['scoringLeaders', 'reboundingLeaders', 'assistLeaders'].forEach(id => {
+                const container = document.getElementById(id);
+                if (container) {
+                    container.innerHTML = '<div style="color: #94a3b8; padding: 1rem; text-align: center;">No players found in this division</div>';
+                }
+            });
+            return;
+        }
+        
+        console.log(`Found ${playersSnap.size} players across ${teamIds.length} teams in ${division} division`);
+        
+        // FIXED: Get stats from gameStats subcollection with enhanced debugging
+        const playerStatsMap = new Map();
+        
+        // Get completed games for this specific division
+        const completedGamesSnap = await db.collection('games')
+            .where('status', '==', 'completed')
+            .where('division', '==', division)
+            .get();
+            
+        console.log(`Processing stats from ${completedGamesSnap.size} completed games in ${division} division`);
+        
+        // DEBUG: Log which games we found (Mike O'Brien's recommendation)
+        const gamesForDebug = [];
+        completedGamesSnap.forEach(doc => {
+            const game = doc.data();
+            gamesForDebug.push({
+                id: doc.id,
+                teams: `${game.homeTeam?.name || game.homeTeamName || 'Unknown'} vs ${game.awayTeam?.name || game.awayTeamName || 'Unknown'}`,
+                date: game.gameDate?.toDate ? game.gameDate.toDate().toLocaleDateString() : 'Unknown date',
+                division: game.division
+            });
+        });
+        console.log(`Found completed games in ${division}:`, gamesForDebug);
+        
+        // Aggregate stats from gameStats subcollections
+        for (const gameDoc of completedGamesSnap.docs) {
+            const game = gameDoc.data();
+            try {
+                // CRITICAL: Access subcollection correctly
+                const gameStatsRef = db.collection('games').doc(gameDoc.id).collection('gameStats');
+                const gameStatsSnapshot = await gameStatsRef.get();
+                
+                // DEBUG: Log stats found per game (James Chen's recommendation)
+                console.log(`Game ${gameDoc.id} (${game.homeTeam?.name || game.homeTeamName || 'Unknown'} vs ${game.awayTeam?.name || game.awayTeamName || 'Unknown'}): Found ${gameStatsSnapshot.size} player stats`);
+                
+                // ERROR HANDLING: Check if subcollection is empty (Dr. Emily Chen's recommendation)
+                if (gameStatsSnapshot.empty) {
+                    console.warn(`?? No gameStats subcollection found for game ${gameDoc.id}`);
+                    continue;
+                }
+                
+                gameStatsSnapshot.docs.forEach(doc => {
+                    const statData = doc.data();
+                    const playerId = statData.playerId || doc.id;
+                    
+                    // Only include players from teams in this division
+                    if (teamIds.includes(statData.teamId)) {
+                        if (!playerStatsMap.has(playerId)) {
+                            playerStatsMap.set(playerId, {
+                                playerId: playerId,
+                                teamId: statData.teamId,
+                                playerNumber: statData.playerNumber || '--',
+                                playerName: statData.playerName || statData.playerNumber || 'Unknown Player',
+                                totalPoints: 0,
+                                totalRebounds: 0,
+                                totalAssists: 0,
+                                totalSteals: 0,
+                                totalBlocks: 0,
+                                gamesPlayed: 0
+                            });
+                        }
+                        
+                        const playerStats = playerStatsMap.get(playerId);
+                        playerStats.totalPoints += (statData.points || 0);
+                        playerStats.totalRebounds += (statData.rebounds || 0);
+                        playerStats.totalAssists += (statData.assists || 0);
+                        playerStats.totalSteals += (statData.steals || 0);
+                        playerStats.totalBlocks += (statData.blocks || 0);
+                        playerStats.gamesPlayed += 1;
+                        
+                        // DEBUG: Log each stat aggregation
+                        console.log(`  Added stats for ${statData.playerName || statData.playerNumber}: ${statData.points || 0} pts, ${statData.rebounds || 0} reb, ${statData.assists || 0} ast`);
+                    }
+                });
+                
+            } catch (error) {
+                // ERROR HANDLING: Log but don't crash (Dr. Emily Chen's recommendation)
+                console.error(`? Error loading stats for game ${gameDoc.id}:`, error);
+            }
+        }
+        
+        console.log(`? Aggregated stats for ${playerStatsMap.size} players with game data`);
+        
+        // Convert to display format with player names
+        const players = [];
+        const playersMap = new Map();
+        
+        // Create map of players for quick lookup
+        playersSnap.forEach(doc => {
+            playersMap.set(doc.id, doc.data());
+        });
+        
+        playerStatsMap.forEach((stats, playerId) => {
+            const playerData = playersMap.get(playerId);
+            // ENHANCED: Use stats.playerName if playerData not found (Dr. Emily Chen's enhancement)
+            
+            const games = Math.max(1, stats.gamesPlayed);
+            
+            // Calculate per-game averages
+            const ppg = parseFloat((stats.totalPoints / games).toFixed(1));
+            const rpg = parseFloat((stats.totalRebounds / games).toFixed(1));
+            const apg = parseFloat((stats.totalAssists / games).toFixed(1));
+            
+            // Get full team name with organization
+            const team = teamInfo[stats.teamId];
+            const orgName = team?.organizationId ? organizationNames[team.organizationId] : null;
+            const fullTeamName = orgName ? `${orgName} ${team.name}` : (team?.name || 'Unknown Team');
+            
+            // Only include players with valid stats
+            if (ppg > 0 || rpg > 0 || apg > 0) {
+                // ENHANCED: Use playerName from stats if playerData not available
+                const playerName = (playerData && playerData.name) || stats.playerName || `Player #${stats.playerNumber}` || 'Unknown Player';
+                const playerJersey = stats.playerNumber || (playerData && playerData.jerseyNumber) || '--';
+                
+                players.push({
+                    id: playerId,
+                    name: playerName,
+                    team: fullTeamName,
+                    jersey: playerJersey,
+                    ppg: ppg,
+                    rpg: rpg,
+                    apg: apg,
+                    games: games,
+                    totalPoints: stats.totalPoints,
+                    totalRebounds: stats.totalRebounds,
+                    totalAssists: stats.totalAssists
+                });
+                
+                // DEBUG: Log each player added (James Chen's enhancement)
+                console.log(`  Player added: ${playerName} (${playerJersey}) - ${ppg} PPG, ${rpg} RPG, ${apg} APG from ${games} games`);
+            }
+        });
+        
+        console.log(`Processed ${players.length} players with stats for display`);
+        
+        // Display leaders for each category
+        displayCategoryLeaders('scoringLeaders', players, 'ppg', 'PPG');
+        displayCategoryLeaders('reboundingLeaders', players, 'rpg', 'RPG');
+        displayCategoryLeaders('assistLeaders', players, 'apg', 'APG');
+        
+    } catch (error) {
+        console.error('Error loading division stats:', error);
+        ['scoringLeaders', 'reboundingLeaders', 'assistLeaders'].forEach(id => {
+            const container = document.getElementById(id);
+            if (container) {
+                container.innerHTML = '<div style="color: #ef4444; padding: 1rem;">Error loading stats - Check console for details</div>';
+            }
+        });
+    }
+}
+
+// Display leaders for a specific category
+function displayCategoryLeaders(containerId, players, statKey, label) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    // Sort players by the stat and take top 5
+    const topPlayers = players
+        .filter(p => p.games > 0 && p[statKey] > 0)
+        .sort((a, b) => b[statKey] - a[statKey])
+        .slice(0, 5);
+    
+    if (topPlayers.length === 0) {
+        container.innerHTML = '<div style="color: #94a3b8; padding: 1rem; text-align: center;">No stats available</div>';
+        return;
+    }
+    
+    container.innerHTML = topPlayers.map((player, idx) => `
+        <div style="padding: 0.75rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="background: #3b82f6; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.875rem;">
+                    ${idx + 1}
+                </span>
+                <div>
+                    <div style="font-weight: 600; color: #f1f5f9;">${player.name} <span style="color: #94a3b8;">#${player.jersey}</span></div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">${player.team}</div>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-weight: bold; color: #3b82f6; font-size: 1.2rem;">${player[statKey].toFixed(1)}</div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">${label}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Make function available globally for onclick handlers
+window.loadDivisionStats = loadDivisionStats;
+
+// Removed old updateLeaderBoard - now using division-based displayCategoryLeaders
+
+// Initialize week filter to default state
+function initializeWeekFilter() {
+    // Only reset UI styling if user hasn't made a selection
+    if (!userHasSelectedWeek) {
+        // Ensure "All Weeks" button is active by default
+        document.querySelectorAll('.schedule-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        const allWeeksButton = document.querySelector('.schedule-tab[onclick*="all"]');
+        if (allWeeksButton) {
+            allWeeksButton.classList.add('active');
+        }
+    }
+    
+    // Only reset filter if not already set by user interaction
+    if (!currentWeekFilter) {
+        currentWeekFilter = 'all';
+        console.log('Week filter initialized to: all');
+    } else {
+        console.log('Week filter preserved as: ' + currentWeekFilter);
+    }
+}
+
+// Initialize data loading when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeDataLoading();
+        initializeWeekFilter();
+    });
+} else {
+    initializeDataLoading();
+    initializeWeekFilter();
+}
+
+// Initialize schedule tabs
+function initScheduleTabs() {
+    const scheduleTabs = document.querySelectorAll('.schedule-tab');
+    scheduleTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active styling
+            scheduleTabs.forEach(t => {
+                t.classList.remove('active');
+                t.style.background = '#1e293b';
+            });
+            tab.classList.add('active');
+            tab.style.background = '#3b82f6';
+            
+            // Load schedule for selected division
+            const division = tab.dataset.division;
+            loadSchedule(division);
+        });
+    });
+}
+
+function initializeDataLoading() {
+    console.log('Starting app initialization...');
+    
+    // Ensure Firebase is ready
+    if (!window.db && firebase && firebase.firestore) {
+        window.db = firebase.firestore();
+        console.log('Firestore initialized');
+    }
+    
+    // Wait for stability then load data
+    setTimeout(() => {
+        console.log('Loading data...');
+        
+        // Load with error handling
+        if (typeof loadStandings === 'function') loadStandings().catch(e => console.error('Standings:', e));
+        if (typeof loadSchedule === 'function') loadSchedule('all').catch(e => console.error('Schedule:', e));
+        // Load player stats with proper error handling
+        if (typeof loadPlayerStats === 'function') {
+            const statsPromise = loadPlayerStats();
+            if (statsPromise && typeof statsPromise.catch === 'function') {
+                statsPromise.catch(error => {
+                    console.error('Error loading stats:', error);
+                    // Show user-friendly message instead of infinite loading
+                    const statsContainer = document.querySelector('.player-leaders-content');
+                    if (statsContainer) {
+                        statsContainer.innerHTML = '<p style="text-align: center; color: #ef4444;">Unable to load player stats</p>';
+                    }
+                });
+            } else {
+                console.error('Stats loading failed - invalid promise returned');
+            }
+        }
+        if (typeof initScheduleTabs === 'function') initScheduleTabs();
+        if (typeof setupLeaderboardListeners === 'function') setupLeaderboardListeners();
+        
+        // Refresh data every 30 seconds
+        setInterval(() => {
+            loadStandings();
+            loadSchedule(currentDivisionFilter);
+            loadPlayerStats();
+        }, 30000);
+    }, 1000);
+}
+</script>
+
+</script>
+                <div class="role-card" onclick="selectRole('admin')" style="background: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;"><i class="fas fa-cog"></i>�</div>
+                    <h3 style="color: #f1f5f9; margin: 0.5rem 0; font-size: 1rem;">ADMIN</h3>
+                    <p style="color: #64748b; font-size: 0.875rem; margin: 0;">League management and administration</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    pointer-events: auto; /* CRITICAL: Must be auto, not none */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+    opacity: 1;
+}
+
+.modal-overlay[style*="display: none"] {
+    display: none !important;
+}
+
+.modal-overlay[style*="display: flex"] {
+    display: flex !important;
+    opacity: 1;
+}
+
+/* Modal Content - Container for modal */
+.modal-content {
+    position: relative;
+    background: #1e293b !important;
+    border-radius: 16px !important;
+    padding: 0 !important;
+    max-width: 600px !important;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    pointer-events: auto; /* CRITICAL: Ensures content is clickable */
+    z-index: 10001;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    padding: 1.5rem !important;
+    border-bottom: 1px solid #334155 !important;
+    position: relative;
+}
+
+.modal-header h2 {
+    margin: 0 !important;
+    font-size: 1.5rem !important;
+    color: #f1f5f9 !important;
+}
+
+/* Close Button - HIGHEST Z-INDEX */
+.modal-close {
+    position: absolute !important;
+    top: -0.5rem !important;
+    right: -0.5rem !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important; /* Touch-friendly */
+    min-height: 44px !important;
+    border: none !important;
+    background: transparent !important;
+    font-size: 2rem !important;
+    line-height: 1 !important;
+    color: #94a3b8 !important;
+    cursor: pointer !important;
+    z-index: 10002 !important; /* CRITICAL: Highest z-index */
+    pointer-events: auto !important; /* CRITICAL: Must be clickable */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    transition: all 0.2s ease !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.modal-close:hover {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+    transform: scale(1.1) !important;
+}
+
+.modal-close:focus {
+    outline: 3px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+}
+
+.modal-close:active {
+    transform: scale(0.95) !important;
+    background: #475569 !important;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 2rem !important;
+    position: relative;
+}
+
+.modal-body h3 {
+    color: #3b82f6 !important;
+    text-align: center !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1.25rem !important;
+}
+
+.modal-body p {
+    color: #94a3b8 !important;
+    text-align: center !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Role Buttons - Improved */
+.role-buttons {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap: 1rem !important;
+}
+
+.role-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 1.5rem 1rem !important;
+    border: 2px solid #334155 !important;
+    border-radius: 12px !important;
+    background: #0f172a !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    min-height: 140px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: #f1f5f9 !important;
+}
+
+.role-btn:hover {
+    border-color: #3b82f6 !important;
+    background: #1e293b !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2) !important;
+}
+
+.role-card:hover {
+    border-color: #3b82f6 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 640px) {
+    .role-cards {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ===================================
+   MOBILE RESPONSIVE DESIGN - PHASE 2
+   =================================== */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+    /* Stats grid becomes 2 columns */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+    
+    /* All buttons meet 48px minimum touch target */
+    .btn, button, .admin-tabs button, .tab-btn, .action-btn {
+        min-height: 48px !important;
+        min-width: 48px !important;
+        font-size: 16px !important;
+        padding: 12px 20px !important;
+    }
+    
+    /* Tables scroll horizontally */
+    .data-table, .table-container {
+        font-size: 14px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: block !important;
+    }
+    
+    .data-table table {
+        min-width: 600px !important;
+    }
+    
+    /* Tab navigation scrolls horizontally */
+    .admin-tabs, .tab-navigation {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        gap: 0.5rem !important;
+    }
+    
+    .admin-tabs button, .tab-btn {
+        flex-shrink: 0 !important;
+        min-width: 120px !important;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    /* Stats grid becomes 1 column */
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Larger text for readability */
+    .stat-card h3 {
+        font-size: 2rem !important;
+    }
+    
+    .stat-card p {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Full width buttons */
+    .btn-group {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+/* === PLAYOFF BRACKET DISPLAY STYLES === */
+.playoff-brackets-section {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.playoff-brackets-section h3 {
+    text-align: center;
+    color: #3b82f6;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.bracket-card {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 2px solid #3b82f6;
+}
+
+.bracket-card h4 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.bracket-game {
+    background: #f8f9fa;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 2px solid #667eea;
+}
+
+.bracket-game-round {
+    font-size: 12px;
+    color: #ff6b35;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.bracket-game-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.bracket-team {
+    flex: 1;
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid #333;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+}
+
+.bracket-vs {
+    color: #666;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.bracket-game-time {
+    margin-top: 10px;
+    text-align: center;
+    color: #ff6b35;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* === ADDITIONAL BRACKET STYLES FOR 5-TEAM TOURNAMENT === */
+.bracket-container {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+}
+
+.bracket-header h2 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+}
+
+.round-label {
+    text-align: center;
+    font-weight: bold;
+    color: #ff6b35;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.bracket-games {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.bracket-spacer {
+    height: 30px;
+}
+
+.game-label {
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.team-slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+.team-slot.bye-team {
+    background: #e8f5e8;
+    border-color: #4CAF50;
+}
+
+.team-slot.champion-team {
+    background: linear-gradient(135deg, #ffdc00, #ffd700);
+    border-color: #ff6b35;
+    font-weight: bold;
+    justify-content: center;
+}
+
+.seed {
+    background: #ff6b35;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+.team-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.bye-label {
+    font-size: 10px;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.game-info {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+}
+
+.bracket-connector {
+    align-self: center;
+    margin: 0 10px;
+}
+
+.connector-svg {
+    display: block;
+}
+
+.champion-round .round-label {
+    color: #ff6b35;
+    font-size: 16px;
+}
+
+.champion-slot {
+    text-align: center;
+}
+
+.tournament-tree {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* === ENHANCED TOURNAMENT BRACKET STYLES === */
+.tournament-tree {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-radius: 16px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.tournament-tree::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b35 0%, #ff8f65 50%, #ff6b35 100%);
+}
+
+.bracket-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.round-label {
+    fill: #ff6b35;
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bracket-layout {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    min-height: 400px;
+    gap: 40px;
+}
+
+.five-team-layout {
+    min-height: 500px;
+}
+
+.round {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.match-group {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+}
+
+.match {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 220px;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.match::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(135deg, #ff6b35 0%, #3b82f6 100%);
+    border-radius: 15px;
+    z-index: -1;
+}
+
+.match:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.semifinals-match::before,
+.quarterfinal-match::before {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+}
+
+.championship-match::before {
+    background: linear-gradient(135deg, #ff6b35 0%, #fbbf24 50%, #ff6b35 100%);
+}
+
+.bye-match {
+    background: linear-gradient(145deg, #f3f4f6 0%, #e5e7eb 100%);
+    border: 3px dashed #9ca3af;
+    opacity: 0.8;
+}
+
+.bye-match::before {
+    background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+}
+
+.match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.game-number {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ff6b35;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.match-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.team-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.team-slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.team-slot:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.seed {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.team-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1f2937;
+    flex: 1;
+}
+
+.bye-team {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: #f59e0b;
+    position: relative;
+}
+
+.bye-indicator {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.championship-indicator {
+    margin-top: 20px;
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+    border-radius: 10px;
+    border: 2px solid #f59e0b;
+}
+
+.trophy {
+    font-size: 32px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.champion-text {
+    font-size: 16px;
+    font-weight: 900;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.runner-up-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #78716c;
+    text-transform: uppercase;
+}
+
+/* Enhanced responsive design */
+@media (max-width: 1200px) {
+    .bracket-layout {
+        gap: 20px;
+    }
+    
+    .match {
+        min-width: 200px;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tournament-tree {
+        padding: 20px;
+        margin: 10px 0;
+    }
+    
+    .bracket-layout,
+    .five-team-layout {
+        flex-direction: column;
+        min-height: auto;
+        gap: 30px;
+    }
+    
+    .bracket-svg {
+        display: none;
+    }
+    
+    .match {
+        min-width: 280px;
+        max-width: 100%;
+    }
+    
+    .match-group {
+        gap: 20px;
+    }
+    
+    .team-slot {
+        padding: 10px 12px;
+    }
+    
+    .team-name {
+        font-size: 13px;
+    }
+    
+    .championship-indicator {
+        padding: 12px;
+    }
+    
+    .trophy {
+        font-size: 28px;
+    }
+    
+    .champion-text {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tournament-tree {
+        padding: 15px;
+    }
+    
+    .match {
+        min-width: 250px;
+        padding: 12px;
+    }
+    
+    .match-header {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .team-slot {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .seed {
+        align-self: center;
+    }
+}
+
+/* Barbarian bracket styles for 4-team and 6-team brackets */
+.tournament-bracket {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px 0;
+    flex-wrap: wrap;
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.round-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #3b82f6;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.match-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.game-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ff6b35;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.match .team {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    font-weight: 600;
+    border: 1px solid #ddd;
+}
+
+.match .vs {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.match .game-time {
+    font-size: 14px;
+    color: #ff6b35;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.bracket-connector {
+    width: 30px;
+    height: 3px;
+    background: #3b82f6;
+    margin: 0 10px;
+}
+
+/* Tournament Bracket Tree Styles */
+.bracket-container {
+    background-color: #0a0a0a;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.bracket-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.bracket-header h2 {
+    color: #ff6b35;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.tournament-tree {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 600px;
+    gap: 0;
+}
+
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.round-label {
+    text-align: center;
+    color: #ff6b35;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    padding: 8px;
+    background-color: rgba(255, 107, 53, 0.1);
+    border-radius: 6px;
+}
+
+.bracket-games {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 600px;
+    gap: 0;
+}
+
+.bracket-game {
+    background-color: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 180px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.bracket-game:hover {
+    border-color: #ff6b35;
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
+}
+
+.game-label {
+    text-align: center;
+    color: #ff6b35;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.team-slot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #0a0a0a;
+    border-radius: 6px;
+    border: 1px solid #333;
+    transition: background-color 0.2s ease;
+}
+
+.team-slot:hover {
+    background-color: #1a1a1a;
+}
+
+.seed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #ff6b35;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.team-name {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bye-team {
+    background-color: rgba(255, 107, 53, 0.1);
+    border-color: #ff6b35;
+}
+
+.bye-label {
+    color: #ff6b35;
+    font-size: 11px;
+    font-style: italic;
+    margin-left: auto;
+}
+
+.game-info {
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+    font-size: 11px;
+    color: #999;
+}
+
+.game-info div {
+    margin: 3px 0;
+}
+
+.bracket-spacer {
+    flex: 1;
+    min-height: 20px;
+}
+
+.bracket-connector {
+    display: flex;
+    align-items: center;
+    width: 80px;
+    height: 600px;
+    flex-shrink: 0;
+}
+
+.connector-svg {
+    display: block;
+}
+
+.champion-round {
+    min-width: 220px;
+}
+
+.champion-slot {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 2px solid #ff6b35;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+.champion-team {
+    background-color: transparent;
+    border: none;
+    justify-content: center;
+}
+
+.champion-team .team-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff6b35;
+    text-align: center;
+}
+
+@media (max-width: 1200px) {
+    .tournament-tree {
+        min-height: 500px;
+    }
+    .bracket-games {
+        height: 500px;
+    }
+    .bracket-connector {
+        height: 500px;
+    }
+    .bracket-connector svg {
+        height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bracket-container {
+        padding: 15px;
+    }
+    .bracket-round {
+        min-width: 160px;
+    }
+    .bracket-game {
+        min-width: 150px;
+        padding: 10px;
+    }
+    .team-name {
+        font-size: 12px;
+    }
+}
+
+/* ======================================== */
+/* FIX WHITE BACKGROUND ON PLAYOFF BRACKETS */
+/* ======================================== */
+
+/* Force dark background on bracket containers */
+.playoff-brackets-section,
+#playoff-brackets-section,
+.bracket-card,
+.bracket-container {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Override any white backgrounds on bracket games */
+.bracket-box,
+.game-bracket,
+.playoff-game {
+    background: #1a1a1a !important;
+    border: 2px solid #ff6b35 !important;
+}
+
+/* Ensure week-content wrappers are transparent */
+.week-content,
+#week-content,
+.content-container {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Nuclear option: Force transparency on common wrapper divs */
+div[class*="playoff"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+div[class*="bracket"]:not(.bracket-box):not(.game-bracket):not(.bracket-display) {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* ======================================== */
+
+</style>
+
+<script>
+// OLD MODAL SCRIPT REMOVED - Was looking for non-existent #roleModal
+// This conflicted with the horizontal modal below
+
+// ==========================================
+// HORIZONTAL MODAL MANAGEMENT - FIXED VERSION
+// Panel Consensus: Use #loginModal (horizontal)
+// ==========================================
+
+(function initializeHorizontalModal() {
+    'use strict';
+    
+    console.log('?? Initializing horizontal staff modal...');
+    
+    // Get the HORIZONTAL modal (keep this one!)
+    const modal = document.getElementById('loginModal');
+    const closeBtn = modal ? modal.querySelector('.modal-close, #closeLogin') : null;
+    const staffLoginBtn = document.getElementById('loginBtn');
+    
+    if (!modal) {
+        console.error('? CRITICAL: horizontal modal #loginModal not found in DOM');
+        return;
+    }
+    
+    console.log('? Horizontal modal element found:', modal.id);
+    
+    // ==========================================
+    // OVERRIDE: Make openRoleModal open HORIZONTAL modal
+    // ==========================================
+    window.openRoleModal = function() {
+        console.log('?? Opening HORIZONTAL role modal');
+        try {
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+            console.log('? Horizontal modal opened successfully');
+            
+            // Focus management - focus first role card
+            const firstRoleCard = modal.querySelector('.role-card');
+            if (firstRoleCard) {
+                setTimeout(() => firstRoleCard.focus(), 100);
+            }
+        } catch (error) {
+            console.error('? Error opening horizontal modal:', error);
+        }
+    };
+    
+    // ==========================================
+    // CLOSE MODAL FUNCTION
+    // ==========================================
+    window.closeRoleModal = function() {
+        console.log('?? Closing HORIZONTAL role modal');
+        try {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            console.log('? Horizontal modal closed successfully');
+            
+            // Return focus to trigger button
+            if (staffLoginBtn) {
+                staffLoginBtn.focus();
+            }
+        } catch (error) {
+            console.error('? Error closing horizontal modal:', error);
+        }
+    };
+    
+    // ==========================================
+    // CLOSE BUTTON HANDLER
+    // ==========================================
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('?? Close button clicked');
+            closeRoleModal();
+        });
+        console.log('? Close button listener attached');
+    } else {
+        console.warn('?? Close button not found in horizontal modal');
+    }
+    
+    // ==========================================
+    // ESC KEY HANDLER (CRITICAL FIX)
+    // ==========================================
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            console.log('?? ESC key pressed - closing horizontal modal');
+            e.preventDefault();
+            closeRoleModal();
+        }
+    });
+    
+    // ==========================================
+    // CLICK BACKDROP HANDLER
+    // ==========================================
+    modal.addEventListener('click', function(e) {
+        // Only close if clicking the backdrop (modal itself, not content)
+        if (e.target === modal) {
+            console.log('Clicked outside modal content (backdrop)');
+            closeRoleModal();
+        }
+    });
+    
+    // ==========================================
+    // FOCUS TRAP
+    // ==========================================
+    modal.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab' && !modal.classList.contains('hidden')) {
+            const focusableElements = modal.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), .role-card[tabindex]:not([tabindex="-1"])'
+            );
+            
+            if (focusableElements.length === 0) return;
+            
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            // Shift + Tab (backwards)
+            if (e.shiftKey) {
+                if (document.activeElement === firstElement) {
+                    lastElement.focus();
+                    e.preventDefault();
+                }
+            } 
+            // Tab (forwards)
+            else {
+                if (document.activeElement === lastElement) {
+                    firstElement.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    });
+    
+    // ==========================================
+    // ROLE CARD CLICK HANDLERS
+    // ==========================================
+    const roleCards = modal.querySelectorAll('.role-card');
+    roleCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const role = this.getAttribute('data-role');
+            if (role) {
+                console.log(`Navigating to ${role} login from horizontal modal`);
+                window.location.href = `/login.html?role=${role}`;
+            }
+        });
+        
+        // Make role cards keyboard accessible
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+    
+    console.log('? Horizontal modal initialization complete');
+    console.log('?? Close methods available: � button, ESC key, click backdrop');
+    console.log('?? Modal target: #loginModal (horizontal layout)');
+    
+})();
+
+// ==========================================
+// NAVIGATION FUNCTIONS
+// ==========================================
+window.navigateToRole = function(role) {
+    console.log(`Navigating to ${role} login`);
+    window.location.href = `/login.html?role=${role}`;
+};
+
+// Barbarian function for backward compatibility
+function selectRole(role) {
+    navigateToRole(role);
+}
+
+// === REAL-TIME LISTENERS - FIX #5 ===
+// === Added by: Data Specialist ===
+
+let standingsListener = null;
+let scheduleListener = null;
+let statsListener = null;
+
+function setupRealtimeListeners() {
+    if (!window.db) {
+        console.log('Firebase not initialized, skipping real-time listeners');
+        return;
+    }
+
+    // Real-time standings listener
+    if (standingsListener) standingsListener();
+    standingsListener = window.db.collection('teams')
+        .onSnapshot((snapshot) => {
+            console.log('?? Standings updated in real-time');
+            loadStandings();
+        }, (error) => {
+            console.error('Standings listener error:', error);
+        });
+
+    // FIXED: Real-time games listener - simplified to avoid Firebase index requirement
+    if (scheduleListener) scheduleListener();
+    scheduleListener = window.db.collection('games')
+        .where('status', '==', 'completed')
+        .onSnapshot((snapshot) => {
+            console.log('?? Games updated in real-time - refreshing schedule, ticker, and stats');
+            
+            // ?? CRITICAL FIX: Check if user is viewing Week 7 playoffs before reloading
+            if (userHasSelectedWeek && (currentWeekFilter === 7 || currentWeekFilter === '7')) {
+                console.log('? Firebase reload blocked - user viewing Week 7 playoffs, brackets preserved');
+                // Update ticker only (doesn't affect brackets)
+                if (typeof loadTickerData === 'function') loadTickerData();
+                if (typeof loadPlayerStats === 'function') loadPlayerStats();
+                return; // Exit early - don't call loadSchedule()
+            }
+            
+            // Normal reload for other weeks (1-6)
+            console.log('? Firebase reload proceeding - not on Week 7');
+            if (typeof loadSchedule === 'function') loadSchedule(currentDivisionFilter);
+            if (typeof loadTickerData === 'function') loadTickerData();
+            if (typeof loadPlayerStats === 'function') loadPlayerStats();
+        }, (error) => {
+            console.error('Games listener error:', error);
+        });
+
+    // FIXED: Real-time gameStats listener for player stats updates
+    if (statsListener) statsListener();
+    
+    // Listen for gameStats updates (more efficient than listening to all games)
+    const gamesRef = window.db.collection('games');
+    statsListener = gamesRef.onSnapshot((snapshot) => {
+        // Check if any games have new or updated gameStats
+        let hasStatsUpdates = false;
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === 'added' || change.type === 'modified') {
+                const game = change.doc.data();
+                if (game.status === 'completed') {
+                    hasStatsUpdates = true;
+                }
+            }
+        });
+        
+        if (hasStatsUpdates) {
+            console.log('?? Game stats updated in real-time');
+            if (typeof loadPlayerStats === 'function') loadPlayerStats();
+        }
+    }, (error) => {
+        console.error('Stats listener error:', error);
+    });
+
+    console.log('? Real-time listeners activated (games, standings, stats)');
+}
+
+// Cleanup listeners on page unload
+function cleanupListeners() {
+    if (standingsListener) {
+        standingsListener();
+        standingsListener = null;
+    }
+    if (scheduleListener) {
+        scheduleListener();
+        scheduleListener = null;
+    }
+    if (statsListener) {
+        statsListener();
+        statsListener = null;
+    }
+    console.log('?? Real-time listeners cleaned up');
+}
+
+// ===== SATURDAY HIGHLIGHT REEL TICKER =====
+
+let tickerItems = [];
+let tickerUpdateInterval = null;
+
+// Initialize ticker on page load
+function initializeTicker() {
+    loadTickerData();
+    
+    // Refresh ticker every 5 minutes
+    tickerUpdateInterval = setInterval(() => {
+        loadTickerData();
+    }, 5 * 60 * 1000);
+    
+    // Real-time listener for new completed games (Saturday only)
+    setupTickerRealTimeListener();
+}
+
+// Load ticker data from Firebase
+async function loadTickerData() {
+    try {
+        tickerItems = [];
+        
+        // Get today's date for fallback message logic only
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
+        
+        console.log(`🎯 Loading recent completed games for ticker...`);
+        
+        // FIREBASE INDEX REQUIREMENT:
+        // Collection: games
+        // Fields indexed:
+        //   - status (Ascending)
+        //   - completedAt (Descending or Ascending)
+        // Create at: https://console.firebase.google.com/v1/r/project/az-flight-league-prod-2026/firestore/indexes
+        
+        // FIXED: Simplified query to avoid Firebase index requirement
+        const gamesSnapshot = await db.collection('games')
+            .where('status', '==', 'completed')
+            .get();
+            
+        // Get all completed games and sort by most recent
+        const targetGames = [];
+        if (!gamesSnapshot.empty) {
+            gamesSnapshot.forEach(doc => {
+                const game = doc.data();
+                if (game.completedAt) {
+                    targetGames.push({ id: doc.id, ...game });
+                }
+            });
+            
+            // Sort by completedAt descending (most recent first)
+            targetGames.sort((a, b) => {
+                const timeA = a.completedAt ? a.completedAt.toDate() : new Date(0);
+                const timeB = b.completedAt ? b.completedAt.toDate() : new Date(0);
+                return timeB - timeA; // Descending order
+            });
+            
+            // Take only the 5 most recent games
+            targetGames.splice(5);
+        }
+        
+        if (targetGames.length === 0) {
+            // No games yet - show welcome message
+            if (dayOfWeek === 6) {
+                tickerItems.push({ text: '<i class="fas fa-basketball-ball"></i> Game Day! Check back for live results and highlights!' });
+            } else {
+                tickerItems.push({ text: '<i class="fas fa-basketball-ball"></i> Next games this Saturday! Stay tuned!' });
+            }
+        } else {
+            // Add all games with FULL DETAILS
+            await Promise.all(targetGames.map(game => 
+                addFullSaturdayGame(game)
+            ));
+            
+            console.log(`Basketball Ticker loaded: ${targetGames.length} recent games, ${tickerItems.length} items`);
+        }
+        
+        updateTickerDisplay();
+        
+    } catch (error) {
+        console.error('Error loading ticker:', error);
+        // Fallback
+        tickerItems = [{ text: '<i class="fas fa-basketball-ball"></i> West Valley Basketball League - Games Every Saturday!' }];
+        updateTickerDisplay();
+    }
+}
+
+// Add full Saturday game to ticker
+async function addFullSaturdayGame(game) {
+    const homeWon = game.homeScore > game.awayScore;
+    
+    // Fetch team names from teams collection
+    let homeTeamName = 'Home Team';
+    let awayTeamName = 'Away Team';
+    
+    try {
+        if (game.homeTeamId) {
+            const homeTeamDoc = await firebase.firestore().collection('teams').doc(game.homeTeamId).get();
+            if (homeTeamDoc.exists) {
+                homeTeamName = homeTeamDoc.data().name || 'Home Team';
+            }
+        }
+        if (game.awayTeamId) {
+            const awayTeamDoc = await firebase.firestore().collection('teams').doc(game.awayTeamId).get();
+            if (awayTeamDoc.exists) {
+                awayTeamName = awayTeamDoc.data().name || 'Away Team';
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching team names for ticker:', error);
+        // Fall back to existing stored names if available
+        homeTeamName = game.homeTeamName || game.homeTeam || 'Home Team';
+        awayTeamName = game.awayTeamName || game.awayTeam || 'Away Team';
+    }
+    
+    const winner = homeWon ? homeTeamName : awayTeamName;
+    const loser = homeWon ? awayTeamName : homeTeamName;
+    
+    // Include division in game result
+    const division = game.division ? `${game.division}: ` : '';
+    
+    // 1. Game Result
+    tickerItems.push({
+        text: `<i class="fas fa-basketball-ball"></i> ${division}${winner} defeated ${loser} ${game.homeScore}-${game.awayScore}`
+    });
+    
+    // 2. MVP (Player of the Game) - FIXED: Proper null checking and fallbacks
+    if (game.mvp) {
+        const mvpName = game.mvp.playerName || `#${game.mvp.playerNumber}` || 'Unknown Player';
+        const mvpPoints = game.mvp.points || 0;
+        const mvpRebounds = game.mvp.rebounds || 0;
+        const mvpAssists = game.mvp.assists || 0;
+        
+        tickerItems.push({
+            text: `<i class="fas fa-trophy text-warning"></i> MVP: ${mvpName} - ${mvpPoints} pts, ${mvpRebounds} reb, ${mvpAssists} ast`
+        });
+    }
+    
+    // 3. Leading Scorer (if different from MVP)
+    if (game.gameLeaders?.scorer) {
+        const isDifferentFromMVP = !game.mvp || game.gameLeaders.scorer.playerId !== game.mvp.playerId;
+        if (isDifferentFromMVP) {
+            tickerItems.push({
+                text: `<i class="fas fa-star"></i> Leading Scorer: ${game.gameLeaders.scorer.playerName} - ${game.gameLeaders.scorer.points} pts`
+            });
+        }
+    }
+    
+    // 4. Leading Rebounder
+    if (game.gameLeaders?.rebounder) {
+        tickerItems.push({
+            text: `<i class="fas fa-star"></i> Leading Rebounder: ${game.gameLeaders.rebounder.playerName} - ${game.gameLeaders.rebounder.rebounds} reb`
+        });
+    }
+    
+    // 5. Leading Assists
+    if (game.gameLeaders?.assists) {
+        tickerItems.push({
+            text: `<i class="fas fa-star"></i> Leading Assists: ${game.gameLeaders.assists.playerName} - ${game.gameLeaders.assists.assists} ast`
+        });
+    }
+}
+
+// Update ticker display
+function updateTickerDisplay() {
+    const tickerContent = document.querySelector('.ticker-content');
+    if (!tickerContent || tickerItems.length === 0) return;
+    
+    const tickerHTML = tickerItems.map(item => `
+        <div class="ticker-item">${item.text}</div>
+    `).join('');
+    
+    // Duplicate for seamless loop
+    tickerContent.innerHTML = tickerHTML + tickerHTML;
+    
+    console.log(`Ticker display updated with ${tickerItems.length} items`);
+}
+
+// Setup real-time listener for Saturday - FIXED: Simplified to avoid index requirement
+function setupTickerRealTimeListener() {
+    const today = new Date();
+    if (today.getDay() === 6) {
+        // Only listen on Saturdays - simplified query to avoid composite index
+        db.collection('games')
+            .where('status', '==', 'completed')
+            .onSnapshot(() => {
+                console.log('?? New game completed - refreshing ticker');
+                loadTickerData();
+            }, (error) => {
+                console.error('?? Real-time listener error:', error);
+            });
+    }
+}
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+    if (tickerUpdateInterval) {
+        clearInterval(tickerUpdateInterval);
+    }
+});
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listener to Staff Login button
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.removeAttribute('onclick');
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openRoleModal();
+        });
+    }
+    
+    // Setup real-time listeners after a short delay to ensure Firebase is ready
+    setTimeout(() => {
+        setupRealtimeListeners();
+    }, 1000);
+    
+    // Initialize ticker after Firebase is ready
+    setTimeout(() => {
+        initializeTicker();
+    }, 1500);
+});
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', cleanupListeners);
+
+// Modal event listeners are now handled in the initializeModal() function above
+        // Dynamic Statistics Loading
+        async function updateStatistics() {
+            console.log('Loading live statistics...');
+            try {
+                // Count teams
+                const teamsSnapshot = await db.collection('teams').get();
+                const teamCount = teamsSnapshot.size;
+                
+                // Count players
+                const playersSnapshot = await db.collection('players').get();
+                const playerCount = playersSnapshot.size;
+                
+                // Count games
+                const gamesSnapshot = await db.collection('games').get();
+                const gameCount = gamesSnapshot.size;
+                
+                // Calculate unique divisions from teams - DYNAMIC FIX
+                const divisions = new Set();
+                teamsSnapshot.forEach(doc => {
+                    const team = doc.data();
+                    if (team.division) {
+                        divisions.add(team.division);
+                    }
+                });
+                const divisionCount = divisions.size;
+                
+                // Update the DOM with animations
+                const animateValue = (element, start, end, duration) => {
+                    if (!element) return;
+                    let startTimestamp = null;
+                    const step = (timestamp) => {
+                        if (!startTimestamp) startTimestamp = timestamp;
+                        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                        element.textContent = Math.floor(progress * (end - start) + start);
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        }
+                    };
+                    window.requestAnimationFrame(step);
+                };
+                
+                // Update with animation
+                const teamsEl = document.getElementById('stat-teams');
+                const playersEl = document.getElementById('stat-players');
+                const gamesEl = document.getElementById('stat-games');
+                const divisionsEl = document.getElementById('stat-divisions');
+                
+                if (teamsEl) animateValue(teamsEl, 0, teamCount, 1000);
+                if (playersEl) animateValue(playersEl, 0, playerCount, 1000);
+                if (gamesEl) animateValue(gamesEl, 0, gameCount, 1000);
+                if (divisionsEl) animateValue(divisionsEl, 0, divisionCount, 1000);
+                
+                console.log('Statistics updated - Teams: ' + teamCount + ', Players: ' + playerCount + ', Games: ' + gameCount + ', Divisions: ' + divisionCount);
+                
+            } catch (error) {
+                console.error('Error updating statistics:', error);
+                // Set to 0 on error
+                document.getElementById('stat-teams').textContent = '0';
+                document.getElementById('stat-players').textContent = '0';
+                document.getElementById('stat-games').textContent = '0';
+                document.getElementById('stat-divisions').textContent = '0';
+            }
+        }
+
+        // LOGO LOADING FUNCTIONALITY - BY MARCUS RODRIGUEZ
+        async function loadLeagueLogo() {
+            try {
+                const doc = await db.collection('settings').doc('league').get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    
+                    // Update logo
+                    if (data.logoURL) {
+                        const headerLogo = document.getElementById('headerLogo');
+                        const defaultIcon = document.getElementById('defaultIcon');
+                        
+                        if (headerLogo) {
+                            headerLogo.src = data.logoURL;
+                            headerLogo.style.display = 'block';
+                        }
+                        if (defaultIcon) {
+                            defaultIcon.style.display = 'none';
+                        }
+                        
+                        console.log('? Logo loaded from Firebase');
+                    }
+                    
+                    // Update league name
+                    // DISABLED - Using hardcoded "WEST VALLEY" value instead of Firebase
+                    // if (data.leagueName) {
+                    //     const leagueNameEl = document.getElementById('leagueName');
+                    //     if (leagueNameEl) {
+                    //         leagueNameEl.textContent = data.leagueName;
+                    //     }
+                    // }
+                }
+            } catch (error) {
+                console.error('Error loading logo:', error);
+            }
+        }
+        
+        // Call updateStatistics after Firebase is initialized
+        setTimeout(updateStatistics, 1500);
+        setTimeout(loadLeagueLogo, 1000);
+        
+        // Update statistics when data changes
+        db.collection('teams').onSnapshot(() => updateStatistics());
+        db.collection('players').onSnapshot(() => updateStatistics());
+        db.collection('games').onSnapshot(() => updateStatistics());
+    </script>
+    
+    <!-- Authentication Loading Logic to Prevent Content Flash -->
+    <script>
+        // Wait for Firebase to be ready, then check authentication state
+        const waitForFirebaseAndCheckAuth = () => {
+            if (typeof firebase !== 'undefined' && firebase.apps.length > 0 && firebase.auth) {
+                console.log('?? Checking authentication state...');
+                
+                // Set up auth state observer
+                firebase.auth().onAuthStateChanged(async (user) => {
+                    if (user) {
+                        console.log('? User authenticated:', user.email);
+                        
+                        try {
+                            // Get user's role from Firestore
+                            const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                            const userData = userDoc.data();
+                            
+                            if (userData && userData.role) {
+                                console.log('?? Redirecting authenticated user to dashboard...');
+                                
+                                // Redirect based on role
+                                const rolePages = {
+                                    'admin': '/admin.html',
+                                    'coach': '/coach.html', 
+                                    'scorekeeper': '/scorekeeper-v2.html'
+                                };
+                                
+                                const redirectPage = rolePages[userData.role] || '/admin.html';
+                                window.location.href = redirectPage;
+                                return; // Exit early - don't show public page
+                            }
+                        } catch (error) {
+                            console.log('Error getting user role:', error);
+                        }
+                    }
+                    
+                    // User is not authenticated OR error occurred
+                    console.log('?? Showing public page for unauthenticated user');
+                    
+                    // Hide loading screen and show public page
+                    const loadingScreen = document.getElementById('authLoadingScreen');
+                    const publicPage = document.getElementById('publicPage');
+                    
+                    if (loadingScreen) {
+                        loadingScreen.style.display = 'none';
+                    }
+                    
+                    if (publicPage) {
+                        publicPage.style.display = 'block';
+                    }
+                });
+                
+                // Timeout fallback - show public page if auth check takes too long
+                setTimeout(() => {
+                    const loadingScreen = document.getElementById('authLoadingScreen');
+                    const publicPage = document.getElementById('publicPage');
+                    
+                    if (loadingScreen && loadingScreen.style.display !== 'none') {
+                        console.log('?? Auth check timeout - showing public page');
+                        loadingScreen.style.display = 'none';
+                        if (publicPage) {
+                            publicPage.style.display = 'block';
+                        }
+                    }
+                }, 3000);
+                
+            } else {
+                // Firebase not ready yet, try again
+                setTimeout(waitForFirebaseAndCheckAuth, 100);
+            }
+        };
+        
+        // Start the authentication check
+        waitForFirebaseAndCheckAuth();
+
+        // === PLAYOFF BRACKET DISPLAY FUNCTIONS ===
+        
+        // Load playoff brackets from Firestore
+        async function loadPlayoffBrackets() {
+            try {
+                const doc = await db.collection('settings').doc('playoffs').get();
+                
+                if (!doc.exists) {
+                    console.log('No playoff brackets configured');
+                    return;
+                }
+                
+                const playoffData = doc.data().brackets;
+                
+                // Add bracket section to schedule container if not already there
+                let bracketSection = document.getElementById('playoff-brackets-section');
+                if (!bracketSection) {
+                    const scheduleContainer = document.querySelector('.schedule-container');
+                    bracketSection = document.createElement('div');
+                    bracketSection.id = 'playoff-brackets-section';
+                    bracketSection.className = 'playoff-brackets-section';
+                    bracketSection.innerHTML = '<h3>Playoff Brackets</h3><div id="bracket-containers"></div>';
+                    scheduleContainer.appendChild(bracketSection);
+                }
+                
+                const bracketContainers = document.getElementById('bracket-containers');
+                bracketContainers.innerHTML = '';
+                
+                for (const [division, bracketData] of Object.entries(playoffData)) {
+                    renderBracket(division, bracketData, bracketContainers);
+                }
+                
+            } catch (error) {
+                console.error('Error loading brackets:', error);
+            }
+        }
+
+        // Generate 3-team tournament bracket with enhanced tree structure and SVG connectors
+        function generate3TeamBracket(division, games) {
+            const divisionName = {
+                '6th': '6th Grade',
+                '7th': '7th Grade',
+                '8th': '8th Grade'
+            }[division] || division;
+
+            const semifinal = games.find(g => g.playoffRound === 'semifinal');
+            const finals = games.find(g => g.playoffRound === 'finals');
+
+            const topSeed = games[0]?.topSeedTeam || 'TBD';
+            const seed2 = semifinal?.team1 || 'TBD';
+            const seed3 = semifinal?.team2 || 'TBD';
+
+            return `
+                <div class="bracket-container">
+                    <div class="bracket-header">
+                        <h2>${divisionName} Playoff Bracket</h2>
+                    </div>
+                    
+                    <div class="tournament-tree">
+                        <div class="bracket-round">
+                            <div class="round-label">Semifinal</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game">
+                                    <div class="game-label">Game 1</div>
+                                    <div class="team-slot">
+                                        <span class="seed">2</span>
+                                        <span class="team-name">${seed2}</span>
+                                    </div>
+                                    <div class="team-slot">
+                                        <span class="seed">3</span>
+                                        <span class="team-name">${seed3}</span>
+                                    </div>
+                                    <div class="game-info">
+                                        <div>${semifinal?.time || 'TBD'}</div>
+                                        <div>${semifinal?.location || 'TBD'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+
+                        <div class="bracket-connector">
+                            <svg width="80" height="600" class="connector-svg">
+                                <line x1="0" y1="150" x2="40" y2="150" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="150" x2="40" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="300" x2="80" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="0" y1="450" x2="40" y2="450" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="450" x2="40" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                            </svg>
+                        </div>
+
+                        <div class="bracket-round">
+                            <div class="round-label">Finals</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game">
+                                    <div class="game-label">Game 2</div>
+                                    <div class="team-slot bye-team">
+                                        <span class="seed">1</span>
+                                        <span class="team-name">${topSeed}</span>
+                                        <span class="bye-label">(Bye)</span>
+                                    </div>
+                                    <div class="team-slot">
+                                        <span class="seed">W1</span>
+                                        <span class="team-name">Winner Game 1</span>
+                                    </div>
+                                    <div class="game-info">
+                                        <div>${finals?.time || 'TBD'}</div>
+                                        <div>${finals?.location || 'TBD'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+
+                        <div class="bracket-connector">
+                            <svg width="80" height="600" class="connector-svg">
+                                <line x1="0" y1="300" x2="80" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                            </svg>
+                        </div>
+
+                        <div class="bracket-round champion-round">
+                            <div class="round-label">Champion</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game champion-slot">
+                                    <div class="team-slot champion-team">
+                                        <span class="team-name">🏆 Winner Game 2</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate 5-team tournament bracket with enhanced quarterfinals/semifinals/finals structure
+        function generate5TeamBracket(division, games) {
+            const divisionName = {
+                '6th': '6th Grade',
+                '7th': '7th Grade',
+                '8th': '8th Grade'
+            }[division] || division;
+
+            // CORRECT 5-TEAM STRUCTURE:
+            // Game 1: Quarterfinal (Play-in) - #4 vs #5
+            // Game 2: Semifinal - #1 (bye) vs Winner of Game 1
+            // Game 3: Semifinal - #2 vs #3
+            // Game 4: Finals - Winner of Game 2 vs Winner of Game 3
+
+            // Organize games by round
+            const quarterfinal = games.find(g => g.playoffRound === 'quarterfinal'); // Game 1
+            const semifinals = games.filter(g => g.playoffRound === 'semifinal'); // Games 2 & 3
+            const finals = games.find(g => g.playoffRound === 'finals'); // Game 4
+
+            const sf1 = semifinals[0] || {}; // #1 seed vs Winner of Game 1
+            const sf2 = semifinals[1] || {}; // #2 vs #3
+
+            // Get teams
+            const topSeed = games[0]?.topSeedTeam || 'TBD'; // #1 seed with bye
+            const seed2 = sf2.team1 || 'TBD'; // #2 seed
+            const seed3 = sf2.team2 || 'TBD'; // #3 seed
+            const seed4 = quarterfinal?.team1 || 'TBD'; // #4 seed
+            const seed5 = quarterfinal?.team2 || 'TBD'; // #5 seed
+
+            return `
+                <div class="bracket-container">
+                    <div class="bracket-header">
+                        <h2>${divisionName} Playoff Bracket</h2>
+                        <p style="color: #999; font-size: 14px; margin-top: 8px;">5-Team Single Elimination</p>
+                    </div>
+                    
+                    <div class="tournament-tree">
+                        <!-- ROUND 1: Quarterfinal (Play-in) -->
+                        <div class="bracket-round">
+                            <div class="round-label">Quarterfinal</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game">
+                                    <div class="game-label">Game 1 (Play-in)</div>
+                                    <div class="team-slot">
+                                        <span class="seed">4</span>
+                                        <span class="team-name">${seed4}</span>
+                                    </div>
+                                    <div class="team-slot">
+                                        <span class="seed">5</span>
+                                        <span class="team-name">${seed5}</span>
+                                    </div>
+                                    <div class="game-info">
+                                        <div>${quarterfinal?.time || 'TBD'}</div>
+                                        <div>${quarterfinal?.location || 'TBD'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+
+                        <!-- Connector Lines Quarterfinal to Semifinals -->
+                        <div class="bracket-connector">
+                            <svg width="80" height="600" class="connector-svg">
+                                <!-- Line from quarterfinal (Game 1) to semifinal (Game 2) -->
+                                <line x1="0" y1="300" x2="40" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="300" x2="40" y2="225" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="225" x2="80" y2="225" stroke="#ff6b35" stroke-width="2"/>
+                            </svg>
+                        </div>
+
+                        <!-- ROUND 2: Semifinals -->
+                        <div class="bracket-round">
+                            <div class="round-label">Semifinals</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game">
+                                    <div class="game-label">Game 2</div>
+                                    <div class="team-slot bye-team">
+                                        <span class="seed">1</span>
+                                        <span class="team-name">${topSeed}</span>
+                                        <span class="bye-label">(Bye)</span>
+                                    </div>
+                                    <div class="team-slot">
+                                        <span class="seed">W1</span>
+                                        <span class="team-name">Winner Game 1</span>
+                                    </div>
+                                    <div class="game-info">
+                                        <div>${sf1.time || 'TBD'}</div>
+                                        <div>${sf1.location || 'TBD'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game">
+                                    <div class="game-label">Game 3</div>
+                                    <div class="team-slot">
+                                        <span class="seed">2</span>
+                                        <span class="team-name">${seed2}</span>
+                                    </div>
+                                    <div class="team-slot">
+                                        <span class="seed">3</span>
+                                        <span class="team-name">${seed3}</span>
+                                    </div>
+                                    <div class="game-info">
+                                        <div>${sf2.time || 'TBD'}</div>
+                                        <div>${sf2.location || 'TBD'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+
+                        <!-- Connector Lines Semifinals to Finals -->
+                        <div class="bracket-connector">
+                            <svg width="80" height="600" class="connector-svg">
+                                <!-- Top semifinal (Game 2) to final -->
+                                <line x1="0" y1="225" x2="40" y2="225" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="225" x2="40" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="300" x2="80" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                                
+                                <!-- Bottom semifinal (Game 3) to final -->
+                                <line x1="0" y1="375" x2="40" y2="375" stroke="#ff6b35" stroke-width="2"/>
+                                <line x1="40" y1="375" x2="40" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                            </svg>
+                        </div>
+
+                        <!-- ROUND 3: Finals -->
+                        <div class="bracket-round">
+                            <div class="round-label">Finals</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game">
+                                    <div class="game-label">Game 4 (Championship)</div>
+                                    <div class="team-slot">
+                                        <span class="seed">W2</span>
+                                        <span class="team-name">Winner Game 2</span>
+                                    </div>
+                                    <div class="team-slot">
+                                        <span class="seed">W3</span>
+                                        <span class="team-name">Winner Game 3</span>
+                                    </div>
+                                    <div class="game-info">
+                                        <div>${finals?.time || 'TBD'}</div>
+                                        <div>${finals?.location || 'TBD'}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+
+                        <!-- Connector to Champion -->
+                        <div class="bracket-connector">
+                            <svg width="80" height="600" class="connector-svg">
+                                <line x1="0" y1="300" x2="80" y2="300" stroke="#ff6b35" stroke-width="2"/>
+                            </svg>
+                        </div>
+
+                        <!-- CHAMPION -->
+                        <div class="bracket-round champion-round">
+                            <div class="round-label">Champion</div>
+                            <div class="bracket-games">
+                                <div class="bracket-spacer"></div>
+                                
+                                <div class="bracket-game champion-slot">
+                                    <div class="team-slot champion-team">
+                                        <span class="team-name">🏆 Winner Game 4</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="bracket-spacer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== 4-TEAM BRACKET FUNCTION =====
+        function generate4TeamBracket(division, games) {
+            if (!games || games.length !== 3) {
+                return `<div style="color: red; padding: 20px;">Error: 4-team bracket needs exactly 3 games, found ${games ? games.length : 0}</div>`;
+            }
+
+            const sorted = [...games].sort((a, b) => a.gameNumber - b.gameNumber);
+            const game1 = sorted[0];
+            const game2 = sorted[1];  
+            const game3 = sorted[2];
+
+            return `
+                <div style="display: flex; gap: 60px; align-items: center; justify-content: center; padding: 40px; background: #1a1a1a; border-radius: 15px;">
+                    
+                    <div style="display: flex; flex-direction: column; gap: 40px;">
+                        <div style="text-align: center; color: #ff6b35; font-weight: bold; margin-bottom: 10px;">SEMIFINALS</div>
+                        
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 2px solid #ff6b35; min-width: 250px;">
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">${game1.team1 || 'TBD'}</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">${game1.team2 || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game1.gameNumber} • ${game1.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game1.location || 'TBD'}</div>
+                        </div>
+
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 2px solid #ff6b35; min-width: 250px;">
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">${game2.team1 || 'TBD'}</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">${game2.team2 || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game2.gameNumber} • ${game2.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game2.location || 'TBD'}</div>
+                        </div>
+                    </div>
+
+                    <div style="color: #ff6b35; font-size: 40px;">→</div>
+
+                    <div>
+                        <div style="text-align: center; color: #ff6b35; font-weight: bold; margin-bottom: 20px;">CHAMPIONSHIP</div>
+                        <div style="background: #2a2a2a; padding: 25px; border-radius: 10px; border: 3px solid #ff6b35; min-width: 250px;">
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">${game3.team1 === 'winner_game1' ? 'Winner Game 1' : game3.team1}</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">${game3.team2 === 'winner_game2' ? 'Winner Game 2' : game3.team2}</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game3.gameNumber} • ${game3.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game3.location || 'TBD'}</div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+        }
+
+        // ===== 5-TEAM BRACKET FUNCTION =====
+        function generate5TeamBracket(division, games) {
+            console.log(`🏀 Generating 5-team bracket (4 games) for ${division}`);
+            
+            if (!games || games.length !== 4) {
+                return `<div style="color: red; padding: 20px;">Error: 5-team bracket needs exactly 4 games, found ${games ? games.length : 0}</div>`;
+            }
+
+            const sorted = [...games].sort((a, b) => a.gameNumber - b.gameNumber);
+            const game1 = sorted[0]; // Quarterfinal: #4 vs #5
+            const game2 = sorted[1]; // Semifinal: #1 vs Winner G1
+            const game3 = sorted[2]; // Semifinal: #2 vs #3
+            const game4 = sorted[3]; // Championship: Winner G2 vs Winner G3
+
+            return `
+                <div style="display: flex; gap: 40px; align-items: center; justify-content: center; padding: 40px; background: #1a1a1a; border-radius: 15px;">
+                    
+                    <!-- QUARTERFINAL SECTION -->
+                    <div>
+                        <div style="text-align: center; color: #ff6b35; font-weight: bold; margin-bottom: 20px;">QUARTERFINAL</div>
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 2px solid #ff6b35; min-width: 250px;">
+                            <div style="color: #999; font-size: 14px; margin-bottom: 5px;">#4 Seed</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">${game1.team1 || 'Seed #4'}</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: #999; font-size: 14px; margin-bottom: 5px;">#5 Seed</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">${game1.team2 || 'Seed #5'}</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game1.gameNumber} • ${game1.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game1.location || 'TBD'}</div>
+                        </div>
+                    </div>
+
+                    <div style="color: #ff6b35; font-size: 40px;">→</div>
+
+                    <!-- SEMIFINALS SECTION -->
+                    <div style="display: flex; flex-direction: column; gap: 40px;">
+                        <div style="text-align: center; color: #ff6b35; font-weight: bold; margin-bottom: 10px;">SEMIFINALS</div>
+                        
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 2px solid #ff6b35; min-width: 250px;">
+                            <div style="color: #999; font-size: 14px; margin-bottom: 5px;">#1 Seed (Bye)</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">${game2.team1 || 'Seed #1'}</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">Winner Game 1</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game2.gameNumber} • ${game2.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game2.location || 'TBD'}</div>
+                        </div>
+
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 2px solid #ff6b35; min-width: 250px;">
+                            <div style="color: #999; font-size: 14px; margin-bottom: 5px;">#2 Seed</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">${game3.team1 || 'Seed #2'}</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: #999; font-size: 14px; margin-bottom: 5px;">#3 Seed</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">${game3.team2 || 'Seed #3'}</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game3.gameNumber} • ${game3.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game3.location || 'TBD'}</div>
+                        </div>
+                    </div>
+
+                    <div style="color: #ff6b35; font-size: 40px;">→</div>
+
+                    <!-- CHAMPIONSHIP SECTION -->
+                    <div>
+                        <div style="text-align: center; color: #ff6b35; font-weight: bold; margin-bottom: 20px;">CHAMPIONSHIP</div>
+                        <div style="background: #2a2a2a; padding: 25px; border-radius: 10px; border: 3px solid #ff6b35; min-width: 250px;">
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 8px;">Winner Game 2</div>
+                            <div style="color: #ff6b35; margin: 10px 0;">vs</div>
+                            <div style="color: white; font-size: 18px; font-weight: bold; margin-bottom: 15px;">Winner Game 3</div>
+                            <div style="color: #999; font-size: 14px;">Game ${game4.gameNumber} • ${game4.time || 'TBD'}</div>
+                            <div style="color: #999; font-size: 14px;">${game4.location || 'TBD'}</div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+        }
+
+        // Render bracket HTML for a division
+        function renderBracket(division, bracketData, container) {
+            const divisionNames = {
+                '6th': '6th/12u',
+                '7th': '7th/13u',
+                '8th': '8th/14u'
+            };
+            
+            const bracketDiv = document.createElement('div');
+            bracketDiv.className = 'bracket-card';
+            
+            let bracketHTML = `<h4>${divisionNames[division]} Division Playoffs</h4>`;
+            
+            // Intelligent bracket detection based on game count
+            const gameCount = bracketData.games ? bracketData.games.length : 0;
+            
+            if (gameCount === 2) {
+                // 3-team bracket (1 semifinal + 1 final)
+                bracketHTML += generate3TeamBracket(division, bracketData.games);
+            } else if (gameCount === 3) {
+                // 4-team bracket (2 semifinals + 1 final)
+                bracketHTML += generate4TeamBracket(division, bracketData.games);
+            } else if (gameCount === 4) {
+                // 5-team bracket (1 quarterfinal + 2 semifinals + 1 final)
+                bracketHTML += generate5TeamBracket(division, bracketData.games);
+            } else {
+                // Error - invalid game count
+                bracketHTML += `
+                    <div style="background: #ff6b35; color: white; padding: 30px; border-radius: 10px; text-align: center;">
+                        <h3>Bracket Configuration Error</h3>
+                        <p>Expected 2, 3, or 4 games. Found ${gameCount} games.</p>
+                        <p>Please check admin panel playoff configuration.</p>
+                    </div>
+                `;
+            }
+            
+            bracketDiv.innerHTML = bracketHTML;
+            container.appendChild(bracketDiv);
+        }
+
+        // Modified loadWeekSchedule to handle bracket loading
+        const originalLoadWeekSchedule = loadWeekSchedule;
+        loadWeekSchedule = async function(weekNumber) {
+            await originalLoadWeekSchedule.call(this, weekNumber);
+            
+            // If Week 7 is selected, load playoff brackets
+            if (weekNumber === '7') {
+                await loadPlayoffBrackets();
+            }
+        };
+    </script>
+    <script>
+// Removed ineffective JavaScript - CSS solution is better
+</script>
+    </body>
+</html>
+<!-- Deployment timestamp: Mon, Sep 29, 2026  4:39:08 PM -->
+

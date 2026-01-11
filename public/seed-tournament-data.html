@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Tournament Data - COTB 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { color: #FFD700; }
+        .status { 
+            background: #2a2a2a; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 20px 0;
+            border-left: 4px solid #FFD700;
+        }
+        .success { border-left-color: #00ff00; }
+        .error { border-left-color: #ff0000; }
+        button {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #FFC107; }
+        button:disabled { background: #666; cursor: not-allowed; }
+        #log {
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .log-entry { margin: 5px 0; }
+        .log-success { color: #00ff00; }
+        .log-error { color: #ff0000; }
+        .log-info { color: #FFD700; }
+    </style>
+</head>
+<body>
+    <h1>🏀 Clash of the Barbarians 2026</h1>
+    <h2>Tournament Data Seeding Tool</h2>
+    
+    <div class="status">
+        <strong>⚠️ WARNING:</strong> This will DELETE all existing data and create fresh placeholder data.
+        <br>Only run this once for initial setup!
+    </div>
+    
+    <button id="seedBtn" onclick="seedAllData()">🌱 Seed All Tournament Data</button>
+    <button id="clearBtn" onclick="clearAllData()">🗑️ Clear All Data Only</button>
+    
+    <h3>Progress Log:</h3>
+    <div id="log"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase Configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        // Logging function
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // ==================== TEAM DATA ====================
+        const teams = [
+            // 4th Grade
+            { name: "Iron Warriors", division: "4th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Shield Breakers", division: "4th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Battle Cubs", division: "4th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Young Vikings", division: "4th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            // 5th Grade
+            { name: "Axe Throwers", division: "5th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Storm Raiders", division: "5th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "War Hammers", division: "5th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Dragon Slayers", division: "5th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            // 6th Grade
+            { name: "Bone Crushers", division: "6th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Fire Starters", division: "6th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Thunder Clan", division: "6th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Night Wolves", division: "6th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            // 7th Grade
+            { name: "Sword Masters", division: "7th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Iron Eagles", division: "7th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Rage Kings", division: "7th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Blood Hawks", division: "7th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            // 8th Grade
+            { name: "Titan Fury", division: "8th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Warlords", division: "8th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Death Dealers", division: "8th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Savage Kings", division: "8th Grade", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 }
+        ];
+        
+        // ==================== SAMPLE PLAYERS (Top Performers) ====================
+        const samplePlayers = [
+            // MVP - 8th Grade
+            {
+                name: "Marcus Fury",
+                jerseyNumber: 23,
+                position: "PG",
+                teamName: "Titan Fury",
+                division: "8th Grade",
+                stats: { points: 28, rebounds: 12, assists: 8, steals: 4, blocks: 2, fgPercent: 62 },
+                badge: "🔥 TOURNAMENT MVP"
+            },
+            // High Scorer - 7th Grade
+            {
+                name: "Jordan Blade",
+                jerseyNumber: 7,
+                position: "SG",
+                teamName: "Sword Masters",
+                division: "7th Grade",
+                stats: { points: 32, rebounds: 5, assists: 4, steals: 6, blocks: 1, fgPercent: 58, threePointers: 6 },
+                badge: "⚡ HIGH SCORER"
+            },
+            // Boards Leader - 8th Grade
+            {
+                name: "Tyler Stone",
+                jerseyNumber: 34,
+                position: "C",
+                teamName: "Warlords",
+                division: "8th Grade",
+                stats: { points: 14, rebounds: 18, assists: 2, steals: 1, blocks: 5, offensiveRebounds: 9 },
+                badge: "💪 BOARDS LEADER"
+            },
+            // Playmaker - 7th Grade
+            {
+                name: "Chris Thunder",
+                jerseyNumber: 11,
+                position: "PG",
+                teamName: "Blood Hawks",
+                division: "7th Grade",
+                stats: { points: 19, rebounds: 4, assists: 11, steals: 5, blocks: 0, fgPercent: 55 },
+                badge: "🎯 PLAYMAKER"
+            }
+        ];
+        
+        // ==================== GAME SCHEDULE (25 Games) ====================
+        // Tournament Date: January 10, 2026 (Saturday)
+        const tournamentDate = "2026-01-10";
+        
+        const games = [
+            // POOL PLAY (10 games) - 8:00 AM to 10:40 AM
+            // 8:00 AM
+            { time: "8:00 AM", court: "Court 1", division: "4th Grade", homeTeam: "Iron Warriors", awayTeam: "Shield Breakers", type: "Pool" },
+            { time: "8:00 AM", court: "Court 2", division: "5th Grade", homeTeam: "Axe Throwers", awayTeam: "Storm Raiders", type: "Pool" },
+            // 8:40 AM
+            { time: "8:40 AM", court: "Court 1", division: "4th Grade", homeTeam: "Battle Cubs", awayTeam: "Young Vikings", type: "Pool" },
+            { time: "8:40 AM", court: "Court 2", division: "5th Grade", homeTeam: "War Hammers", awayTeam: "Dragon Slayers", type: "Pool" },
+            // 9:20 AM
+            { time: "9:20 AM", court: "Court 1", division: "6th Grade", homeTeam: "Bone Crushers", awayTeam: "Fire Starters", type: "Pool" },
+            { time: "9:20 AM", court: "Court 2", division: "7th Grade", homeTeam: "Sword Masters", awayTeam: "Iron Eagles", type: "Pool" },
+            // 10:00 AM
+            { time: "10:00 AM", court: "Court 1", division: "6th Grade", homeTeam: "Thunder Clan", awayTeam: "Night Wolves", type: "Pool" },
+            { time: "10:00 AM", court: "Court 2", division: "7th Grade", homeTeam: "Rage Kings", awayTeam: "Blood Hawks", type: "Pool" },
+            // 10:40 AM
+            { time: "10:40 AM", court: "Court 1", division: "8th Grade", homeTeam: "Titan Fury", awayTeam: "Warlords", type: "Pool" },
+            { time: "10:40 AM", court: "Court 2", division: "8th Grade", homeTeam: "Death Dealers", awayTeam: "Savage Kings", type: "Pool" },
+            
+            // PLAYOFFS (15 games) - 11:20 AM to 4:00 PM
+            // Semifinals - 11:20 AM
+            { time: "11:20 AM", court: "Court 1", division: "4th Grade", homeTeam: "TBD #1 Seed", awayTeam: "TBD #4 Seed", type: "Semifinal" },
+            { time: "11:20 AM", court: "Court 2", division: "5th Grade", homeTeam: "TBD #1 Seed", awayTeam: "TBD #4 Seed", type: "Semifinal" },
+            // 12:00 PM
+            { time: "12:00 PM", court: "Court 1", division: "4th Grade", homeTeam: "TBD #2 Seed", awayTeam: "TBD #3 Seed", type: "Semifinal" },
+            { time: "12:00 PM", court: "Court 2", division: "5th Grade", homeTeam: "TBD #2 Seed", awayTeam: "TBD #3 Seed", type: "Semifinal" },
+            // 12:40 PM
+            { time: "12:40 PM", court: "Court 1", division: "6th Grade", homeTeam: "TBD #1 Seed", awayTeam: "TBD #4 Seed", type: "Semifinal" },
+            { time: "12:40 PM", court: "Court 2", division: "7th Grade", homeTeam: "TBD #1 Seed", awayTeam: "TBD #4 Seed", type: "Semifinal" },
+            // 1:20 PM
+            { time: "1:20 PM", court: "Court 1", division: "6th Grade", homeTeam: "TBD #2 Seed", awayTeam: "TBD #3 Seed", type: "Semifinal" },
+            { time: "1:20 PM", court: "Court 2", division: "7th Grade", homeTeam: "TBD #2 Seed", awayTeam: "TBD #3 Seed", type: "Semifinal" },
+            // 2:00 PM
+            { time: "2:00 PM", court: "Court 1", division: "8th Grade", homeTeam: "TBD #1 Seed", awayTeam: "TBD #4 Seed", type: "Semifinal" },
+            { time: "2:00 PM", court: "Court 2", division: "8th Grade", homeTeam: "TBD #2 Seed", awayTeam: "TBD #3 Seed", type: "Semifinal" },
+            // Championships - 2:40 PM
+            { time: "2:40 PM", court: "Court 1", division: "4th Grade", homeTeam: "TBD Winner SF1", awayTeam: "TBD Winner SF2", type: "Championship" },
+            { time: "2:40 PM", court: "Court 2", division: "5th Grade", homeTeam: "TBD Winner SF1", awayTeam: "TBD Winner SF2", type: "Championship" },
+            // 3:20 PM
+            { time: "3:20 PM", court: "Court 1", division: "6th Grade", homeTeam: "TBD Winner SF1", awayTeam: "TBD Winner SF2", type: "Championship" },
+            { time: "3:20 PM", court: "Court 2", division: "7th Grade", homeTeam: "TBD Winner SF1", awayTeam: "TBD Winner SF2", type: "Championship" },
+            // 4:00 PM
+            { time: "4:00 PM", court: "Court 1", division: "8th Grade", homeTeam: "TBD Winner SF1", awayTeam: "TBD Winner SF2", type: "Championship" }
+        ];
+        
+        // ==================== CLEAR ALL DATA ====================
+        async function clearAllData() {
+            document.getElementById('clearBtn').disabled = true;
+            document.getElementById('seedBtn').disabled = true;
+            
+            log('🗑️ Starting data cleanup...', 'info');
+            
+            try {
+                // Clear games
+                log('Deleting games collection...', 'info');
+                const gamesSnapshot = await db.collection('games').get();
+                const gamesBatch = db.batch();
+                gamesSnapshot.docs.forEach(doc => gamesBatch.delete(doc.ref));
+                await gamesBatch.commit();
+                log(`✅ Deleted ${gamesSnapshot.size} games`, 'success');
+                
+                // Clear teams
+                log('Deleting teams collection...', 'info');
+                const teamsSnapshot = await db.collection('teams').get();
+                const teamsBatch = db.batch();
+                teamsSnapshot.docs.forEach(doc => teamsBatch.delete(doc.ref));
+                await teamsBatch.commit();
+                log(`✅ Deleted ${teamsSnapshot.size} teams`, 'success');
+                
+                // Clear players
+                log('Deleting players collection...', 'info');
+                const playersSnapshot = await db.collection('players').get();
+                const playersBatch = db.batch();
+                playersSnapshot.docs.forEach(doc => playersBatch.delete(doc.ref));
+                await playersBatch.commit();
+                log(`✅ Deleted ${playersSnapshot.size} players`, 'success');
+                
+                // Clear standings if exists
+                log('Deleting standings collection...', 'info');
+                const standingsSnapshot = await db.collection('standings').get();
+                if (standingsSnapshot.size > 0) {
+                    const standingsBatch = db.batch();
+                    standingsSnapshot.docs.forEach(doc => standingsBatch.delete(doc.ref));
+                    await standingsBatch.commit();
+                    log(`✅ Deleted ${standingsSnapshot.size} standings`, 'success');
+                } else {
+                    log('No standings to delete', 'info');
+                }
+                
+                log('🎉 All data cleared successfully!', 'success');
+            } catch (error) {
+                log(`❌ Error clearing data: ${error.message}`, 'error');
+            }
+            
+            document.getElementById('clearBtn').disabled = false;
+            document.getElementById('seedBtn').disabled = false;
+        }
+        
+        // ==================== SEED ALL DATA ====================
+        async function seedAllData() {
+            document.getElementById('clearBtn').disabled = true;
+            document.getElementById('seedBtn').disabled = true;
+            
+            log('🌱 Starting tournament data seeding...', 'info');
+            
+            try {
+                // Step 1: Clear existing data
+                await clearAllData();
+                
+                // Step 2: Seed teams
+                log('📋 Creating teams...', 'info');
+                const teamIds = {};
+                for (const team of teams) {
+                    const docRef = await db.collection('teams').add({
+                        ...team,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    teamIds[team.name] = docRef.id;
+                    log(`  ✅ Created team: ${team.name} (${team.division})`, 'success');
+                }
+                log(`🎉 Created ${teams.length} teams!`, 'success');
+                
+                // Step 3: Seed players (for Top Performers)
+                log('👤 Creating sample players...', 'info');
+                for (const player of samplePlayers) {
+                    const teamId = teamIds[player.teamName] || null;
+                    await db.collection('players').add({
+                        name: player.name,
+                        jerseyNumber: player.jerseyNumber,
+                        position: player.position,
+                        teamId: teamId,
+                        teamName: player.teamName,
+                        division: player.division,
+                        stats: player.stats,
+                        badge: player.badge,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    log(`  ✅ Created player: ${player.name} (#${player.jerseyNumber}) - ${player.teamName}`, 'success');
+                }
+                log(`🎉 Created ${samplePlayers.length} sample players!`, 'success');
+                
+                // Step 4: Seed games
+                log('🏀 Creating tournament games...', 'info');
+                let gameNumber = 1;
+                for (const game of games) {
+                    // Parse time for scheduledFor field
+                    const [time, period] = game.time.split(' ');
+                    const [hours, minutes] = time.split(':');
+                    let hour = parseInt(hours);
+                    if (period === 'PM' && hour !== 12) hour += 12;
+                    if (period === 'AM' && hour === 12) hour = 0;
+                    
+                    const scheduledFor = new Date(`${tournamentDate}T${hour.toString().padStart(2, '0')}:${minutes}:00`);
+                    
+                    // Get team IDs if they exist (for pool play games with real team names)
+                    const homeTeamId = teamIds[game.homeTeam] || null;
+                    const awayTeamId = teamIds[game.awayTeam] || null;
+                    
+                    await db.collection('games').add({
+                        gameNumber: gameNumber,
+                        date: tournamentDate,
+                        time: game.time,
+                        court: game.court,
+                        location: game.court,
+                        division: game.division,
+                        gameType: game.type,
+                        homeTeamId: homeTeamId,
+                        homeTeamName: game.homeTeam,
+                        homeTeam: {
+                            id: homeTeamId,
+                            name: game.homeTeam,
+                            score: 0,
+                            fouls: 0
+                        },
+                        awayTeamId: awayTeamId,
+                        awayTeamName: game.awayTeam,
+                        awayTeam: {
+                            id: awayTeamId,
+                            name: game.awayTeam,
+                            score: 0,
+                            fouls: 0
+                        },
+                        homeScore: 0,
+                        awayScore: 0,
+                        status: 'scheduled',
+                        quarter: 1,
+                        scheduledFor: scheduledFor,
+                        tournamentId: 'cotb-2026',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    log(`  ✅ Game ${gameNumber}: ${game.time} | ${game.court} | ${game.division} | ${game.homeTeam} vs ${game.awayTeam} (${game.type})`, 'success');
+                    gameNumber++;
+                }
+                log(`🎉 Created ${games.length} tournament games!`, 'success');
+                
+                log('', 'info');
+                log('═══════════════════════════════════════════════════', 'success');
+                log('🏆 TOURNAMENT DATA SEEDING COMPLETE! 🏆', 'success');
+                log('═══════════════════════════════════════════════════', 'success');
+                log(`✅ ${teams.length} Teams created`, 'success');
+                log(`✅ ${samplePlayers.length} Sample players created`, 'success');
+                log(`✅ ${games.length} Games scheduled`, 'success');
+                log('', 'info');
+                log('📌 Next steps:', 'info');
+                log('1. Go to Firebase Console and set security rules', 'info');
+                log('2. Create auth users (admin, court1, court2)', 'info');
+                log('3. Redeploy the site', 'info');
+                log('4. Delete this seed-tournament-data.html file', 'info');
+                
+            } catch (error) {
+                log(`❌ Error seeding data: ${error.message}`, 'error');
+                console.error(error);
+            }
+            
+            document.getElementById('clearBtn').disabled = false;
+            document.getElementById('seedBtn').disabled = false;
+        }
+    </script>
+</body>
+</html>

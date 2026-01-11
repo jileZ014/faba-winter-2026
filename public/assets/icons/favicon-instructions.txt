@@ -1,0 +1,16 @@
+# Favicon Instructions
+
+To add a proper favicon.ico file:
+
+1. Use one of the logo images in assets/images/logos/
+2. Convert to ICO format using online tools:
+   - https://favicon.io/favicon-converter/
+   - https://convertio.co/jpg-ico/
+3. Generate multiple sizes: 16x16, 32x32, 48x48
+4. Replace this file with favicon.ico
+
+For now, add this to index.html <head>:
+<link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">

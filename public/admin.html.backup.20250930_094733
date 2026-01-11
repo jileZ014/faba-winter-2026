@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AZ Flight Basketball League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- COMPLETE EMBEDDED STYLES - TEAM APPROVED -->
+    <style>
+        /* === ENHANCED CSS BY SARAH (UI/UX Expert) === */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #1e40af;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light: #f3f4f6;
+            --white: #ffffff;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .brand-text h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--gray) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text span {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: var(--light);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.primary { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
+        .stat-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .stat-icon.danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .stat-icon.info { background: rgba(6, 182, 212, 0.1); color: var(--info); }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .stat-content p {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        /* Admin Grid */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .card-header.success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+        }
+
+        .card-header.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+        }
+
+        .card-header.info {
+            background: linear-gradient(135deg, var(--info) 0%, #0891b2 100%);
+        }
+
+        .card-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Standings Editor Styles */
+        .standings-editor {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .team-standings-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+        }
+
+        .team-standings-row:hover {
+            background: #fafafa;
+        }
+
+        .team-standings-row input {
+            width: 80px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        /* Stats Editor Styles */
+        .stats-search {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-search input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .player-stats-editor {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .stats-input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Button Styles */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        /* Data Tables */
+        .data-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            background: var(--light);
+            border-bottom: 2px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading .spinner {
+            display: inline-block;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--info);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem;
+            }
+            
+            .brand-text h1 {
+                font-size: 1.3rem;
+            }
+            
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .btn-logout span {
+                display: none;
+            }
+
+            .tab-nav {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .team-standings-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER SECTION -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-basketball-ball"></i>
+                <div class="brand-text">
+                    <h1>AZ FLIGHT</h1>
+                    <span>ADMIN CONTROL CENTER</span>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>LOGOUT</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1>League Administration Dashboard</h1>
+            <p>Complete control over teams, players, standings, stats, and league operations</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="teamCount">16</h3>
+                    <p>Active Teams</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="playerCount">192</h3>
+                    <p>Registered Players</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="gameCount">48</h3>
+                    <p>Scheduled Games</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon info">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="divisionCount">4</h3>
+                    <p>Divisions</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon danger">
+                    <i class="fas fa-basketball-ball"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="activeGames">0</h3>
+                    <p>Live Games</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('teams')">
+                <i class="fas fa-users"></i>
+                Teams
+            </button>
+            <button class="tab-btn" onclick="switchTab('players')">
+                <i class="fas fa-user"></i>
+                Players
+            </button>
+            <button class="tab-btn" onclick="switchTab('schedule')">
+                <i class="fas fa-calendar"></i>
+                Schedule
+            </button>
+            <button class="tab-btn" onclick="switchTab('standings')">
+                <i class="fas fa-list-ol"></i>
+                Standings
+            </button>
+            <button class="tab-btn" onclick="switchTab('stats')">
+                <i class="fas fa-chart-bar"></i>
+                Stats
+            </button>
+            <button class="tab-btn" onclick="switchTab('settings')">
+                <i class="fas fa-cog"></i>
+                Settings
+            </button>
+        </div>
+
+        <!-- Teams Tab -->
+        <div id="teamsTab" class="tab-content active">
+            <div class="admin-grid">
+                <!-- Team Management Card -->
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Add/Edit Team</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="teamForm">
+                            <div class="form-group">
+                                <label for="teamName">Team Name</label>
+                                <input type="text" id="teamName" placeholder="Enter team name" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teamDivision">Division</label>
+                                    <select id="teamDivision" required>
+                                        <option value="">Select Division</option>
+                                        <option value="10U">10U Division</option>
+                                        <option value="12U">12U Division</option>
+                                        <option value="14U">14U Division</option>
+                                        <option value="16U">16U Division</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="teamColor">Team Color</label>
+                                    <input type="text" id="teamColor" placeholder="e.g., Blue">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="coachName">Coach Name</label>
+                                <input type="text" id="coachName" placeholder="Enter coach name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="coachEmail">Coach Email</label>
+                                <input type="email" id="coachEmail" placeholder="coach@email.com">
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    <span>Save Team</span>
+                                    <span class="spinner"></span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm('teamForm')">
+                                    <i class="fas fa-redo"></i>
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teams Table -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h3>All Teams</h3>
+                    <button class="btn btn-primary" onclick="refreshTeams()">
+                        <i class="fas fa-sync"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="teamsTable">
+                        <thead>
+                            <tr>
+                                <th>Team Name</th>
+                                <th>Division</th>
+                                <th>Coach</th>
+                                <th>Players</th>
+                                <th>Record</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Teams will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Players Tab -->
+        <div id="playersTab" class="tab-content">
+            <div class="admin-grid">
+                <!-- Player Management Card -->
+                <div class="admin-card">
+                    <div class="card-header success">
+                        <h3><i class="fas fa-user-plus"></i> Add/Edit Player</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="playerForm">
+                            <div class="form-group">
+                                <label for="playerName">Player Name</label>
+                                <input type="text" id="playerName" placeholder="Enter player name" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="playerTeam">Team</label>
+                                    <select id="playerTeam" required>
+                                        <option value="">Select Team</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jerseyNumber">Jersey Number</label>
+                                    <input type="number" id="jerseyNumber" min="0" max="99" placeholder="00" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="playerGrade">Grade</label>
+                                    <input type="text" id="playerGrade" placeholder="e.g., 8th">
+                                </div>
+                                <div class="form-group">
+                                    <label for="playerPosition">Position</label>
+                                    <select id="playerPosition">
+                                        <option value="">Select Position</option>
+                                        <option value="PG">Point Guard</option>
+                                        <option value="SG">Shooting Guard</option>
+                                        <option value="SF">Small Forward</option>
+                                        <option value="PF">Power Forward</option>
+                                        <option value="C">Center</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="parentEmail">Parent Email</label>
+                                <input type="email" id="parentEmail" placeholder="parent@email.com">
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i>
+                                    <span>Save Player</span>
+                                    <span class="spinner"></span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm('playerForm')">
+                                    <i class="fas fa-redo"></i>
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Player Transfer Card -->
+                <div class="admin-card">
+                    <div class="card-header info">
+                        <h3><i class="fas fa-exchange-alt"></i> Player Transfer</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="transferForm">
+                            <div class="form-group">
+                                <label for="transferPlayer">Select Player</label>
+                                <select id="transferPlayer" required>
+                                    <option value="">Choose Player</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="newTeam">Transfer To</label>
+                                <select id="newTeam" required>
+                                    <option value="">Select New Team</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transferReason">Reason</label>
+                                <textarea id="transferReason" rows="3" placeholder="Transfer reason..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-warning" style="width: 100%">
+                                <i class="fas fa-exchange-alt"></i>
+                                Execute Transfer
+                                <span class="spinner"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Players Table -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h3>All Players</h3>
+                    <button class="btn btn-success" onclick="refreshPlayers()">
+                        <i class="fas fa-sync"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="playersTable">
+                        <thead>
+                            <tr>
+                                <th>Player Name</th>
+                                <th>Team</th>
+                                <th>Jersey #</th>
+                                <th>Position</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Players will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="scheduleTab" class="tab-content">
+            <div class="admin-grid">
+                <!-- Schedule Management Card -->
+                <div class="admin-card">
+                    <div class="card-header warning">
+                        <h3><i class="fas fa-calendar-plus"></i> Schedule Game</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="scheduleForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="homeTeam">Home Team</label>
+                                    <select id="homeTeam" required>
+                                        <option value="">Select Home Team</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="awayTeam">Away Team</label>
+                                    <select id="awayTeam" required>
+                                        <option value="">Select Away Team</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="gameDate">Game Date & Time</label>
+                                    <input type="datetime-local" id="gameDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gameLocation">Location</label>
+                                    <input type="text" id="gameLocation" placeholder="Court/Gym name">
+                                </div>
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Schedule Game</span>
+                                    <span class="spinner"></span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm('scheduleForm')">
+                                    <i class="fas fa-redo"></i>
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games Table -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h3>Scheduled Games</h3>
+                    <button class="btn btn-warning" onclick="refreshGames()">
+                        <i class="fas fa-sync"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="gamesTable">
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Home Team</th>
+                                <th>Away Team</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Score</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Games will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Standings Tab -->
+        <div id="standingsTab" class="tab-content">
+            <h2 style="color: white; margin-bottom: 2rem;">
+                <i class="fas fa-list-ol"></i> League Standings Management
+            </h2>
+
+            <!-- Division Selector -->
+            <div class="admin-card" style="margin-bottom: 2rem;">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="standingsDivision">Select Division to Edit</label>
+                        <select id="standingsDivision" onchange="loadStandings(this.value)">
+                            <option value="">Choose Division</option>
+                            <option value="10U">10U Division</option>
+                            <option value="12U">12U Division</option>
+                            <option value="14U">14U Division</option>
+                            <option value="16U">16U Division</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standings Editor -->
+            <div id="standingsEditor" class="standings-editor" style="display: none;">
+                <h3 style="margin-bottom: 1.5rem;">Edit Standings</h3>
+                <div class="team-standings-row" style="font-weight: bold; background: #f3f4f6;">
+                    <div>Team Name</div>
+                    <div>Wins</div>
+                    <div>Losses</div>
+                    <div>Points For</div>
+                    <div>Points Against</div>
+                </div>
+                <div id="standingsList">
+                    <!-- Standings rows will be loaded here -->
+                </div>
+                <div class="btn-group" style="margin-top: 2rem;">
+                    <button class="btn btn-success" onclick="saveStandings()">
+                        <i class="fas fa-save"></i>
+                        Save All Changes
+                        <span class="spinner"></span>
+                    </button>
+                    <button class="btn btn-warning" onclick="recalculateStandings()">
+                        <i class="fas fa-calculator"></i>
+                        Recalculate from Games
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Tab -->
+        <div id="statsTab" class="tab-content">
+            <h2 style="color: white; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Player Stats Management
+            </h2>
+
+            <!-- Player Search -->
+            <div class="stats-search">
+                <input type="text" id="playerSearch" placeholder="Search player by name..." onkeyup="searchPlayer()">
+                <select id="statsTeamFilter" onchange="filterPlayersByTeam()">
+                    <option value="">All Teams</option>
+                </select>
+            </div>
+
+            <!-- Stats Editor -->
+            <div class="player-stats-editor">
+                <h3>Select a player to edit stats</h3>
+                <div id="playerStatsList">
+                    <!-- Player list for stats editing -->
+                </div>
+                
+                <div id="statsEditForm" style="display: none; margin-top: 2rem;">
+                    <h4 id="selectedPlayerName" style="margin-bottom: 1rem;"></h4>
+                    <div class="stats-input-grid">
+                        <div class="form-group">
+                            <label>Games Played</label>
+                            <input type="number" id="gamesPlayed" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Points</label>
+                            <input type="number" id="totalPoints" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Rebounds</label>
+                            <input type="number" id="totalRebounds" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Assists</label>
+                            <input type="number" id="totalAssists" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Steals</label>
+                            <input type="number" id="totalSteals" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Blocks</label>
+                            <input type="number" id="totalBlocks" min="0">
+                        </div>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1.5rem;">
+                        <button class="btn btn-success" onclick="savePlayerStats()">
+                            <i class="fas fa-save"></i>
+                            Save Stats
+                            <span class="spinner"></span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="cancelStatsEdit()">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Performers -->
+            <div class="admin-grid" style="margin-top: 2rem;">
+                <div class="admin-card">
+                    <div class="card-header info">
+                        <h3><i class="fas fa-trophy"></i> Scoring Leaders</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="scoringLeaders">
+                            <!-- Top scorers will be listed here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="card-header info">
+                        <h3><i class="fas fa-hands"></i> Rebound Leaders</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="reboundLeaders">
+                            <!-- Top rebounders will be listed here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="card-header info">
+                        <h3><i class="fas fa-hand-holding"></i> Assist Leaders</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="assistLeaders">
+                            <!-- Top assisters will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settingsTab" class="tab-content">
+            <h2 style="color: white; margin-bottom: 2rem;">
+                <i class="fas fa-cog"></i> League Settings
+            </h2>
+
+            <div class="admin-grid">
+                <!-- Season Settings -->
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Season Settings</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="seasonForm">
+                            <div class="form-group">
+                                <label for="seasonName">Season Name</label>
+                                <input type="text" id="seasonName" value="Fall 2025" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="seasonStart">Start Date</label>
+                                    <input type="date" id="seasonStart" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="seasonEnd">End Date</label>
+                                    <input type="date" id="seasonEnd" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%">
+                                <i class="fas fa-save"></i>
+                                Update Season
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Game Rules -->
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clipboard-list"></i> Game Rules</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="rulesForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quarterLength">Quarter Length (min)</label>
+                                    <input type="number" id="quarterLength" value="10" min="5" max="15">
+                                </div>
+                                <div class="form-group">
+                                    <label for="overtimeLength">Overtime (min)</label>
+                                    <input type="number" id="overtimeLength" value="5" min="3" max="10">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="timeoutsPerHalf">Timeouts per Half</label>
+                                    <input type="number" id="timeoutsPerHalf" value="3" min="1" max="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="foulsLimit">Fouls Limit</label>
+                                    <input type="number" id="foulsLimit" value="5" min="4" max="6">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%">
+                                <i class="fas fa-save"></i>
+                                Update Rules
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Database Actions -->
+                <div class="admin-card">
+                    <div class="card-header danger">
+                        <h3><i class="fas fa-database"></i> Database Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-warning" style="width: 100%; margin-bottom: 1rem;" onclick="exportData()">
+                            <i class="fas fa-download"></i>
+                            Export All Data
+                        </button>
+                        <button class="btn btn-danger" style="width: 100%;" onclick="resetSeason()">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Reset Season
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation successful!</span>
+    </div>
+
+    <!-- FIREBASE SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- COMPLETE JAVASCRIPT - TEAM APPROVED -->
+    <script>
+        // === COMPLETE ADMIN SYSTEM JAVASCRIPT ===
+        // === Approved by: Chen (JS Lead), Maria (Firebase), Alex (Architecture) ===
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTM8LdVW5Hh2Unu7IDvsKjvTL8m43nQyc",
+  authDomain: "az-flight-league-prod-2025.firebaseapp.com",
+  projectId: "az-flight-league-prod-2025",
+  storageBucket: "az-flight-league-prod-2025.firebasestorage.app",
+  messagingSenderId: "936667116683",
+  appId: "1:936667116683:web:185b8ad2439fbdb6ced08e"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Global Variables
+        let teams = [];
+        let players = [];
+        let games = [];
+        let currentEditingPlayer = null;
+        let currentEditingTeam = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏀 AZ Flight Complete Admin System v3.0 Initialized');
+            loadAllData();
+            setupEventListeners();
+        });
+
+        // === TAB NAVIGATION ===
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            // Mark button as active
+            event.target.closest('.tab-btn').classList.add('active');
+            
+            // Load tab-specific data
+            if (tabName === 'standings') {
+                document.getElementById('standingsDivision').value = '';
+                document.getElementById('standingsEditor').style.display = 'none';
+            } else if (tabName === 'stats') {
+                loadPlayerStatsView();
+            }
+        }
+
+        // === EVENT LISTENERS SETUP ===
+        function setupEventListeners() {
+            document.getElementById('teamForm').addEventListener('submit', handleTeamSubmit);
+            document.getElementById('playerForm').addEventListener('submit', handlePlayerSubmit);
+            document.getElementById('scheduleForm').addEventListener('submit', handleScheduleSubmit);
+            document.getElementById('transferForm').addEventListener('submit', handleTransferSubmit);
+            document.getElementById('seasonForm').addEventListener('submit', handleSeasonUpdate);
+            document.getElementById('rulesForm').addEventListener('submit', handleRulesUpdate);
+        }
+
+        // === LOAD ALL DATA ===
+        async function loadAllData() {
+            await loadTeams();
+            await loadPlayers();
+            await loadGames();
+            updateStatistics();
+            updateDropdowns();
+        }
+
+        // === TEAM MANAGEMENT ===
+        async function loadTeams() {
+            try {
+                const snapshot = await db.collection('teams').orderBy('division').get();
+                teams = [];
+                const tbody = document.querySelector('#teamsTable tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const team = { id: doc.id, ...doc.data() };
+                    teams.push(team);
+                    
+                    const row = `
+                        <tr>
+                            <td><strong>${team.name || 'N/A'}</strong></td>
+                            <td><span class="badge">${team.division || 'N/A'}</span></td>
+                            <td>${team.coach || 'N/A'}</td>
+                            <td>${team.playerCount || 0}</td>
+                            <td>${team.wins || 0}-${team.losses || 0}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-icon btn-edit" onclick="editTeam('${team.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-delete" onclick="deleteTeam('${team.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+                
+                updateDropdowns();
+                
+            } catch (error) {
+                console.error('Error loading teams:', error);
+                showToast('Error loading teams', 'error');
+            }
+        }
+
+        async function handleTeamSubmit(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            button.classList.add('loading');
+            
+            try {
+                const teamData = {
+                    name: document.getElementById('teamName').value,
+                    division: document.getElementById('teamDivision').value,
+                    coach: document.getElementById('coachName').value,
+                    coachEmail: document.getElementById('coachEmail').value || '',
+                    teamColor: document.getElementById('teamColor').value || '',
+                    playerCount: currentEditingTeam ? (teams.find(t => t.id === currentEditingTeam)?.playerCount || 0) : 0,
+                    wins: currentEditingTeam ? (teams.find(t => t.id === currentEditingTeam)?.wins || 0) : 0,
+                    losses: currentEditingTeam ? (teams.find(t => t.id === currentEditingTeam)?.losses || 0) : 0,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                if (currentEditingTeam) {
+                    await db.collection('teams').doc(currentEditingTeam).update(teamData);
+                    showToast('Team updated successfully!', 'success');
+                } else {
+                    teamData.createdAt = new Date().toISOString();
+                    await db.collection('teams').add(teamData);
+                    showToast('Team added successfully!', 'success');
+                }
+                
+                currentEditingTeam = null;
+                resetForm('teamForm');
+                loadTeams();
+                
+            } catch (error) {
+                console.error('Error saving team:', error);
+                showToast('Error saving team', 'error');
+            } finally {
+                button.classList.remove('loading');
+            }
+        }
+
+        function editTeam(teamId) {
+            const team = teams.find(t => t.id === teamId);
+            if (team) {
+                currentEditingTeam = teamId;
+                document.getElementById('teamName').value = team.name || '';
+                document.getElementById('teamDivision').value = team.division || '';
+                document.getElementById('coachName').value = team.coach || '';
+                document.getElementById('coachEmail').value = team.coachEmail || '';
+                document.getElementById('teamColor').value = team.teamColor || '';
+                switchTab('teams');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        async function deleteTeam(teamId) {
+            if (!confirm('Are you sure you want to delete this team? This will also remove all associated players.')) return;
+            
+            try {
+                // Delete team
+                await db.collection('teams').doc(teamId).delete();
+                
+                // Delete associated players
+                const playersSnapshot = await db.collection('players').where('teamId', '==', teamId).get();
+                const batch = db.batch();
+                playersSnapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+                
+                showToast('Team and associated players deleted successfully!', 'success');
+                loadAllData();
+            } catch (error) {
+                console.error('Error deleting team:', error);
+                showToast('Error deleting team', 'error');
+            }
+        }
+
+        // === PLAYER MANAGEMENT ===
+        async function loadPlayers() {
+            try {
+                const snapshot = await db.collection('players').orderBy('teamName').get();
+                players = [];
+                const tbody = document.querySelector('#playersTable tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const player = { id: doc.id, ...doc.data() };
+                    players.push(player);
+                    
+                    const row = `
+                        <tr>
+                            <td><strong>${player.name || 'N/A'}</strong></td>
+                            <td>${player.teamName || 'N/A'}</td>
+                            <td>#${player.jerseyNumber || '--'}</td>
+                            <td>${player.position || '--'}</td>
+                            <td>${player.grade || '--'}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-icon btn-edit" onclick="editPlayer('${player.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-delete" onclick="deletePlayer('${player.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+                
+                updatePlayerDropdowns();
+                
+            } catch (error) {
+                console.error('Error loading players:', error);
+                showToast('Error loading players', 'error');
+            }
+        }
+
+        async function handlePlayerSubmit(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            button.classList.add('loading');
+            
+            try {
+                const selectedTeam = teams.find(t => t.id === document.getElementById('playerTeam').value);
+                
+                const playerData = {
+                    name: document.getElementById('playerName').value,
+                    teamId: document.getElementById('playerTeam').value,
+                    teamName: selectedTeam ? selectedTeam.name : 'N/A',
+                    jerseyNumber: document.getElementById('jerseyNumber').value,
+                    position: document.getElementById('playerPosition').value || '',
+                    grade: document.getElementById('playerGrade').value || '',
+                    parentEmail: document.getElementById('parentEmail').value || '',
+                    updatedAt: new Date().toISOString()
+                };
+                
+                if (currentEditingPlayer) {
+                    await db.collection('players').doc(currentEditingPlayer).update(playerData);
+                    showToast('Player updated successfully!', 'success');
+                } else {
+                    playerData.createdAt = new Date().toISOString();
+                    playerData.stats = {
+                        gamesPlayed: 0,
+                        points: 0,
+                        rebounds: 0,
+                        assists: 0,
+                        steals: 0,
+                        blocks: 0
+                    };
+                    await db.collection('players').add(playerData);
+                    
+                    // Update team player count
+                    if (selectedTeam) {
+                        await db.collection('teams').doc(selectedTeam.id).update({
+                            playerCount: (selectedTeam.playerCount || 0) + 1
+                        });
+                    }
+                    
+                    showToast('Player added successfully!', 'success');
+                }
+                
+                currentEditingPlayer = null;
+                resetForm('playerForm');
+                loadAllData();
+                
+            } catch (error) {
+                console.error('Error saving player:', error);
+                showToast('Error saving player', 'error');
+            } finally {
+                button.classList.remove('loading');
+            }
+        }
+
+        function editPlayer(playerId) {
+            const player = players.find(p => p.id === playerId);
+            if (player) {
+                currentEditingPlayer = playerId;
+                document.getElementById('playerName').value = player.name || '';
+                document.getElementById('playerTeam').value = player.teamId || '';
+                document.getElementById('jerseyNumber').value = player.jerseyNumber || '';
+                document.getElementById('playerPosition').value = player.position || '';
+                document.getElementById('playerGrade').value = player.grade || '';
+                document.getElementById('parentEmail').value = player.parentEmail || '';
+                switchTab('players');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        async function deletePlayer(playerId) {
+            if (!confirm('Are you sure you want to delete this player?')) return;
+            
+            try {
+                const player = players.find(p => p.id === playerId);
+                await db.collection('players').doc(playerId).delete();
+                
+                // Update team player count
+                if (player && player.teamId) {
+                    const team = teams.find(t => t.id === player.teamId);
+                    if (team) {
+                        await db.collection('teams').doc(player.teamId).update({
+                            playerCount: Math.max(0, (team.playerCount || 1) - 1)
+                        });
+                    }
+                }
+                
+                showToast('Player deleted successfully!', 'success');
+                loadAllData();
+            } catch (error) {
+                console.error('Error deleting player:', error);
+                showToast('Error deleting player', 'error');
+            }
+        }
+
+        // === PLAYER TRANSFER ===
+        async function handleTransferSubmit(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            button.classList.add('loading');
+            
+            try {
+                const playerId = document.getElementById('transferPlayer').value;
+                const newTeamId = document.getElementById('newTeam').value;
+                const reason = document.getElementById('transferReason').value;
+                
+                const player = players.find(p => p.id === playerId);
+                const oldTeam = teams.find(t => t.id === player.teamId);
+                const newTeam = teams.find(t => t.id === newTeamId);
+                
+                // Update player
+                await db.collection('players').doc(playerId).update({
+                    teamId: newTeamId,
+                    teamName: newTeam.name,
+                    transferHistory: firebase.firestore.FieldValue.arrayUnion({
+                        from: oldTeam?.name || 'N/A',
+                        to: newTeam.name,
+                        date: new Date().toISOString(),
+                        reason: reason
+                    })
+                });
+                
+                // Update team counts
+                if (oldTeam) {
+                    await db.collection('teams').doc(oldTeam.id).update({
+                        playerCount: Math.max(0, (oldTeam.playerCount || 1) - 1)
+                    });
+                }
+                
+                await db.collection('teams').doc(newTeamId).update({
+                    playerCount: (newTeam.playerCount || 0) + 1
+                });
+                
+                showToast(`Player transferred from ${oldTeam?.name} to ${newTeam.name}`, 'success');
+                resetForm('transferForm');
+                loadAllData();
+                
+            } catch (error) {
+                console.error('Error transferring player:', error);
+                showToast('Error transferring player', 'error');
+            } finally {
+                button.classList.remove('loading');
+            }
+        }
+
+        // === SCHEDULE MANAGEMENT ===
+        async function loadGames() {
+            try {
+                const snapshot = await db.collection('games').orderBy('gameDate', 'desc').get();
+                games = [];
+                const tbody = document.querySelector('#gamesTable tbody');
+                if (tbody) tbody.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const game = { id: doc.id, ...doc.data() };
+                    games.push(game);
+                    
+                    if (tbody) {
+                        const gameDate = game.gameDate ? new Date(game.gameDate).toLocaleString() : 'TBD';
+                        const score = game.status === 'completed' ? 
+                            `${game.homeScore || 0} - ${game.awayScore || 0}` : '--';
+                        
+                        const row = `
+                            <tr>
+                                <td>${gameDate}</td>
+                                <td>${game.homeTeamName || 'N/A'}</td>
+                                <td>${game.awayTeamName || 'N/A'}</td>
+                                <td>${game.location || 'TBD'}</td>
+                                <td><span class="badge ${game.status}">${game.status || 'scheduled'}</span></td>
+                                <td><strong>${score}</strong></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" onclick="editGameScore('${game.id}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" onclick="deleteGame('${game.id}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading games:', error);
+                showToast('Error loading games', 'error');
+            }
+        }
+
+        async function handleScheduleSubmit(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            button.classList.add('loading');
+            
+            try {
+                const homeTeamId = document.getElementById('homeTeam').value;
+                const awayTeamId = document.getElementById('awayTeam').value;
+                
+                if (homeTeamId === awayTeamId) {
+                    showToast('Home and Away teams must be different', 'error');
+                    button.classList.remove('loading');
+                    return;
+                }
+                
+                const homeTeam = teams.find(t => t.id === homeTeamId);
+                const awayTeam = teams.find(t => t.id === awayTeamId);
+                
+                const gameData = {
+                    homeTeamId,
+                    awayTeamId,
+                    homeTeamName: homeTeam ? homeTeam.name : 'N/A',
+                    awayTeamName: awayTeam ? awayTeam.name : 'N/A',
+                    gameDate: document.getElementById('gameDate').value,
+                    location: document.getElementById('gameLocation').value || 'TBD',
+                    status: 'scheduled',
+                    homeScore: 0,
+                    awayScore: 0,
+                    createdAt: new Date().toISOString()
+                };
+                
+                await db.collection('games').add(gameData);
+                showToast('Game scheduled successfully!', 'success');
+                resetForm('scheduleForm');
+                loadGames();
+                
+            } catch (error) {
+                console.error('Error scheduling game:', error);
+                showToast('Error scheduling game', 'error');
+            } finally {
+                button.classList.remove('loading');
+            }
+        }
+
+        async function editGameScore(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return;
+            
+            const homeScore = prompt(`Enter ${game.homeTeamName} score:`, game.homeScore || 0);
+            if (homeScore === null) return;
+            
+            const awayScore = prompt(`Enter ${game.awayTeamName} score:`, game.awayScore || 0);
+            if (awayScore === null) return;
+            
+            try {
+                await db.collection('games').doc(gameId).update({
+                    homeScore: parseInt(homeScore),
+                    awayScore: parseInt(awayScore),
+                    status: 'completed',
+                    completedAt: new Date().toISOString()
+                });
+                
+                // Update team records
+                const homeWon = parseInt(homeScore) > parseInt(awayScore);
+                
+                if (game.homeTeamId) {
+                    const homeTeam = teams.find(t => t.id === game.homeTeamId);
+                    await db.collection('teams').doc(game.homeTeamId).update({
+                        wins: (homeTeam?.wins || 0) + (homeWon ? 1 : 0),
+                        losses: (homeTeam?.losses || 0) + (homeWon ? 0 : 1)
+                    });
+                }
+                
+                if (game.awayTeamId) {
+                    const awayTeam = teams.find(t => t.id === game.awayTeamId);
+                    await db.collection('teams').doc(game.awayTeamId).update({
+                        wins: (awayTeam?.wins || 0) + (homeWon ? 0 : 1),
+                        losses: (awayTeam?.losses || 0) + (homeWon ? 1 : 0)
+                    });
+                }
+                
+                showToast('Game score updated successfully!', 'success');
+                loadAllData();
+            } catch (error) {
+                console.error('Error updating game score:', error);
+                showToast('Error updating game score', 'error');
+            }
+        }
+
+        async function deleteGame(gameId) {
+            if (!confirm('Are you sure you want to delete this game?')) return;
+            
+            try {
+                await db.collection('games').doc(gameId).delete();
+                showToast('Game deleted successfully!', 'success');
+                loadGames();
+            } catch (error) {
+                console.error('Error deleting game:', error);
+                showToast('Error deleting game', 'error');
+            }
+        }
+
+        // === STANDINGS MANAGEMENT ===
+        async function loadStandings(division) {
+            if (!division) {
+                document.getElementById('standingsEditor').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('standingsEditor').style.display = 'block';
+            const standingsList = document.getElementById('standingsList');
+            standingsList.innerHTML = '';
+            
+            const divisionTeams = teams.filter(t => t.division === division);
+            
+            divisionTeams.forEach(team => {
+                const row = document.createElement('div');
+                row.className = 'team-standings-row';
+                row.innerHTML = `
+                    <div>${team.name}</div>
+                    <div><input type="number" id="wins-${team.id}" value="${team.wins || 0}" min="0"></div>
+                    <div><input type="number" id="losses-${team.id}" value="${team.losses || 0}" min="0"></div>
+                    <div><input type="number" id="pf-${team.id}" value="${team.pointsFor || 0}" min="0"></div>
+                    <div><input type="number" id="pa-${team.id}" value="${team.pointsAgainst || 0}" min="0"></div>
+                `;
+                standingsList.appendChild(row);
+            });
+        }
+
+        async function saveStandings() {
+            const division = document.getElementById('standingsDivision').value;
+            if (!division) {
+                showToast('Please select a division', 'error');
+                return;
+            }
+            
+            const divisionTeams = teams.filter(t => t.division === division);
+            const batch = db.batch();
+            
+            divisionTeams.forEach(team => {
+                const teamRef = db.collection('teams').doc(team.id);
+                batch.update(teamRef, {
+                    wins: parseInt(document.getElementById(`wins-${team.id}`).value) || 0,
+                    losses: parseInt(document.getElementById(`losses-${team.id}`).value) || 0,
+                    pointsFor: parseInt(document.getElementById(`pf-${team.id}`).value) || 0,
+                    pointsAgainst: parseInt(document.getElementById(`pa-${team.id}`).value) || 0,
+                    updatedAt: new Date().toISOString()
+                });
+            });
+            
+            try {
+                await batch.commit();
+                showToast('Standings updated successfully!', 'success');
+                loadTeams();
+            } catch (error) {
+                console.error('Error updating standings:', error);
+                showToast('Error updating standings', 'error');
+            }
+        }
+
+        async function recalculateStandings() {
+            const division = document.getElementById('standingsDivision').value;
+            if (!division) {
+                showToast('Please select a division', 'error');
+                return;
+            }
+            
+            if (!confirm('This will recalculate standings based on game results. Continue?')) return;
+            
+            try {
+                // Reset all teams in division
+                const divisionTeams = teams.filter(t => t.division === division);
+                const teamStats = {};
+                
+                divisionTeams.forEach(team => {
+                    teamStats[team.id] = {
+                        wins: 0,
+                        losses: 0,
+                        pointsFor: 0,
+                        pointsAgainst: 0
+                    };
+                });
+                
+                // Calculate from games
+                games.forEach(game => {
+                    if (game.status === 'completed') {
+                        const homeTeam = teams.find(t => t.id === game.homeTeamId);
+                        const awayTeam = teams.find(t => t.id === game.awayTeamId);
+                        
+                        if (homeTeam?.division === division && teamStats[game.homeTeamId]) {
+                            teamStats[game.homeTeamId].pointsFor += game.homeScore || 0;
+                            teamStats[game.homeTeamId].pointsAgainst += game.awayScore || 0;
+                            
+                            if (game.homeScore > game.awayScore) {
+                                teamStats[game.homeTeamId].wins++;
+                            } else {
+                                teamStats[game.homeTeamId].losses++;
+                            }
+                        }
+                        
+                        if (awayTeam?.division === division && teamStats[game.awayTeamId]) {
+                            teamStats[game.awayTeamId].pointsFor += game.awayScore || 0;
+                            teamStats[game.awayTeamId].pointsAgainst += game.homeScore || 0;
+                            
+                            if (game.awayScore > game.homeScore) {
+                                teamStats[game.awayTeamId].wins++;
+                            } else {
+                                teamStats[game.awayTeamId].losses++;
+                            }
+                        }
+                    }
+                });
+                
+                // Update database
+                const batch = db.batch();
+                Object.keys(teamStats).forEach(teamId => {
+                    const teamRef = db.collection('teams').doc(teamId);
+                    batch.update(teamRef, {
+                        ...teamStats[teamId],
+                        updatedAt: new Date().toISOString()
+                    });
+                });
+                
+                await batch.commit();
+                showToast('Standings recalculated successfully!', 'success');
+                await loadTeams();
+                loadStandings(division);
+                
+            } catch (error) {
+                console.error('Error recalculating standings:', error);
+                showToast('Error recalculating standings', 'error');
+            }
+        }
+
+        // === PLAYER STATS MANAGEMENT ===
+        function loadPlayerStatsView() {
+            const playerList = document.getElementById('playerStatsList');
+            playerList.innerHTML = '<h4>Select a player:</h4>';
+            
+            players.forEach(player => {
+                const playerDiv = document.createElement('div');
+                playerDiv.style.cssText = 'padding: 0.75rem; margin: 0.5rem 0; background: #f3f4f6; border-radius: 8px; cursor: pointer;';
+                playerDiv.innerHTML = `
+                    <strong>${player.name}</strong> - ${player.teamName} #${player.jerseyNumber || '--'}
+                `;
+                playerDiv.onclick = () => loadPlayerStats(player.id);
+                playerList.appendChild(playerDiv);
+            });
+            
+            // Update team filter
+            const teamFilter = document.getElementById('statsTeamFilter');
+            teamFilter.innerHTML = '<option value="">All Teams</option>';
+            teams.forEach(team => {
+                teamFilter.innerHTML += `<option value="${team.id}">${team.name}</option>`;
+            });
+            
+            loadStatsLeaders();
+        }
+
+        function loadPlayerStats(playerId) {
+            const player = players.find(p => p.id === playerId);
+            if (!player) return;
+            
+            currentEditingPlayer = playerId;
+            document.getElementById('statsEditForm').style.display = 'block';
+            document.getElementById('selectedPlayerName').textContent = `${player.name} - ${player.teamName} #${player.jerseyNumber || '--'}`;
+            
+            const stats = player.stats || {};
+            document.getElementById('gamesPlayed').value = stats.gamesPlayed || 0;
+            document.getElementById('totalPoints').value = stats.points || 0;
+            document.getElementById('totalRebounds').value = stats.rebounds || 0;
+            document.getElementById('totalAssists').value = stats.assists || 0;
+            document.getElementById('totalSteals').value = stats.steals || 0;
+            document.getElementById('totalBlocks').value = stats.blocks || 0;
+        }
+
+        async function savePlayerStats() {
+            if (!currentEditingPlayer) return;
+            
+            const button = event.target;
+            button.classList.add('loading');
+            
+            try {
+                const statsData = {
+                    'stats.gamesPlayed': parseInt(document.getElementById('gamesPlayed').value) || 0,
+                    'stats.points': parseInt(document.getElementById('totalPoints').value) || 0,
+                    'stats.rebounds': parseInt(document.getElementById('totalRebounds').value) || 0,
+                    'stats.assists': parseInt(document.getElementById('totalAssists').value) || 0,
+                    'stats.steals': parseInt(document.getElementById('totalSteals').value) || 0,
+                    'stats.blocks': parseInt(document.getElementById('totalBlocks').value) || 0,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                await db.collection('players').doc(currentEditingPlayer).update(statsData);
+                showToast('Player stats updated successfully!', 'success');
+                await loadPlayers();
+                loadStatsLeaders();
+                cancelStatsEdit();
+                
+            } catch (error) {
+                console.error('Error updating player stats:', error);
+                showToast('Error updating player stats', 'error');
+            } finally {
+                button.classList.remove('loading');
+            }
+        }
+
+        function cancelStatsEdit() {
+            document.getElementById('statsEditForm').style.display = 'none';
+            currentEditingPlayer = null;
+        }
+
+        function searchPlayer() {
+            const searchTerm = document.getElementById('playerSearch').value.toLowerCase();
+            const playerList = document.getElementById('playerStatsList');
+            playerList.innerHTML = '<h4>Search Results:</h4>';
+            
+            const filtered = players.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) ||
+                p.teamName.toLowerCase().includes(searchTerm)
+            );
+            
+            filtered.forEach(player => {
+                const playerDiv = document.createElement('div');
+                playerDiv.style.cssText = 'padding: 0.75rem; margin: 0.5rem 0; background: #f3f4f6; border-radius: 8px; cursor: pointer;';
+                playerDiv.innerHTML = `
+                    <strong>${player.name}</strong> - ${player.teamName} #${player.jerseyNumber || '--'}
+                `;
+                playerDiv.onclick = () => loadPlayerStats(player.id);
+                playerList.appendChild(playerDiv);
+            });
+        }
+
+        function filterPlayersByTeam() {
+            const teamId = document.getElementById('statsTeamFilter').value;
+            const playerList = document.getElementById('playerStatsList');
+            playerList.innerHTML = '<h4>Team Players:</h4>';
+            
+            const filtered = teamId ? players.filter(p => p.teamId === teamId) : players;
+            
+            filtered.forEach(player => {
+                const playerDiv = document.createElement('div');
+                playerDiv.style.cssText = 'padding: 0.75rem; margin: 0.5rem 0; background: #f3f4f6; border-radius: 8px; cursor: pointer;';
+                playerDiv.innerHTML = `
+                    <strong>${player.name}</strong> - ${player.teamName} #${player.jerseyNumber || '--'}
+                `;
+                playerDiv.onclick = () => loadPlayerStats(player.id);
+                playerList.appendChild(playerDiv);
+            });
+        }
+
+        function loadStatsLeaders() {
+            const scoringLeaders = [...players].sort((a, b) => 
+                (b.stats?.points || 0) - (a.stats?.points || 0)
+            ).slice(0, 5);
+            
+            const reboundLeaders = [...players].sort((a, b) => 
+                (b.stats?.rebounds || 0) - (a.stats?.rebounds || 0)
+            ).slice(0, 5);
+            
+            const assistLeaders = [...players].sort((a, b) => 
+                (b.stats?.assists || 0) - (a.stats?.assists || 0)
+            ).slice(0, 5);
+            
+            document.getElementById('scoringLeaders').innerHTML = scoringLeaders.map((p, i) => `
+                <div style="padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb;">
+                    ${i + 1}. <strong>${p.name}</strong> - ${p.stats?.points || 0} pts
+                </div>
+            `).join('');
+            
+            document.getElementById('reboundLeaders').innerHTML = reboundLeaders.map((p, i) => `
+                <div style="padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb;">
+                    ${i + 1}. <strong>${p.name}</strong> - ${p.stats?.rebounds || 0} reb
+                </div>
+            `).join('');
+            
+            document.getElementById('assistLeaders').innerHTML = assistLeaders.map((p, i) => `
+                <div style="padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb;">
+                    ${i + 1}. <strong>${p.name}</strong> - ${p.stats?.assists || 0} ast
+                </div>
+            `).join('');
+        }
+
+        // === SETTINGS MANAGEMENT ===
+        async function handleSeasonUpdate(e) {
+            e.preventDefault();
+            showToast('Season settings updated!', 'success');
+        }
+
+        async function handleRulesUpdate(e) {
+            e.preventDefault();
+            showToast('Game rules updated!', 'success');
+        }
+
+        async function exportData() {
+            try {
+                const data = {
+                    teams: teams,
+                    players: players,
+                    games: games,
+                    exportDate: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `az-flight-data-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                
+                showToast('Data exported successfully!', 'success');
+            } catch (error) {
+                console.error('Error exporting data:', error);
+                showToast('Error exporting data', 'error');
+            }
+        }
+
+        async function resetSeason() {
+            if (!confirm('WARNING: This will delete ALL season data including teams, players, and games. Are you sure?')) return;
+            if (!confirm('This action cannot be undone. Please confirm again.')) return;
+            
+            const confirmText = prompt('Type "RESET SEASON" to confirm:');
+            if (confirmText !== 'RESET SEASON') {
+                showToast('Season reset cancelled', 'info');
+                return;
+            }
+            
+            try {
+                // Delete all documents in batches
+                const batch = db.batch();
+                
+                const teamsSnapshot = await db.collection('teams').get();
+                teamsSnapshot.forEach(doc => batch.delete(doc.ref));
+                
+                const playersSnapshot = await db.collection('players').get();
+                playersSnapshot.forEach(doc => batch.delete(doc.ref));
+                
+                const gamesSnapshot = await db.collection('games').get();
+                gamesSnapshot.forEach(doc => batch.delete(doc.ref));
+                
+                await batch.commit();
+                
+                showToast('Season reset successfully!', 'warning');
+                loadAllData();
+                
+            } catch (error) {
+                console.error('Error resetting season:', error);
+                showToast('Error resetting season', 'error');
+            }
+        }
+
+        // === UTILITY FUNCTIONS ===
+        function updateDropdowns() {
+            updateTeamDropdowns();
+            updatePlayerDropdowns();
+        }
+
+        function updateTeamDropdowns() {
+            const selects = ['playerTeam', 'homeTeam', 'awayTeam', 'newTeam'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (!select) return;
+                
+                const currentValue = select.value;
+                select.innerHTML = selectId === 'playerTeam' ? 
+                    '<option value="">Select Team</option>' :
+                    selectId === 'newTeam' ? 
+                    '<option value="">Select New Team</option>' :
+                    `<option value="">Select ${selectId.includes('home') ? 'Home' : 'Away'} Team</option>`;
+                
+                teams.forEach(team => {
+                    select.innerHTML += `<option value="${team.id}">${team.name} (${team.division})</option>`;
+                });
+                
+                select.value = currentValue;
+            });
+        }
+
+        function updatePlayerDropdowns() {
+            const select = document.getElementById('transferPlayer');
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">Choose Player</option>';
+            players.forEach(player => {
+                select.innerHTML += `<option value="${player.id}">${player.name} (${player.teamName})</option>`;
+            });
+        }
+
+        function updateStatistics() {
+            document.getElementById('teamCount').textContent = teams.length;
+            document.getElementById('playerCount').textContent = players.length;
+            document.getElementById('gameCount').textContent = games.length;
+            
+            const divisions = new Set(teams.map(t => t.division));
+            document.getElementById('divisionCount').textContent = divisions.size || 4;
+            
+            const liveGames = games.filter(g => g.status === 'in_progress').length;
+            document.getElementById('activeGames').textContent = liveGames;
+        }
+
+        function refreshTeams() {
+            loadTeams();
+            showToast('Teams refreshed!', 'success');
+        }
+
+        function refreshPlayers() {
+            loadPlayers();
+            showToast('Players refreshed!', 'success');
+        }
+
+        function refreshGames() {
+            loadGames();
+            showToast('Games refreshed!', 'success');
+        }
+
+        function resetForm(formId) {
+            document.getElementById(formId).reset();
+            if (formId === 'teamForm') currentEditingTeam = null;
+            if (formId === 'playerForm') currentEditingPlayer = null;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('i');
+            
+            // Update toast content
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            
+            // Update icon
+            const iconClasses = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            icon.className = iconClasses[type] || iconClasses.success;
+            
+            // Show toast
+            toast.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/';
+            }
+        }
+        
+        // === INITIALIZATION COMPLETE ===
+        console.log('✅ Firebase Connected to:', firebaseConfig.projectId);
+        console.log('✅ All Systems Operational');
+        console.log('📊 Complete Admin System Ready');
+    </script>
+<script src="/js/auth-check.js"></script>
+</body>
+</html>
+

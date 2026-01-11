@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - FABA Winter 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --faba-red: #dc2626;
+            --faba-gold: #fbbf24;
+            --faba-orange: #f97316;
+            --faba-dark: #0a0a0a;
+            --faba-dark-secondary: #1a1a1a;
+            --faba-dark-card: #141414;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--faba-dark);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: linear-gradient(90deg, var(--faba-red), var(--faba-orange));
+            padding: 20px;
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .admin-header a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            background: var(--faba-dark-card);
+            border: 2px solid #333;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .admin-tab:hover {
+            border-color: var(--faba-gold);
+        }
+
+        .admin-tab.active {
+            background: var(--faba-gold);
+            border-color: var(--faba-gold);
+            color: var(--faba-dark);
+        }
+
+        .admin-panel {
+            display: none;
+            background: var(--faba-dark-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #333;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+
+        .panel-header h2 {
+            font-family: 'Anton', sans-serif;
+            color: var(--faba-gold);
+            font-size: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--faba-gold);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: var(--faba-dark-secondary);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--faba-gold);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--faba-gold);
+            color: var(--faba-dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--faba-orange);
+        }
+
+        .btn-danger {
+            background: var(--faba-red);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: #fff;
+        }
+
+        /* Games List */
+        .games-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .game-item {
+            background: var(--faba-dark-secondary);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 100px 1fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .game-item.completed {
+            border-color: #22c55e;
+        }
+
+        .game-team {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .game-team.away {
+            text-align: right;
+        }
+
+        .game-team-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .game-score-input {
+            width: 80px;
+            padding: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: var(--faba-dark);
+            color: var(--faba-gold);
+        }
+
+        .game-vs {
+            text-align: center;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .game-meta {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .game-badge {
+            background: #333;
+            color: var(--faba-gold);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .game-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .game-actions .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            color: #888;
+            font-weight: 500;
+        }
+
+        .filter-group select {
+            padding: 8px 15px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            background: var(--faba-dark-secondary);
+            color: #fff;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #22c55e;
+            display: block;
+        }
+
+        .status-message.error {
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid var(--faba-red);
+            color: var(--faba-red);
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .game-team.away {
+                text-align: center;
+            }
+
+            .game-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* Login Styles */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: var(--faba-dark-card);
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: var(--faba-gold);
+            font-family: 'Anton', sans-serif;
+            margin-bottom: 30px;
+        }
+
+        #adminContent {
+            display: none;
+        }
+
+        #loginContent {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="loginContent">
+        <div class="login-container">
+            <h2>FABA Admin Login</h2>
+            <div id="loginStatus" class="status-message"></div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" placeholder="admin@faba.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Password">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">Login</button>
+            <p style="text-align: center; margin-top: 20px; color: #666;">
+                <a href="index.html" style="color: var(--faba-gold);">Back to Home</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div id="adminContent">
+        <header class="admin-header">
+            <h1>FABA Winter 2026 - Admin</h1>
+            <a href="index.html">Back to Site</a> |
+            <a href="#" onclick="logout()">Logout</a>
+        </header>
+
+        <div class="admin-container">
+            <div id="statusMessage" class="status-message"></div>
+
+            <!-- Admin Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showPanel('scores')">Update Scores</button>
+                <button class="admin-tab" onclick="showPanel('games')">Manage Games</button>
+                <button class="admin-tab" onclick="showPanel('teams')">Manage Teams</button>
+                <button class="admin-tab" onclick="showPanel('standings')">Recalculate Standings</button>
+            </div>
+
+            <!-- Scores Panel -->
+            <div id="scoresPanel" class="admin-panel active">
+                <div class="panel-header">
+                    <h2>Update Game Scores</h2>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Week:</label>
+                        <select id="scoreWeekFilter" onchange="loadGamesForScoring()">
+                            <option value="1">Week 1</option>
+                            <option value="2">Week 2</option>
+                            <option value="3">Week 3</option>
+                            <option value="4">Week 4</option>
+                            <option value="5">Week 5</option>
+                            <option value="6">Week 6</option>
+                            <option value="7">Week 7 - Playoffs</option>
+                            <option value="8">Week 8 - Finals</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Division:</label>
+                        <select id="scoreDivisionFilter" onchange="loadGamesForScoring()">
+                            <option value="all">All</option>
+                            <option value="Open">Open</option>
+                            <option value="38+">38+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="gamesForScoring" class="games-list">
+                    <p style="color: #888; text-align: center; padding: 40px;">Loading games...</p>
+                </div>
+            </div>
+
+            <!-- Games Panel -->
+            <div id="gamesPanel" class="admin-panel">
+                <div class="panel-header">
+                    <h2>Add New Game</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Week</label>
+                        <select id="newGameWeek">
+                            <option value="1">Week 1</option>
+                            <option value="2">Week 2</option>
+                            <option value="3">Week 3</option>
+                            <option value="4">Week 4</option>
+                            <option value="5">Week 5</option>
+                            <option value="6">Week 6</option>
+                            <option value="7">Week 7</option>
+                            <option value="8">Week 8</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Division</label>
+                        <select id="newGameDivision" onchange="loadTeamsForGame()">
+                            <option value="Open">Open</option>
+                            <option value="38+">38+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="text" id="newGameTime" placeholder="11:00 AM">
+                    </div>
+                    <div class="form-group">
+                        <label>Court</label>
+                        <select id="newGameCourt">
+                            <option value="CT-1">CT-1</option>
+                            <option value="CT-2">CT-2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Home Team</label>
+                        <select id="newGameHomeTeam"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Away Team</label>
+                        <select id="newGameAwayTeam"></select>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="addGame()">Add Game</button>
+            </div>
+
+            <!-- Teams Panel -->
+            <div id="teamsPanel" class="admin-panel">
+                <div class="panel-header">
+                    <h2>Add New Team</h2>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Team Name</label>
+                        <input type="text" id="newTeamName" placeholder="Team Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Division</label>
+                        <select id="newTeamDivision">
+                            <option value="Open">Open</option>
+                            <option value="38+">38+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="addTeam()">Add Team</button>
+
+                <hr style="margin: 30px 0; border-color: #333;">
+
+                <h3 style="color: var(--faba-gold); margin-bottom: 20px;">Current Teams</h3>
+                <div id="teamsList"></div>
+            </div>
+
+            <!-- Standings Panel -->
+            <div id="standingsPanel" class="admin-panel">
+                <div class="panel-header">
+                    <h2>Recalculate Standings</h2>
+                </div>
+
+                <p style="color: #888; margin-bottom: 20px;">
+                    This will recalculate all team standings based on completed games.
+                </p>
+
+                <div class="form-group">
+                    <label>Division</label>
+                    <select id="recalcDivision">
+                        <option value="all">All Divisions</option>
+                        <option value="Open">Open</option>
+                        <option value="38+">38+</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success" onclick="recalculateStandings()">Recalculate Standings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Base path for FABA data
+        const FABA_BASE = 'faba-leagues/winter-2026';
+
+        // Check auth state
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('loginContent').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadGamesForScoring();
+                loadTeamsList();
+                loadTeamsForGame();
+            } else {
+                document.getElementById('loginContent').style.display = 'block';
+                document.getElementById('adminContent').style.display = 'none';
+            }
+        });
+
+        // Login
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const statusEl = document.getElementById('loginStatus');
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                statusEl.className = 'status-message success';
+                statusEl.textContent = 'Login successful!';
+            } catch (error) {
+                statusEl.className = 'status-message error';
+                statusEl.textContent = 'Login failed: ' + error.message;
+            }
+        }
+
+        // Logout
+        function logout() {
+            auth.signOut();
+        }
+
+        // Show status message
+        function showStatus(message, type = 'success') {
+            const el = document.getElementById('statusMessage');
+            el.className = `status-message ${type}`;
+            el.textContent = message;
+            setTimeout(() => {
+                el.className = 'status-message';
+            }, 5000);
+        }
+
+        // Show panel
+        function showPanel(panelName) {
+            document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+
+            document.getElementById(panelName + 'Panel').classList.add('active');
+            event.target.classList.add('active');
+
+            if (panelName === 'scores') loadGamesForScoring();
+            if (panelName === 'teams') loadTeamsList();
+        }
+
+        // Load games for scoring
+        async function loadGamesForScoring() {
+            const week = parseInt(document.getElementById('scoreWeekFilter').value);
+            const division = document.getElementById('scoreDivisionFilter').value;
+            const container = document.getElementById('gamesForScoring');
+
+            container.innerHTML = '<p style="color: #888; text-align: center; padding: 40px;">Loading...</p>';
+
+            try {
+                let query = db.collection(FABA_BASE + '/games').where('week', '==', week);
+                const snapshot = await query.get();
+
+                let games = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (division === 'all' || data.division === division) {
+                        games.push({ id: doc.id, ...data });
+                    }
+                });
+
+                // Sort by time
+                games.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+                if (games.length === 0) {
+                    container.innerHTML = '<p style="color: #888; text-align: center; padding: 40px;">No games found for this week/division.</p>';
+                    return;
+                }
+
+                let html = '';
+                games.forEach(game => {
+                    const statusClass = game.status === 'completed' ? 'completed' : '';
+                    html += `
+                        <div class="game-item ${statusClass}" data-game-id="${game.id}">
+                            <div class="game-team home">
+                                <div class="game-team-name">${game.homeTeam}</div>
+                                <div class="game-meta">
+                                    <span class="game-badge">${game.time}</span>
+                                    <span class="game-badge">${game.court}</span>
+                                    <span class="game-badge">${game.division}</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" class="game-score-input" id="home-${game.id}" value="${game.homeScore || 0}" min="0">
+                                <div class="game-vs">vs</div>
+                                <input type="number" class="game-score-input" id="away-${game.id}" value="${game.awayScore || 0}" min="0">
+                            </div>
+                            <div class="game-team away">
+                                <div class="game-team-name">${game.awayTeam}</div>
+                            </div>
+                            <div class="game-actions">
+                                <button class="btn btn-success" onclick="saveScore('${game.id}')">Save</button>
+                                <button class="btn btn-primary" onclick="markComplete('${game.id}')">Final</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading games:', error);
+                container.innerHTML = '<p style="color: var(--faba-red); text-align: center; padding: 40px;">Error loading games.</p>';
+            }
+        }
+
+        // Save score
+        async function saveScore(gameId) {
+            const homeScore = parseInt(document.getElementById('home-' + gameId).value) || 0;
+            const awayScore = parseInt(document.getElementById('away-' + gameId).value) || 0;
+
+            try {
+                await db.collection(FABA_BASE + '/games').doc(gameId).update({
+                    homeScore,
+                    awayScore,
+                    status: 'in-progress'
+                });
+                showStatus('Score saved!');
+            } catch (error) {
+                showStatus('Error saving score: ' + error.message, 'error');
+            }
+        }
+
+        // Mark game complete
+        async function markComplete(gameId) {
+            const homeScore = parseInt(document.getElementById('home-' + gameId).value) || 0;
+            const awayScore = parseInt(document.getElementById('away-' + gameId).value) || 0;
+
+            if (!confirm('Mark this game as FINAL?')) return;
+
+            try {
+                await db.collection(FABA_BASE + '/games').doc(gameId).update({
+                    homeScore,
+                    awayScore,
+                    status: 'completed'
+                });
+                showStatus('Game marked as FINAL!');
+                loadGamesForScoring();
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Load teams list
+        async function loadTeamsList() {
+            const container = document.getElementById('teamsList');
+
+            try {
+                const snapshot = await db.collection(FABA_BASE + '/teams').orderBy('division').get();
+
+                let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px;">';
+                snapshot.forEach(doc => {
+                    const team = doc.data();
+                    html += `
+                        <div style="background: var(--faba-dark-secondary); padding: 10px 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>${team.name}</span>
+                            <span class="game-badge">${team.division}</span>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = '<p style="color: var(--faba-red);">Error loading teams.</p>';
+            }
+        }
+
+        // Load teams for game form
+        async function loadTeamsForGame() {
+            const division = document.getElementById('newGameDivision').value;
+            const homeSelect = document.getElementById('newGameHomeTeam');
+            const awaySelect = document.getElementById('newGameAwayTeam');
+
+            try {
+                const snapshot = await db.collection(FABA_BASE + '/teams')
+                    .where('division', '==', division)
+                    .orderBy('name')
+                    .get();
+
+                let options = '<option value="">Select Team</option>';
+                snapshot.forEach(doc => {
+                    const team = doc.data();
+                    options += `<option value="${team.name}">${team.name}</option>`;
+                });
+
+                homeSelect.innerHTML = options;
+                awaySelect.innerHTML = options;
+            } catch (error) {
+                console.error('Error loading teams:', error);
+            }
+        }
+
+        // Add team
+        async function addTeam() {
+            const name = document.getElementById('newTeamName').value.trim();
+            const division = document.getElementById('newTeamDivision').value;
+
+            if (!name) {
+                showStatus('Please enter a team name.', 'error');
+                return;
+            }
+
+            try {
+                await db.collection(FABA_BASE + '/teams').add({
+                    name,
+                    division,
+                    wins: 0,
+                    losses: 0,
+                    pointsFor: 0,
+                    pointsAgainst: 0
+                });
+
+                document.getElementById('newTeamName').value = '';
+                showStatus('Team added successfully!');
+                loadTeamsList();
+                loadTeamsForGame();
+            } catch (error) {
+                showStatus('Error adding team: ' + error.message, 'error');
+            }
+        }
+
+        // Add game
+        async function addGame() {
+            const week = parseInt(document.getElementById('newGameWeek').value);
+            const division = document.getElementById('newGameDivision').value;
+            const time = document.getElementById('newGameTime').value.trim();
+            const court = document.getElementById('newGameCourt').value;
+            const homeTeam = document.getElementById('newGameHomeTeam').value;
+            const awayTeam = document.getElementById('newGameAwayTeam').value;
+
+            if (!homeTeam || !awayTeam || !time) {
+                showStatus('Please fill in all fields.', 'error');
+                return;
+            }
+
+            if (homeTeam === awayTeam) {
+                showStatus('Home and away teams cannot be the same.', 'error');
+                return;
+            }
+
+            try {
+                await db.collection(FABA_BASE + '/games').add({
+                    week,
+                    division,
+                    time,
+                    court,
+                    homeTeam,
+                    awayTeam,
+                    homeScore: 0,
+                    awayScore: 0,
+                    status: 'scheduled'
+                });
+
+                document.getElementById('newGameTime').value = '';
+                showStatus('Game added successfully!');
+            } catch (error) {
+                showStatus('Error adding game: ' + error.message, 'error');
+            }
+        }
+
+        // Recalculate standings
+        async function recalculateStandings() {
+            const division = document.getElementById('recalcDivision').value;
+
+            if (!confirm('This will recalculate standings from all completed games. Continue?')) return;
+
+            try {
+                // Get all teams
+                let teamsQuery = db.collection(FABA_BASE + '/teams');
+                if (division !== 'all') {
+                    teamsQuery = teamsQuery.where('division', '==', division);
+                }
+                const teamsSnapshot = await teamsQuery.get();
+
+                // Reset all teams
+                const teamStats = {};
+                teamsSnapshot.forEach(doc => {
+                    teamStats[doc.data().name] = {
+                        id: doc.id,
+                        wins: 0,
+                        losses: 0,
+                        pointsFor: 0,
+                        pointsAgainst: 0
+                    };
+                });
+
+                // Get all completed games
+                let gamesQuery = db.collection(FABA_BASE + '/games').where('status', '==', 'completed');
+                const gamesSnapshot = await gamesQuery.get();
+
+                gamesSnapshot.forEach(doc => {
+                    const game = doc.data();
+                    const homeTeam = game.homeTeam;
+                    const awayTeam = game.awayTeam;
+                    const homeScore = game.homeScore || 0;
+                    const awayScore = game.awayScore || 0;
+
+                    // Only process if both teams are in our list
+                    if (teamStats[homeTeam] && teamStats[awayTeam]) {
+                        // Update points
+                        teamStats[homeTeam].pointsFor += homeScore;
+                        teamStats[homeTeam].pointsAgainst += awayScore;
+                        teamStats[awayTeam].pointsFor += awayScore;
+                        teamStats[awayTeam].pointsAgainst += homeScore;
+
+                        // Update wins/losses
+                        if (homeScore > awayScore) {
+                            teamStats[homeTeam].wins++;
+                            teamStats[awayTeam].losses++;
+                        } else if (awayScore > homeScore) {
+                            teamStats[awayTeam].wins++;
+                            teamStats[homeTeam].losses++;
+                        }
+                    }
+                });
+
+                // Batch update all teams
+                const batch = db.batch();
+                Object.entries(teamStats).forEach(([name, stats]) => {
+                    const ref = db.collection(FABA_BASE + '/teams').doc(stats.id);
+                    batch.update(ref, {
+                        wins: stats.wins,
+                        losses: stats.losses,
+                        pointsFor: stats.pointsFor,
+                        pointsAgainst: stats.pointsAgainst
+                    });
+                });
+
+                await batch.commit();
+                showStatus('Standings recalculated successfully!');
+            } catch (error) {
+                showStatus('Error recalculating standings: ' + error.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

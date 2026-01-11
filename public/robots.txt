@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://azflight.basketball/sitemap.xml
+
+# Disallow admin areas (when backend is added)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Disallow: /tests/
+
+# Allow specific files
+Allow: /css/
+Allow: /js/
+Allow: /assets/

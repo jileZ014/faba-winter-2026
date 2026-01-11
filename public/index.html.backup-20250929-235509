@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZ Flight Basketball League | Professional Youth Basketball Management</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Arizona's premier youth basketball league with live scoring, team management, and league administration. Professional basketball league management system.">
+    <meta name="keywords" content="basketball, league, Arizona, youth sports, live scoring, team management, scorekeeper, coach portal">
+    <meta name="author" content="Arizona Flight Basketball Club">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="AZ Flight Basketball League">
+    <meta property="og:description" content="Arizona's premier youth basketball league management system with live scoring and team management.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://azflight.basketball">
+    <meta property="og:image" content="https://azflight.basketball/assets/images/og-image.jpg">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AZ Flight Basketball League">
+    <meta name="twitter:description" content="Professional youth basketball league management with live scoring and team management.">
+    <meta name="twitter:image" content="https://azflight.basketball/assets/images/twitter-card.jpg">
+
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="AZ Flight">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AZ Flight">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#3b82f6">
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- External Dependencies -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Local Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/utilities.css">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="js/app.js" as="script">
+    <link rel="preload" href="css/style.css" as="style">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 bg-primary text-white p-2 rounded">
+        Skip to main content
+    </a>
+
+    <!-- PUBLIC PAGE -->
+    <div id="publicPage" class="page active">
+        <header class="header" role="banner">
+            <div class="container">
+                <nav class="nav" role="navigation" aria-label="Main navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>BASKETBALL LEAGUE</span>
+                        </div>
+                    </div>
+                    <div class="nav-menu">
+                        <a href="#home" class="nav-link">Home</a>
+                        <a href="#standings" class="nav-link">Standings</a>
+                        <a href="#schedule" class="nav-link">Schedule</a>
+                        <a href="#stats" class="nav-link">Stats</a>
+                        <button class="btn-login" id="loginBtn" type="button" aria-label="Open staff login modal">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>STAFF LOGIN</span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main" role="main">
+            <!-- HERO SECTION -->
+            <section id="home" class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span>FALL 2025 SEASON</span>
+                        </div>
+                        <h1 class="hero-title">
+                            <span class="title-line-1">ARIZONA'S PREMIER</span>
+                            <span class="title-line-2">YOUTH BASKETBALL LEAGUE</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Developing champions on and off the court with professional facilities,
+                            expert coaching, and competitive play across all age divisions.
+                        </p>
+                        <div class="hero-stats" role="group" aria-label="League statistics">
+                            <div class="stat">
+                                <div class="stat-number">16</div>
+                                <div class="stat-label">Teams</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">192</div>
+                                <div class="stat-label">Players</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">48</div>
+                                <div class="stat-label">Games</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">Divisions</div>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <button class="btn-primary" type="button" onclick="scrollToSection('standings')">
+                                VIEW STANDINGS
+                            </button>
+                            <button class="btn-secondary" type="button" onclick="scrollToSection('schedule')">
+                                SEE SCHEDULE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STANDINGS SECTION -->
+            <section id="standings" class="section standings">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>LEAGUE STANDINGS</h2>
+                        <p>Current season records across all divisions</p>
+                    </div>
+                    <div class="division-tabs" role="tablist" aria-label="Division standings">
+                        <button class="division-tab active" role="tab" aria-selected="true" data-division="10U" type="button">10U</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="12U" type="button">12U</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="14U" type="button">14U</button>
+                        <button class="division-tab" role="tab" aria-selected="false" data-division="16U" type="button">16U</button>
+                    </div>
+                    <div class="standings-table" role="tabpanel">
+                        <table role="table" aria-label="Team standings">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Rank</th>
+                                    <th scope="col">Team</th>
+                                    <th scope="col" abbr="Wins">W</th>
+                                    <th scope="col" abbr="Losses">L</th>
+                                    <th scope="col" abbr="Percentage">PCT</th>
+                                    <th scope="col" abbr="Games Behind">GB</th>
+                                </tr>
+                            </thead>
+                            <tbody id="standingsBody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCHEDULE SECTION -->
+            <section id="schedule" class="section schedule">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>GAME SCHEDULE</h2>
+                        <p>Upcoming games and recent results</p>
+                    </div>
+                    <div class="schedule-grid" id="scheduleGrid" role="list" aria-label="Game schedule">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- PLAYER STATS SECTION -->
+            <section id="stats" class="section stats-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>PLAYER LEADERS</h2>
+                        <p>Top performers across all categories</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                                <span>SCORING LEADERS</span>
+                            </h3>
+                            <div class="stat-list" id="scoringLeaders" role="list" aria-label="Top scoring players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="stat-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-hands" aria-hidden="true"></i>
+                                <span>REBOUNDING LEADERS</span>
+                            </h3>
+                            <div class="stat-list" id="reboundingLeaders" role="list" aria-label="Top rebounding players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="stat-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-bolt" aria-hidden="true"></i>
+                                <span>ASSIST LEADERS</span>
+                            </h3>
+                            <div class="stat-list" id="assistLeaders" role="list" aria-label="Top assist players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal hidden" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="logo">
+                    <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                    <div class="brand-text">
+                        <h1>AZ FLIGHT</h1>
+                        <span>STAFF ACCESS</span>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeLogin" type="button" aria-label="Close login modal">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h2 id="loginTitle">SELECT YOUR ROLE</h2>
+                <p>Choose your dashboard to access league management tools</p>
+                <div class="role-grid">
+                    <div class="role-card" data-role="scorekeeper" role="button" tabindex="0" aria-label="Access scorekeeper dashboard">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i>
+                        <h3>SCOREKEEPER</h3>
+                        <p>Live game scoring and statistics tracking</p>
+                    </div>
+                    <div class="role-card" data-role="coach" role="button" tabindex="0" aria-label="Access coach dashboard">
+                        <i class="fas fa-users" aria-hidden="true"></i>
+                        <h3>COACH</h3>
+                        <p>Team and player management</p>
+                    </div>
+                    <div class="role-card" data-role="admin" role="button" tabindex="0" aria-label="Access admin dashboard">
+                        <i class="fas fa-cog" aria-hidden="true"></i>
+                        <h3>ADMIN</h3>
+                        <p>League management and administration</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SELECTION PAGE -->
+    <div id="gameSelectionPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Dashboard navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>SCOREKEEPER</span>
+                        </div>
+                    </div>
+                    <button class="btn-back" id="backFromGameSelection" type="button" aria-label="Return to home page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> BACK
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="selection-header">
+                    <h1>SELECT TODAY'S GAME</h1>
+                    <p><time datetime="2025-09-20">Saturday, September 20, 2025</time></p>
+                </div>
+                <div class="games-list" id="gamesList" role="list" aria-label="Available games">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SCOREKEEPER DASHBOARD -->
+    <div id="scorekeeperPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Scorekeeper navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>LIVE SCORING</span>
+                        </div>
+                    </div>
+                    <button class="btn-back" id="backFromScorekeeper" type="button" aria-label="Return to game selection">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> GAMES
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="scorekeeper-content">
+                    <div class="game-info">
+                        <h2 id="currentGameTeams">DESERT HAWKS VS VALLEY VIPERS</h2>
+                        <div class="current-score" role="group" aria-label="Current game score">
+                            <span id="homeScore" aria-label="Home team score">0</span>
+                            <span class="score-divider" aria-hidden="true">-</span>
+                            <span id="awayScore" aria-label="Away team score">0</span>
+                        </div>
+                    </div>
+                    <div class="teams-container">
+                        <!-- Home Team -->
+                        <section class="team-section" aria-labelledby="homeTeamName">
+                            <div class="team-header">
+                                <h3 id="homeTeamName">DESERT HAWKS</h3>
+                                <div class="team-fouls" role="group" aria-label="Home team fouls">
+                                    <span class="fouls-label">TEAM FOULS:</span>
+                                    <span class="fouls-count" id="homeTeamFouls" aria-live="polite">0</span>
+                                </div>
+                            </div>
+                            <div class="players-list" id="homePlayers" role="list" aria-label="Home team players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
+                        <!-- Away Team -->
+                        <section class="team-section" aria-labelledby="awayTeamName">
+                            <div class="team-header">
+                                <h3 id="awayTeamName">VALLEY VIPERS</h3>
+                                <div class="team-fouls" role="group" aria-label="Away team fouls">
+                                    <span class="fouls-label">TEAM FOULS:</span>
+                                    <span class="fouls-count" id="awayTeamFouls" aria-live="polite">0</span>
+                                </div>
+                            </div>
+                            <div class="players-list" id="awayPlayers" role="list" aria-label="Away team players">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
+                    </div>
+                    <div class="scorekeeper-actions">
+                        <button class="btn-save" id="saveGameBtn" type="button" aria-label="Save current game data">
+                            <i class="fas fa-save" aria-hidden="true"></i> SAVE GAME & SYNC
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- COACH DASHBOARD -->
+    <div id="coachPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Coach navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>COACH PORTAL</span>
+                        </div>
+                    </div>
+                    <select class="team-selector" id="teamSelector" aria-label="Select team to manage">
+                        <option value="10u-hawks">10U - Desert Hawks</option>
+                        <option value="12u-suns">12U - Scottsdale Suns</option>
+                        <option value="14u-panthers">14U - Peoria Panthers</option>
+                        <option value="16u-elite">16U - Arizona Elite</option>
+                    </select>
+                    <button class="btn-back" id="backFromCoach" type="button" aria-label="Return to home page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> BACK
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="dashboard-content">
+                    <div class="dashboard-sections">
+                        <section class="dashboard-section" aria-labelledby="playerManagementTitle">
+                            <div class="dashboard-section-header">
+                                <h3 id="playerManagementTitle">PLAYER MANAGEMENT</h3>
+                                <button class="btn-add" id="addPlayerBtn" type="button" aria-label="Add new player">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> ADD PLAYER
+                                </button>
+                            </div>
+                            <div class="table-container">
+                                <table class="players-table" role="table" aria-label="Team players">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Photo</th>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Position</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="coachPlayersTable">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section class="dashboard-section" aria-labelledby="teamPerformanceTitle">
+                            <div class="dashboard-section-header">
+                                <h3 id="teamPerformanceTitle">TEAM PERFORMANCE</h3>
+                            </div>
+                            <div class="performance-grid" role="list" aria-label="Team performance statistics">
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">8</div>
+                                    <div class="perf-label">Wins</div>
+                                </div>
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">2</div>
+                                    <div class="perf-label">Losses</div>
+                                </div>
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">72.5</div>
+                                    <div class="perf-label">Avg Points</div>
+                                </div>
+                                <div class="performance-card" role="listitem">
+                                    <div class="perf-value">38.2</div>
+                                    <div class="perf-label">Avg Rebounds</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminPage" class="page">
+        <header class="dashboard-header" role="banner">
+            <div class="container">
+                <nav class="dashboard-nav" role="navigation" aria-label="Admin navigation">
+                    <div class="logo">
+                        <i class="fas fa-basketball-ball" aria-hidden="true"></i>
+                        <div class="brand-text">
+                            <h1>AZ FLIGHT</h1>
+                            <span>ADMIN CONTROL</span>
+                        </div>
+                    </div>
+                    <button class="btn-back" id="backFromAdmin" type="button" aria-label="Return to home page">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> BACK
+                    </button>
+                </nav>
+            </div>
+        </header>
+        <main role="main">
+            <div class="container">
+                <div class="dashboard-content">
+                    <div class="admin-grid">
+                        <section class="admin-card" aria-labelledby="leagueOverviewTitle">
+                            <h3 id="leagueOverviewTitle">LEAGUE OVERVIEW</h3>
+                            <div class="overview-stats" role="list" aria-label="League statistics">
+                                <div class="overview-stat" role="listitem">
+                                    <div class="overview-stat-value">16</div>
+                                    <div class="overview-stat-label">Teams</div>
+                                </div>
+                                <div class="overview-stat" role="listitem">
+                                    <div class="overview-stat-value">192</div>
+                                    <div class="overview-stat-label">Players</div>
+                                </div>
+                                <div class="overview-stat" role="listitem">
+                                    <div class="overview-stat-value">48</div>
+                                    <div class="overview-stat-label">Games</div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="admin-card" aria-labelledby="teamManagementTitle">
+                            <h3 id="teamManagementTitle">TEAM MANAGEMENT</h3>
+                            <div class="admin-actions" role="list" aria-label="Team management actions">
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-users" aria-hidden="true"></i>
+                                    <span>MANAGE TEAMS</span>
+                                </button>
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                    <span>ADD TEAM</span>
+                                </button>
+                            </div>
+                        </section>
+                        <section class="admin-card" aria-labelledby="scheduleManagementTitle">
+                            <h3 id="scheduleManagementTitle">SCHEDULE MANAGEMENT</h3>
+                            <div class="admin-actions" role="list" aria-label="Schedule management actions">
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-calendar" aria-hidden="true"></i>
+                                    <span>MANAGE SCHEDULE</span>
+                                </button>
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                    <span>SCHEDULE GAME</span>
+                                </button>
+                            </div>
+                        </section>
+                        <section class="admin-card" aria-labelledby="dataManagementTitle">
+                            <h3 id="dataManagementTitle">DATA MANAGEMENT</h3>
+                            <div class="admin-actions" role="list" aria-label="Data management actions">
+                                <button class="admin-btn" type="button" role="listitem">
+                                    <i class="fas fa-download" aria-hidden="true"></i>
+                                    <span>EXPORT DATA</span>
+                                </button>
+                                <button class="admin-btn danger" type="button" role="listitem">
+                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                                    <span>RESET LEAGUE</span>
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Configuration Scripts (Load First) -->
+    <script src="config/app.config.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+
+    <!-- Main Application Script -->
+    <script src="js/app-final.js"></script>
+
+
+    <!-- Service Worker Registration -->
+    <script>
+       // TEMPORARILY DISABLED - Causing cache issues
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+//         navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // PWA Install Banner
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show custom install UI (optional)
+            console.log('💡 App can be installed');
+        });
+
+        // Handle app installation
+        window.addEventListener('appinstalled', () => {
+            console.log('📱 PWA was installed');
+            deferredPrompt = null;
+        });
+    </script>
+
+    <!-- Analytics (Add when ready) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+  // Firebase configuration - GET THESE VALUES FROM FIREBASE CONSOLE
+  const firebaseConfig = {
+    apiKey: "AIzaSyCTM8LdVW5Hh2Unu7IDvsKjvTL8m43nQyc",
+  authDomain: "az-flight-league-prod-2025.firebaseapp.com",
+  projectId: "az-flight-league-prod-2025",
+  storageBucket: "az-flight-league-prod-2025.firebasestorage.app",
+  messagingSenderId: "936667116683",
+  appId: "1:936667116683:web:185b8ad2439fbdb6ced08e",
+  };
+  
+  // Initialize Firebase if available
+  if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+    window.auth = firebase.auth();
+    console.log('🔥 Firebase initialized successfully');
+    
+    // Optional: Enable offline persistence
+    window.db.enablePersistence()
+      .catch((err) => {
+        if (err.code === 'failed-precondition') {
+          console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+        } else if (err.code === 'unimplemented') {
+          console.warn('The current browser doesn\'t support offline persistence.');
+        }
+      });
+  }
+  <!-- ADD THIS CODE TO index.html RIGHT AFTER Firebase initialization -->
+<script>
+// Load teams and standings from Firestore
+async function loadStandings() {
+    try {
+        const db = firebase.firestore();
+        
+        // Get all teams
+        const teamsSnapshot = await db.collection('teams').get();
+        
+        if (teamsSnapshot.empty) {
+            console.log('No teams found in Firestore');
+            return;
+        }
+        
+        // Organize teams by division
+        const teamsByDivision = {};
+        
+        teamsSnapshot.forEach(doc => {
+            const team = { id: doc.id, ...doc.data() };
+            const division = team.division || '10U';
+            
+            if (!teamsByDivision[division]) {
+                teamsByDivision[division] = [];
+            }
+            
+            // Calculate win percentage
+            const wins = team.wins || 0;
+            const losses = team.losses || 0;
+            const totalGames = wins + losses;
+            team.pct = totalGames > 0 ? (wins / totalGames).toFixed(3) : '.000';
+            
+            teamsByDivision[division].push(team);
+        });
+        
+        // Sort teams by wins (descending)
+        for (const division in teamsByDivision) {
+            teamsByDivision[division].sort((a, b) => {
+                const aWins = a.wins || 0;
+                const bWins = b.wins || 0;
+                return bWins - aWins;
+            });
+            
+            // Calculate games behind
+            const leader = teamsByDivision[division][0];
+            const leaderWins = leader.wins || 0;
+            const leaderLosses = leader.losses || 0;
+            
+            teamsByDivision[division].forEach((team, index) => {
+                const teamWins = team.wins || 0;
+                const teamLosses = team.losses || 0;
+                const gb = index === 0 ? '-' : 
+                    (((leaderWins - teamWins) + (teamLosses - leaderLosses)) / 2).toFixed(1);
+                team.gb = gb === '0.0' ? '-' : gb;
+                team.rank = index + 1;
+            });
+        }
+        
+        // Update all division tabs
+        updateDivisionTabs(teamsByDivision);
+        
+        // Show first division with data
+        const firstDivision = Object.keys(teamsByDivision).sort()[0];
+        if (firstDivision) {
+            showDivision(firstDivision, teamsByDivision[firstDivision]);
+        }
+        
+        console.log('Standings loaded successfully:', teamsByDivision);
+        
+    } catch (error) {
+        console.error('Error loading standings:', error);
+    }
+}
+
+// Update division tabs based on available data
+function updateDivisionTabs(teamsByDivision) {
+    const tabsContainer = document.querySelector('[role="tablist"]');
+    if (!tabsContainer) return;
+    
+    // Get all tab buttons
+    const tabs = tabsContainer.querySelectorAll('[role="tab"]');
+    
+    tabs.forEach(tab => {
+        const division = tab.textContent;
+        
+        // Add click handler
+        tab.onclick = () => {
+            // Update selected state
+            tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+            tab.setAttribute('aria-selected', 'true');
+            
+            // Show division data
+            const teams = teamsByDivision[division] || [];
+            showDivision(division, teams);
+        };
+        
+        // Add indicator if division has teams
+        if (teamsByDivision[division] && teamsByDivision[division].length > 0) {
+            tab.style.fontWeight = 'bold';
+        }
+    });
+}
+
+// Display standings for a specific division
+function showDivision(division, teams) {
+    const tbody = document.querySelector('table[aria-label="Team standings"] tbody');
+    if (!tbody) {
+        console.error('Standings table body not found');
+        return;
+    }
+    
+    // Clear existing rows
+    tbody.innerHTML = '';
+    
+    if (!teams || teams.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                    No teams in ${division} division
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Add team rows
+    teams.forEach(team => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="text-align: center; font-weight: bold;">${team.rank}</td>
+            <td style="font-weight: 600;">
+                <div>${team.name || 'Unnamed Team'}</div>
+                ${team.coach ? `<small style="color: #94a3b8;">Coach: ${team.coach}</small>` : ''}
+            </td>
+            <td style="text-align: center; color: #22c55e;">${team.wins || 0}</td>
+            <td style="text-align: center; color: #ef4444;">${team.losses || 0}</td>
+            <td style="text-align: center;">${team.pct}</td>
+            <td style="text-align: center;">${team.gb}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Load schedule from Firestore
+async function loadSchedule() {
+    try {
+        const db = firebase.firestore();
+        const gamesSnapshot = await db.collection('games')
+            .orderBy('date', 'desc')
+            .limit(10)
+            .get();
+        
+        const scheduleContainer = document.querySelector('#schedule ul');
+        if (!scheduleContainer) return;
+        
+        scheduleContainer.innerHTML = '';
+        
+        if (gamesSnapshot.empty) {
+            scheduleContainer.innerHTML = '<li style="text-align: center; color: #94a3b8;">No games scheduled</li>';
+            return;
+        }
+        
+        gamesSnapshot.forEach(doc => {
+            const game = doc.data();
+            const gameDate = game.date?.toDate ? game.date.toDate() : new Date(game.date);
+            const li = document.createElement('li');
+            
+            li.innerHTML = `
+                <div style="padding: 1rem; border-bottom: 1px solid #334155;">
+                    <div style="font-weight: bold;">${game.homeTeam} vs ${game.awayTeam}</div>
+                    <div style="color: #94a3b8; font-size: 0.875rem;">
+                        ${gameDate.toLocaleDateString()} at ${gameDate.toLocaleTimeString()}
+                    </div>
+                    ${game.completed ? `
+                        <div style="color: #3b82f6; font-weight: bold;">
+                            Final: ${game.homeScore} - ${game.awayScore}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            scheduleContainer.appendChild(li);
+        });
+        
+    } catch (error) {
+        console.error('Error loading schedule:', error);
+    }
+}
+
+// Load player stats
+async function loadPlayerStats() {
+    try {
+        const db = firebase.firestore();
+        const playersSnapshot = await db.collection('players')
+            .orderBy('points', 'desc')
+            .limit(5)
+            .get();
+        
+        // Update scoring leaders
+        const scoringList = document.querySelector('#stats .scoring-leaders ul');
+        if (scoringList && !playersSnapshot.empty) {
+            scoringList.innerHTML = '';
+            playersSnapshot.forEach(doc => {
+                const player = doc.data();
+                const li = document.createElement('li');
+                li.innerHTML = `${player.name} - ${player.points || 0} pts`;
+                scoringList.appendChild(li);
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error loading player stats:', error);
+    }
+}
+
+// Initialize data loading when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeDataLoading);
+} else {
+    initializeDataLoading();
+}
+
+function initializeDataLoading() {
+    // Wait a bit for Firebase to initialize
+    setTimeout(() => {
+        console.log('Loading standings from Firestore...');
+        loadStandings();
+        loadSchedule();
+        loadPlayerStats();
+        
+        // Refresh data every 30 seconds
+        setInterval(() => {
+            loadStandings();
+            loadSchedule();
+            loadPlayerStats();
+        }, 30000);
+    }, 1000);
+}
+</script>
+
+</script>
+<!-- Role Selection Modal (WORKING VERSION) -->
+<div id="roleModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="background: #1e293b; border-radius: 12px; padding: 0; max-width: 600px;">
+        <div class="modal-header" style="padding: 1.5rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="color: #f1f5f9; margin: 0;">Staff Login</h2>
+            <button class="modal-close" onclick="closeRoleModal()" style="background: none; border: none; color: #94a3b8; font-size: 2rem; cursor: pointer;">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 2rem;">
+            <h2 style="color: #3b82f6; text-align: center; margin-bottom: 0.5rem; font-size: 1.25rem;">SELECT YOUR ROLE</h2>
+            <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;">Choose your dashboard to access league management tools</p>
+            <div class="role-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div class="role-card" onclick="selectRole('scorekeeper')" style="background: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;">📊</div>
+                    <h3 style="color: #f1f5f9; margin: 0.5rem 0; font-size: 1rem;">SCOREKEEPER</h3>
+                    <p style="color: #64748b; font-size: 0.875rem; margin: 0;">Live game scoring and statistics tracking</p>
+                </div>
+                <div class="role-card" onclick="selectRole('coach')" style="background: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;">👥</div>
+                    <h3 style="color: #f1f5f9; margin: 0.5rem 0; font-size: 1rem;">COACH</h3>
+                    <p style="color: #64748b; font-size: 0.875rem; margin: 0;">Team and player management</p>
+                </div>
+                <div class="role-card" onclick="selectRole('admin')" style="background: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;">⚙️</div>
+                    <h3 style="color: #f1f5f9; margin: 0.5rem 0; font-size: 1rem;">ADMIN</h3>
+                    <p style="color: #64748b; font-size: 0.875rem; margin: 0;">League management and administration</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay[style*="display: none"] {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.role-card:hover {
+    border-color: #3b82f6 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+@media (max-width: 640px) {
+    .role-cards {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+
+<script>
+// Role Modal Functions
+function openRoleModal() {
+    const modal = document.getElementById('roleModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeRoleModal() {
+    const modal = document.getElementById('roleModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function selectRole(role) {
+    sessionStorage.setItem('selectedRole', role);
+    window.location.href = '/login.html';
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listener to Staff Login button
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.removeAttribute('onclick');
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openRoleModal();
+        });
+    }
+});
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('roleModal');
+    if (event.target === modal) {
+        closeRoleModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeRoleModal();
+    }
+});
+</script>
+
+</body>
+</html>
+<!-- Deployment timestamp: Mon, Sep 29, 2025  4:39:08 PM -->
+

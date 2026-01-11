@@ -1,0 +1,4412 @@
+<!DOCTYPE html><!-- NUCLEAR-v7-2026-10-11-15:15:00-GAME-DAY-FINAL -->
+<!-- CACHE BUST: 2026-10-11-14:30:00-CRITICAL-GAME-DAY-v6 -->
+<!-- VERSION: BUG-2-FIX-FINAL-PRODUCTION -->
+<!-- DEPLOYMENT: 6TH-ITERATION-SCOREBOARD-FIX -->
+<!-- Cache bust: 2026-10-11-08:10 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scorekeeper Dashboard - Clash of the Barbarians 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Auth Check Script - MUST load before page content -->
+    <script src="js/auth-check.js" defer></script>
+    
+    <style>
+        /* PROFESSIONAL SCOREKEEPER STYLES */
+        :root {
+            --primary-blue: #3b82f6;
+            --primary-blue-dark: #2563eb;
+            --primary-blue-light: #60a5fa;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --surface-hover: #475569;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #475569;
+            --border-light: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Styles */
+        .dashboard-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            letter-spacing: 2px;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--surface-hover);
+            color: var(--primary-blue);
+        }
+
+        .btn-end-game {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-end-game:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Sticky Score Bar - Compact */
+        .score-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border);
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Collapsible Bench Section */
+        .bench-section {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .bench-section.collapsed {
+            height: 5vh;
+            min-height: 40px;
+        }
+
+        .bench-section.expanded {
+            height: 15vh;
+            min-height: 120px;
+        }
+
+        .bench-toggle {
+            width: 100%;
+            background: var(--surface-light);
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.75rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .bench-toggle:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        .compact-bench {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            align-items: center;
+        }
+
+        .compact-bench-team {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .compact-bench-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .compact-bench-players {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .compact-bench-number {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .compact-bench-number:hover {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        
+        .compact-bench-number.selected {
+            background: var(--warning);
+            border-color: var(--warning);
+            color: var(--background);
+        }
+        
+        /* Point Subtraction Buttons */
+        .score-minus {
+            background: var(--danger) !important;
+            border-color: var(--danger) !important;
+            color: white !important;
+            margin-right: 0.5rem;
+            min-width: 40px;
+        }
+        
+        .score-minus:hover {
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+            transform: scale(1.05);
+        }
+        
+        .scoring-group {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* ============================================
+           SCOREKEEPER SCORING CONTROLS - OPTIMIZED FOR 10" TABLETS
+           Single-row layout: [FT] [+2] [+3] [- Points]
+           ============================================ */
+        .scoring-buttons-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            justify-content: center;
+            flex-wrap: nowrap; /* Keep single row in landscape */
+        }
+
+        /* Universal button styles for all scoring buttons */
+        .scoring-buttons-row button {
+            height: 60px !important;
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            border: none !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            user-select: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            color: white !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            min-width: 80px !important;
+        }
+
+        .scoring-buttons-row button:active {
+            transform: scale(0.95) !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        /* Individual button styles - Color-coded by action */
+        .score-minus-single {
+            background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%) !important;
+            flex: 0 0 140px !important;
+        }
+
+        .score-minus-single:hover {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%) !important;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .team-score-section {
+            text-align: center;
+        }
+
+        .team-score-section.away {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .bench-players {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .bench-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-right: 0.5rem;
+            font-weight: 600;
+        }
+
+        .bench-number {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--border);
+            background: linear-gradient(135deg, var(--surface-light), var(--surface));
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .bench-number:hover {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .bench-number.selected {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-color: var(--success);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .bench-number.selected::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 900;
+        }
+
+        .bench-instruction {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .clock-section {
+            text-align: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+        }
+
+        .period-display {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            margin-bottom: 0.25rem;
+            line-height: 1;
+        }
+
+        .time-display {
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Court View Container */
+        .court-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .court-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Team Section */
+        .team-section {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .team-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .team-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .team-fouls {
+            background: var(--surface);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .fouls-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .fouls-count {
+            color: var(--danger);
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        .btn-add-player {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-player:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* Players List */
+        .players-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Micro Player Cards */
+        .player-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            height: 120px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin-bottom: 0.75rem;
+        }
+
+        .player-card:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-blue-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
+        }
+
+        .player-card.warning {
+            border-color: var(--warning);
+            background: linear-gradient(135deg, var(--surface), rgba(245, 158, 11, 0.08));
+        }
+
+        .player-card.fouled-out {
+            border-color: var(--danger);
+            background: linear-gradient(135deg, var(--surface), rgba(239, 68, 68, 0.08));
+            opacity: 0.7;
+        }
+
+        .player-card.substitution-target {
+            border-color: #f97316;
+            background: linear-gradient(135deg, var(--surface), rgba(249, 115, 22, 0.1));
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+            cursor: pointer;
+        }
+
+        .player-card.substitution-target::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #f97316, #ea580c);
+            border-radius: 12px;
+            z-index: -1;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+
+        /* Micro Card Header */
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .player-number {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .player-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-points {
+            font-weight: 900;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .undo-btn {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .undo-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: scale(1.1);
+        }
+
+        .undo-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .foul-status {
+            background: var(--danger);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Micro Card Stats */
+        .player-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 40px 40px 40px;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            flex: 1;
+        }
+
+        .stat-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.25rem;
+        }
+
+        .stat-group-compact {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.25rem;
+        }
+
+        .stat-group-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            line-height: 1;
+        }
+
+        .stat-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-controls-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-btn {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+            padding: 0.5rem;
+        }
+
+        .stat-btn:hover {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Scoring buttons specific styles - overrides for scorekeeper layout */
+        .scoring-buttons-row .stat-btn.plus-one {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%) !important;
+            flex: 0 0 80px !important;
+        }
+
+        .scoring-buttons-row .stat-btn.plus-one:hover {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%) !important;
+        }
+
+        .scoring-buttons-row .stat-btn.plus-two {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+            flex: 0 0 80px !important;
+        }
+
+        .scoring-buttons-row .stat-btn.plus-two:hover {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%) !important;
+        }
+
+        .scoring-buttons-row .stat-btn.plus-three {
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%) !important;
+            flex: 0 0 80px !important;
+        }
+
+        .scoring-buttons-row .stat-btn.plus-three:hover {
+            background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%) !important;
+        }
+
+        /* ===== FIX #3: BUTTON COLOR CODING =====
+           Problem: All scoring buttons had transparent backgrounds
+           Solution: Apply color-coded backgrounds per specification
+           Date: October 23, 2026
+           Colors: FT=Blue, +2=Green, +3=Purple, -Points=Red */
+        .scoring-buttons-row .score-minus-single {
+            background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%) !important;
+            flex: 0 0 140px !important;
+        }
+
+        .scoring-buttons-row .score-minus-single:hover {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%) !important;
+        }
+
+        /* Ensure all scoring buttons have proper colors */
+        .scoring-buttons-row button.stat-btn.plus-one,
+        .scoring-buttons-row button[class*="plus-one"] {
+            background: #2196F3 !important; /* Blue */
+            color: white !important;
+        }
+
+        .scoring-buttons-row button.stat-btn.plus-two,
+        .scoring-buttons-row button[class*="plus-two"] {
+            background: #4CAF50 !important; /* Green */
+            color: white !important;
+        }
+
+        .scoring-buttons-row button.stat-btn.plus-three,
+        .scoring-buttons-row button[class*="plus-three"] {
+            background: #9C27B0 !important; /* Purple */
+            color: white !important;
+        }
+
+        .scoring-buttons-row button.score-minus-single,
+        .scoring-buttons-row button[class*="minus"] {
+            background: #F44336 !important; /* Red */
+            color: white !important;
+        }
+
+        /* Hover states */
+        .scoring-buttons-row button.stat-btn.plus-one:hover {
+            background: #1976D2 !important;
+        }
+
+        .scoring-buttons-row button.stat-btn.plus-two:hover {
+            background: #388E3C !important;
+        }
+
+        .scoring-buttons-row button.stat-btn.plus-three:hover {
+            background: #7B1FA2 !important;
+        }
+
+        .scoring-buttons-row button.score-minus-single:hover {
+            background: #D32F2F !important;
+        }
+
+        /* Barbarian button styles for other parts of the UI */
+        .stat-btn.plus-three {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-color: #7c3aed;
+            color: white;
+            min-height: 48px;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .stat-btn.plus-three:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            transform: scale(1.05);
+        }
+
+        .stat-btn.plus-two {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-color: var(--success);
+            color: white;
+            min-height: 48px;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .stat-btn.plus-two:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: scale(1.05);
+        }
+
+        .stat-btn.plus-one {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+            border-color: var(--primary-blue);
+            color: white;
+            min-height: 48px;
+            font-weight: 900;
+            font-size: 0.85rem;
+        }
+
+        .stat-btn.plus-one:hover {
+            background: linear-gradient(135deg, var(--primary-blue-dark), #1d4ed8);
+            transform: scale(1.05);
+        }
+
+        .stat-btn-small {
+            min-width: 44px;
+            min-height: 44px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .stat-btn-small:hover {
+            transform: scale(1.1);
+        }
+
+        .stat-value {
+            font-weight: 900;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            min-width: 24px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .stat-value-compact {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            min-width: 16px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Last Action Display */
+        .last-action {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Actions */
+        .scorekeeper-actions {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Add Player Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-submit {
+            flex: 1;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover {
+            background: var(--surface-hover);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 10001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* ===== TABLET OPTIMIZATIONS ===== */
+
+        /* Game Selection Screen */
+        #game-selection-screen {
+            min-height: 100vh;
+            padding: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-selection-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-selection-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .game-selection-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .game-card {
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .game-card-time {
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-card-teams {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .game-card-team {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin: 0.5rem 0;
+        }
+
+        .game-card-vs {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .game-card-division {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: var(--surface);
+            border-radius: 6px;
+        }
+
+        .game-card-status {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .game-card-action {
+            text-align: right;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        #no-games-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        #no-games-message p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Score Bar - Compact Layout */
+        .score-bar {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            background: var(--surface);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 0;
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+        }
+
+        .team-score {
+            text-align: center;
+        }
+
+        .team-score.home-score {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+        }
+
+        .team-score.away-score {
+            border-right: 4px solid #f97316;
+            padding-right: 1rem;
+        }
+
+        .score-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            line-height: 1;
+            margin: 0.5rem 0;
+        }
+
+        .away-score .score-value {
+            color: #f97316;
+        }
+
+        .team-name-small {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .game-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Side-by-side Teams Container */
+        .teams-container-tablet {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: calc(100vh - 240px);
+        }
+
+        .teams-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .team-panel {
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .team-panel.home-panel {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .team-panel.away-panel {
+            border-right: 4px solid #f97316;
+        }
+
+        .team-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .team-header-compact h3 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .team-info-compact {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .team-fouls-compact {
+            background: var(--surface);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team-fouls-compact span:first-child {
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .btn-add-player-compact {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-player-compact:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* Players Grid - Compact Cards */
+        .players-grid {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding-right: 0.5rem;
+        }
+
+        /* Compact Player Card */
+        .player-card-compact {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            min-height: 85px;
+        }
+
+        .player-card-compact:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-blue);
+        }
+
+        .player-card-compact.warning {
+            border-color: var(--warning);
+            background: linear-gradient(135deg, var(--surface), rgba(245, 158, 11, 0.05));
+        }
+
+        .player-card-compact.fouled-out {
+            border-color: var(--danger);
+            background: linear-gradient(135deg, var(--surface), rgba(239, 68, 68, 0.05));
+            opacity: 0.6;
+        }
+
+        .player-card-compact.recent-action {
+            border-color: var(--success);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .player-info-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .player-number-compact {
+            background: var(--primary-blue);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .player-name-compact {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1rem;
+            flex: 1;
+        }
+
+        .player-stats-display {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .foul-status-compact {
+            background: var(--danger);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Compact Stats Controls */
+        .player-stats-compact {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.4rem;
+        }
+
+        .stat-group-compact {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.25rem;
+        }
+
+        .stat-label-compact {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-controls-compact {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .stat-btn-compact {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 50px;
+            height: 45px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-btn-compact:hover {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .stat-btn-compact:active {
+            transform: scale(0.95);
+        }
+
+        .stat-btn-compact.plus-three {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-color: #7c3aed;
+            color: white;
+            font-weight: 900;
+        }
+
+        .stat-btn-compact.plus-three:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
+
+        .stat-btn-compact.plus-two {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            font-weight: 900;
+        }
+
+        .stat-btn-compact.plus-two:hover {
+            background: #059669;
+        }
+
+        .stat-btn-compact.plus-one {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            font-weight: 900;
+        }
+
+        .stat-btn-compact.plus-one:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .stat-value-compact {
+            font-weight: 900;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            min-width: 25px;
+            text-align: center;
+            margin: 0.2rem 0;
+        }
+
+        /* Scrollbar styling for players list */
+        .players-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .players-grid::-webkit-scrollbar-track {
+            background: var(--surface);
+            border-radius: 4px;
+        }
+
+        .players-grid::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .players-grid::-webkit-scrollbar-thumb:hover {
+            background: var(--border-light);
+        }
+
+        /* Tablet specific adjustments */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .score-bar {
+                padding: 0.75rem 1.5rem;
+            }
+            
+            .score-value {
+                font-size: 2.5rem;
+            }
+            
+            .stat-btn-compact {
+                width: 45px;
+                height: 40px;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN - PORTRAIT MODE FOR TABLETS
+           2x2 Grid Layout: [FT]    [+2]
+                           [+3] [- Points]
+           ============================================ */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .scoring-buttons-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .scoring-buttons-row button {
+                flex: 1 1 calc(50% - 4px) !important;
+                min-width: 120px !important;
+                height: 56px !important;
+                font-size: 16px !important;
+            }
+        }
+
+        /* Extra Small Devices */
+        @media (max-width: 480px) {
+            .scoring-buttons-row button {
+                height: 52px !important;
+                font-size: 14px !important;
+                min-width: 100px !important;
+            }
+        }
+
+        /* Touch Feedback for Mobile/Tablet */
+        @media (hover: none) {
+            .scoring-buttons-row button:active {
+                filter: brightness(0.9) !important;
+                transform: scale(0.95) !important;
+            }
+        }
+
+        /* Portrait mode fallback */
+        @media (orientation: portrait) {
+            .teams-split {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            
+            .score-bar {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 1rem;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .teams-container {
+                grid-template-columns: 1fr;
+            }
+
+            .player-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .current-score {
+                font-size: 3rem;
+            }
+
+            .player-stats {
+                grid-template-columns: repeat(3, 1fr);
+                font-size: 0.9rem;
+            }
+
+            .stat-btn {
+                width: 28px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* ===== END GAME MODAL STYLES ===== */
+
+        .end-game-score {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface-light);
+            border-radius: 12px;
+        }
+
+        .end-game-score h2 {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .final-score-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .team-final {
+            text-align: center;
+        }
+
+        .team-name-final {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .score-final {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+        }
+
+        .vs-final {
+            font-size: 2rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .game-leaders {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .game-leaders h3 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .leaders-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .leader-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--surface-light);
+            border-radius: 8px;
+        }
+
+        .leader-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .leader-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .leader-value {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .mvp-selection {
+            margin-top: 2rem;
+        }
+
+        .mvp-selection h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .mvp-players-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .mvp-player-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--surface-light);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mvp-player-option:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-blue);
+            transform: translateX(5px);
+        }
+
+        .mvp-player-option.selected {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .mvp-radio {
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .mvp-player-info {
+            flex: 1;
+        }
+
+        .mvp-player-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .mvp-player-stats {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* ==========================================
+           AUTH-FIRST ARCHITECTURE - BUG #2 FIX
+           By: Marcus Rodriguez (Auth Expert)
+           ========================================== */
+
+        /* Hide ALL content by default */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Loading screen - ONLY visible element initially */
+        #authLoadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+        
+        /* Hide main content initially */
+        .scorekeeper-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+        
+        /* Show content only when authenticated */
+        body.authenticated .scorekeeper-container {
+            display: block;
+            opacity: 1;
+        }
+        
+        body.authenticated #authLoadingScreen {
+            display: none;
+        }
+        
+        /* Spinner animation */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===================================
+           MOBILE RESPONSIVE DESIGN - PHASE 2
+           =================================== */
+
+        /* Tablet and below */
+        @media (max-width: 768px) {
+            /* Stats grid becomes 2 columns */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+            }
+            
+            /* All buttons meet 48px minimum touch target */
+            .btn, button, .admin-tabs button, .tab-btn, .action-btn {
+                min-height: 48px !important;
+                min-width: 48px !important;
+                font-size: 16px !important;
+                padding: 12px 20px !important;
+            }
+            
+            /* Tables scroll horizontally */
+            .data-table, .table-container {
+                font-size: 14px !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                display: block !important;
+            }
+            
+            .data-table table {
+                min-width: 600px !important;
+            }
+            
+            /* Tab navigation scrolls horizontally */
+            .admin-tabs, .tab-navigation {
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                -webkit-overflow-scrolling: touch !important;
+                display: flex !important;
+                gap: 0.5rem !important;
+            }
+            
+            .admin-tabs button, .tab-btn {
+                flex-shrink: 0 !important;
+                min-width: 120px !important;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 480px) {
+            /* Stats grid becomes 1 column */
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Larger text for readability */
+            .stat-card h3 {
+                font-size: 2rem !important;
+            }
+            
+            .stat-card p {
+                font-size: 0.9rem !important;
+            }
+            
+            /* Full width buttons */
+            .btn-group {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            
+            .btn {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+        }
+
+        /* ===================================
+           SCOREKEEPER TABLET OPTIMIZATION - PHASE 5
+           =================================== */
+
+        /* Tablet optimizations (10-inch tablets) */
+        @media (max-width: 1024px) {
+            /* Larger touch targets for scorekeeper */
+            .score-button, .player-stat-btn, .action-btn {
+                min-height: 52px !important;
+                min-width: 52px !important;
+                font-size: 18px !important;
+                padding: 14px !important;
+                margin: 0.25rem !important;
+            }
+            
+            /* Extra large touch targets for plus/minus controls */
+            .plus-minus-controls button, .score-control-btn {
+                min-height: 56px !important;
+                min-width: 56px !important;
+                font-size: 24px !important;
+                font-weight: bold !important;
+            }
+            
+            /* Improved spacing */
+            .scorekeeper-grid, .game-controls {
+                gap: 1.5rem !important;
+            }
+            
+            .player-card, .stat-card, .team-section {
+                padding: 1.25rem !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .button-group, .stat-buttons {
+                gap: 1rem !important;
+            }
+            
+            /* Larger, more readable fonts */
+            .player-name {
+                font-size: 20px !important;
+                font-weight: 600 !important;
+            }
+            
+            .jersey-number {
+                font-size: 28px !important;
+                font-weight: bold !important;
+            }
+            
+            .stat-value, .score-value {
+                font-size: 32px !important;
+                font-weight: bold !important;
+            }
+            
+            .score-display, .final-score {
+                font-size: 48px !important;
+                font-weight: bold !important;
+            }
+            
+            /* Better quarter/period controls */
+            .quarter-selector, .period-controls {
+                display: flex !important;
+                gap: 1rem !important;
+                padding: 1rem !important;
+                flex-wrap: wrap !important;
+            }
+            
+            .quarter-btn, .period-btn {
+                flex: 1 !important;
+                min-width: 100px !important;
+                min-height: 52px !important;
+                font-size: 18px !important;
+                font-weight: 600 !important;
+            }
+            
+            .quarter-btn.active, .period-btn.active {
+                background: #10b981 !important;
+                transform: scale(1.05) !important;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen - ONLY visible element initially -->
+    <div id="authLoadingScreen">
+        <div style="text-align: center; color: white;">
+            <div class="spinner"></div>
+            <h2 style="margin-top: 1.5rem; font-weight: 600;">Verifying Scorekeeper Access</h2>
+            <p style="margin-top: 0.5rem; opacity: 0.9;">Please wait while we confirm your scorekeeper credentials...</p>
+        </div>
+    </div>
+
+    <!-- ALL SCOREKEEPER CONTENT WRAPPED -->
+    <div class="scorekeeper-container">
+        <!-- Game Selection Screen -->
+    <div id="game-selection-screen" style="display: block;">
+        <div class="container">
+            <div class="game-selection-header">
+                <h2>Select a Game to Score</h2>
+                <p>Choose from today's scheduled games</p>
+            </div>
+            <div id="scheduled-games-list" class="games-grid">
+                <!-- Games loaded dynamically -->
+            </div>
+            <div id="no-games-message" style="display: none;">
+                <p>No games scheduled for today</p>
+                <button class="btn-primary" onclick="loadAllGames()">Show All Games</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring Interface (initially hidden) -->
+    <div id="scoring-screen" style="display: none;">
+
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <nav class="dashboard-nav">
+                <div class="logo">
+                    <i class="fas fa-basketball-ball"></i>
+                    <div class="brand-text">
+                        <h1>AZ FLIGHT</h1>
+                        <span>LIVE SCORING</span>
+                    </div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-end-game" onclick="endGame()">
+                        <i class="fas fa-stop"></i> END GAME
+                    </button>
+                    <button class="btn-back" onclick="exitScoring()">
+                        <i class="fas fa-arrow-left"></i> EXIT
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sticky Score Bar -->
+    <div class="score-bar">
+        <div class="score-grid">
+            <!-- Home Team Section -->
+            <div class="team-score-section home">
+                <div class="team-name" id="homeTeamNameTop">HOME TEAM</div>
+                <div class="score-display" id="homeScoreTop">0</div>
+            </div>
+
+            <!-- Clock Section -->
+            <div class="clock-section">
+                <div class="period-display" id="periodDisplay">Q1</div>
+                <div class="time-display">8:45</div>
+                <select class="period-selector" id="periodSelector" onchange="updatePeriod()" style="display: none;">
+                    <option value="Q1">Q1</option>
+                    <option value="Q2">Q2</option>
+                    <option value="Q3">Q3</option>
+                    <option value="Q4">Q4</option>
+                    <option value="OT">OT</option>
+                </select>
+            </div>
+
+            <!-- Away Team Section -->
+            <div class="team-score-section away">
+                <div class="team-name" id="awayTeamNameTop">AWAY TEAM</div>
+                <div class="score-display" id="awayScoreTop">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collapsible Bench Section -->
+    <div class="bench-section collapsed" id="benchSection">
+        <button class="bench-toggle" onclick="toggleBench()" id="benchToggle">
+            ⬆️ SHOW BENCH (0 players)
+        </button>
+        <div class="compact-bench" id="benchContent">
+            <div class="compact-bench-team">
+                <div class="compact-bench-label">🏠 HOME BENCH</div>
+                <div class="compact-bench-players" id="homeBenchCompact">
+                    <!-- Home bench players -->
+                </div>
+            </div>
+            <div class="compact-bench-team">
+                <div class="compact-bench-label">✈️ AWAY BENCH</div>
+                <div class="compact-bench-players" id="awayBenchCompact">
+                    <!-- Away bench players -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5v5 Court View -->
+    <div class="court-container">
+        <div class="court-view">
+            <!-- Home Team Court (5 Players) -->
+            <div class="team-section home-team">
+                <div class="team-header">
+                    <h3 id="homeTeamName">HOME TEAM</h3>
+                    <div class="team-controls">
+                        <div class="team-fouls">
+                            <span class="fouls-label">Team Fouls</span>
+                            <span class="fouls-count" id="homeTeamFouls">0</span>
+                        </div>
+                        <button class="btn-add-player" onclick="showAddPlayerModal('home')">
+                            <i class="fas fa-user-plus"></i> Add Player
+                        </button>
+                    </div>
+                </div>
+                <div class="players-list" id="homePlayers">
+                    <!-- Home team court players (5) -->
+                </div>
+            </div>
+
+            <!-- Away Team Court (5 Players) -->
+            <div class="team-section away-team">
+                <div class="team-header">
+                    <h3 id="awayTeamName">AWAY TEAM</h3>
+                    <div class="team-controls">
+                        <div class="team-fouls">
+                            <span class="fouls-label">Team Fouls</span>
+                            <span class="fouls-count" id="awayTeamFouls">0</span>
+                        </div>
+                        <button class="btn-add-player" onclick="showAddPlayerModal('away')">
+                            <i class="fas fa-user-plus"></i> Add Player
+                        </button>
+                    </div>
+                </div>
+                <div class="players-list" id="awayPlayers">
+                    <!-- Away team court players (5) -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="scorekeeper-actions">
+        <div class="action-buttons">
+            <button class="btn-save" onclick="saveGame()">
+                <i class="fas fa-save"></i> SAVE & SYNC
+            </button>
+        </div>
+    </div>
+
+        <!-- Hidden elements for backward compatibility -->
+        <div style="display: none;">
+            <span id="homeScore">0</span>
+            <span id="awayScore">0</span>
+            <h2 id="gameTeams">SELECT GAME TO START</h2>
+        </div>
+    </div>
+
+    <!-- Add Player Modal -->
+    <div id="addPlayerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Player</h3>
+                <button class="modal-close" onclick="hideAddPlayerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addPlayerForm" onsubmit="addNewPlayer(event)">
+                <div class="form-group">
+                    <label for="playerName">Player Name</label>
+                    <input type="text" id="playerName" required placeholder="Enter player name">
+                </div>
+                <div class="form-group">
+                    <label for="playerNumber">Jersey Number</label>
+                    <input type="number" id="playerNumber" required min="0" max="99" placeholder="00">
+                </div>
+                <input type="hidden" id="playerTeam" value="">
+                <div class="modal-actions">
+                    <button type="submit" class="btn-submit">Add Player</button>
+                    <button type="button" class="btn-cancel" onclick="hideAddPlayerModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- End Game Modal -->
+    <div id="endGameModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>🏀 Game Complete</h3>
+                <button class="modal-close" onclick="hideEndGameModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Final Score -->
+                <div class="end-game-score">
+                    <h2>FINAL SCORE</h2>
+                    <div class="final-score-display">
+                        <div class="team-final">
+                            <div class="team-name-final" id="finalHomeTeam">HOME</div>
+                            <div class="score-final" id="finalHomeScore">0</div>
+                        </div>
+                        <div class="vs-final">-</div>
+                        <div class="team-final">
+                            <div class="team-name-final" id="finalAwayTeam">AWAY</div>
+                            <div class="score-final" id="finalAwayScore">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Leaders -->
+                <div class="game-leaders">
+                    <h3>GAME LEADERS</h3>
+                    <div class="leaders-grid">
+                        <div class="leader-item">
+                            <div class="leader-icon">🏆</div>
+                            <div class="leader-label">Points</div>
+                            <div class="leader-value" id="leadingScorer">-</div>
+                        </div>
+                        <div class="leader-item">
+                            <div class="leader-icon">📊</div>
+                            <div class="leader-label">Rebounds</div>
+                            <div class="leader-value" id="leadingRebounder">-</div>
+                        </div>
+                        <div class="leader-item">
+                            <div class="leader-icon">🎯</div>
+                            <div class="leader-label">Assists</div>
+                            <div class="leader-value" id="leadingAssists">-</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- MVP Selection -->
+                <div class="mvp-selection">
+                    <h3>⭐ SELECT PLAYER OF THE GAME</h3>
+                    <div id="mvpPlayersList" class="mvp-players-list">
+                        <!-- Players populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="hideEndGameModal()">
+                    Cancel
+                </button>
+                <button type="button" class="btn-submit" onclick="confirmEndGame()">
+                    <i class="fas fa-flag-checkered"></i> FINISH GAME
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════
+        // NUCLEAR CACHE BUST v7 - 2026-10-11-15:15:00
+        // CDN MUST SERVE THIS VERSION FOR PRODUCTION GAME
+        // ═══════════════════════════════════════════════════════════
+        // Phase 4.1: Enlarge Interface Elements - Size variables (DO NOT CHANGE CSS)
+        const PLAYER_NAME_FONT_SIZE = '27px';     // Increased from 18px (1.5x)
+        const JERSEY_NUMBER_FONT_SIZE = '24px';   // Increased from 16px (1.5x)
+        const STAT_LABEL_FONT_SIZE = '21px';      // Increased from 14px (1.5x)
+        
+        // Button sizes (increased by 2x)
+        const STAT_BUTTON_SIZE = '80px';          // Increased from 40px (2x)
+        const STAT_BUTTON_FONT = '36px';          // Increased from 18px (2x)
+        
+        // Spacing
+        const PLAYER_ROW_HEIGHT = '75px';         // Increased from 50px (1.5x)
+        const BUTTON_MARGIN = '10px';             // Increased from 5px (2x)
+
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+        
+        // Initialize Firebase only once
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log('✅ Firebase initialized in scorekeeper.html');
+        } else {
+            console.log('✅ Using existing Firebase instance');
+        }
+
+        // ===== CRITICAL FIXES VALIDATION =====
+        // Log all implemented fixes for QA validation
+        console.log('🔧 ===== SCOREKEEPER CRITICAL FIXES STATUS =====');
+        console.log('✅ FIX #1: UI Synchronization - Real-time game stats listener implemented');
+        console.log('✅ FIX #3: Button Color Coding - Color-coded scoring buttons implemented');
+        console.log('✅ FIX #5: Debounce Protection - 200ms protection on all scoring functions');
+        console.log('📋 Ready for testing with game: xHK3yOF2CRCUKdSMpyn3');
+        console.log('🎯 Expected: All 10 players showing correct stats, not "0 pts"');
+        console.log('🎨 Expected: FT=Blue, +2=Green, +3=Purple, -Points=Red');
+        console.log('⏰ Expected: Rapid clicking blocked with warning toast');
+        console.log('===============================================');
+        
+        // Global database and auth references - MUST be accessible to all functions
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+        
+        // Enable offline persistence
+        db.enablePersistence({ synchronizeTabs: true })
+            .then(() => console.log('✅ Offline persistence enabled'))
+            .catch((err) => console.log('⚠️ Persistence warning:', err.code));
+
+        // ========================================
+        // AUTH-FIRST INITIALIZATION
+        // By: Marcus Rodriguez (Auth Expert)
+        // ========================================
+
+        console.log('🔐 Auth Check Script v4.0 - Auth-First Architecture');
+
+        // NO OTHER CODE RUNS UNTIL THIS COMPLETES
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (!user) {
+                console.log('❌ No authenticated user');
+                console.log('🔀 Redirecting to login');
+                // Immediate redirect - no initialization
+                window.location.href = '/login.html?role=scorekeeper';
+                return;
+            }
+
+            console.log('✅ User authenticated:', user.email);
+            console.log('🎨 Revealing scorekeeper interface');
+            
+            // ONLY NOW reveal content
+            document.body.classList.add('authenticated');
+            
+            // ONLY NOW initialize scorekeeper functionality
+            console.log('🏀 Scorekeeper Panel Initializing...');
+            
+            // Small delay to ensure smooth transition
+            setTimeout(() => {
+                console.log('🏀 Scorekeeper Dashboard Starting...');
+                
+                // Check if user came directly to a game (via URL parameter)
+                const urlParams = new URLSearchParams(window.location.search);
+                const gameId = urlParams.get('gameId');
+                
+                if (gameId) {
+                    // Load specific game
+                    console.log('📋 Loading game from URL:', gameId);
+                    document.getElementById('game-selection-screen').style.display = 'none';
+                    document.getElementById('scoring-screen').style.display = 'block';
+                    
+                    // Wait for Firebase to be ready
+                    setTimeout(() => {
+                        if (typeof loadGame === 'function') {
+                            loadGame(gameId);
+                        }
+                    }, 1000);
+                } else {
+                    // Show game selection
+                    console.log('📋 Showing game selection screen');
+                    document.getElementById('game-selection-screen').style.display = 'block';
+                    document.getElementById('scoring-screen').style.display = 'none';
+                    
+                    // Wait for Firebase to be ready then load games
+                    setTimeout(() => {
+                        if (typeof loadAvailableGames === 'function') {
+                            loadAvailableGames();
+                        }
+                    }, 1000);
+                }
+                
+                // Initialize scorekeeper functionality
+                if (typeof initializeScorekeeperPanel === 'function') {
+                    initializeScorekeeperPanel();
+                }
+                
+                console.log('✅ Scorekeeper dashboard ready');
+                
+                // Load today's scheduled games
+                if (typeof loadTodaysGames === 'function') {
+                    console.log('🔄 Calling loadTodaysGames()...');
+                    loadTodaysGames();
+                } else {
+                    console.error('❌ loadTodaysGames function not found!');
+                }
+            }, 100);
+        });
+
+        // Game State
+        let currentGame = {
+            id: null,
+            homeTeam: { id: null, name: 'Home Team', players: [], fouls: 0 },
+            awayTeam: { id: null, name: 'Away Team', players: [], fouls: 0 },
+            period: 'Q1',
+            startTime: null,
+            division: null
+        };
+
+        // Real-time listeners storage
+        let playersListeners = [];
+        let recentActionTimeout = null;
+
+        // Initialize
+
+        // ===== GAME SELECTION FUNCTIONS =====
+
+        async function loadTodaysGames() {
+            try {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                console.log('📅 Loading games for today:', today.toDateString());
+                
+                const gamesSnapshot = await db.collection('games')
+                    .where('status', 'in', ['scheduled', 'in-progress'])
+                    .where('gameDate', '>=', firebase.firestore.Timestamp.fromDate(today))
+                    .where('gameDate', '<', firebase.firestore.Timestamp.fromDate(tomorrow))
+                    .orderBy('gameDate')
+                    .get();
+                
+                displayGamesList(gamesSnapshot);
+            } catch (error) {
+                console.error('❌ Error loading games:', error);
+                loadAllGames();
+            }
+        }
+
+        async function loadAllGames() {
+            try {
+                const gamesSnapshot = await db.collection('games')
+                    .where('status', 'in', ['scheduled', 'in-progress'])
+                    .orderBy('gameDate', 'desc')
+                    .limit(20)
+                    .get();
+                
+                displayGamesList(gamesSnapshot);
+            } catch (error) {
+                console.error('Error loading all games:', error);
+                showToast('Error loading games', 'error');
+            }
+        }
+
+        function displayGamesList(gamesSnapshot) {
+            const gamesList = document.getElementById('scheduled-games-list');
+            const noGamesMsg = document.getElementById('no-games-message');
+            
+            if (!gamesList) {
+                console.error('❌ scheduled-games-list element not found');
+                return;
+            }
+            
+            if (gamesSnapshot.empty) {
+                gamesList.style.display = 'none';
+                if (noGamesMsg) noGamesMsg.style.display = 'block';
+                console.log('ℹ️ No games found');
+                return;
+            }
+            
+            gamesList.style.display = 'grid';
+            if (noGamesMsg) noGamesMsg.style.display = 'none';
+            gamesList.innerHTML = '';
+            
+            console.log(`✅ Found ${gamesSnapshot.size} games`);
+            
+            // Process games asynchronously to fetch team names
+            const gamePromises = [];
+            gamesSnapshot.forEach(doc => {
+                const game = doc.data();
+                gamePromises.push(createGameCard(doc.id, game));
+            });
+            
+            Promise.all(gamePromises).then(gameCards => {
+                gameCards.forEach(card => gamesList.appendChild(card));
+            }).catch(error => {
+                console.error('Error creating game cards:', error);
+            });
+        }
+
+        async function createGameCard(gameId, game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.onclick = () => selectGame(gameId);
+            
+            const gameDate = game.gameDate?.toDate() || new Date();
+            const time = gameDate.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit'
+            });
+            
+            const date = gameDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            const statusBadge = game.status === 'in-progress' 
+                ? '<div class="game-card-status">🔴 In Progress</div>'
+                : '';
+            
+            // Extract team names with multiple fallback options (Fix #7)
+            const homeTeamName = game.homeTeam?.name || game.homeTeamName || 'Home Team';
+            const awayTeamName = game.awayTeam?.name || game.awayTeamName || 'Away Team';
+            
+            console.log(`🏀 Game ${gameId}: ${homeTeamName} vs ${awayTeamName}`);
+            
+            card.innerHTML = `
+                <div class="game-card-time">${date} • ${time}</div>
+                <div class="game-card-teams">
+                    <div class="game-card-team">${homeTeamName}</div>
+                    <div class="game-card-vs">vs</div>
+                    <div class="game-card-team">${awayTeamName}</div>
+                </div>
+                <div class="game-card-division">${game.division || 'Division TBD'}</div>
+                ${statusBadge}
+                <div class="game-card-action">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function selectGame(gameId) {
+            console.log('🎯 Game selected:', gameId);
+            document.getElementById('game-selection-screen').style.display = 'none';
+            document.getElementById('scoring-screen').style.display = 'block';
+            loadGame(gameId);
+        }
+
+        // ===== GAME LOADING =====
+
+        async function loadGame(gameId) {
+            try {
+                showToast('Loading game...');
+                
+                const gameDoc = await db.collection('games').doc(gameId).get();
+                
+                if (!gameDoc.exists) {
+                    showToast('Game not found', 'error');
+                    return;
+                }
+                
+                const gameData = gameDoc.data();
+                currentGame.id = gameId;
+                currentGame.division = gameData.division;
+                
+                // Load both teams
+                await Promise.all([
+                    loadTeam(gameData.homeTeamId, 'home', gameData.homeTeam),
+                    loadTeam(gameData.awayTeamId, 'away', gameData.awayTeam)
+                ]);
+                
+                // Load existing game stats if resuming
+                await loadExistingGameStats(gameId);
+                
+                // Setup real-time listeners
+                setupRealtimeListeners();
+                
+                // Update display
+                updateGameDisplay();
+                
+                // Set window.currentGame for global access
+                window.currentGame = currentGame;
+                console.log('✅ window.currentGame initialized:', window.currentGame);
+                
+                showToast('Game loaded successfully!');
+            } catch (error) {
+                console.error('Error loading game:', error);
+                showToast('Error loading game', 'error');
+            }
+        }
+
+        async function loadTeam(teamId, side, teamData) {
+            try {
+                const team = side === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+                team.id = teamId;
+                // Fetch team name from teams collection
+                try {
+                    const teamDoc = await db.collection('teams').doc(teamId).get();
+                    if (teamDoc.exists) {
+                        team.name = teamDoc.data().name || (side === 'home' ? 'Home Team' : 'Away Team');
+                    } else {
+                        team.name = side === 'home' ? 'Home Team' : 'Away Team';
+                    }
+                } catch (error) {
+                    console.error(`Error fetching team name for ${teamId}:`, error);
+                    team.name = side === 'home' ? 'Home Team' : 'Away Team';
+                }
+                
+                // Load players from Firestore
+                const playersSnapshot = await db.collection('players')
+                    .where('teamId', '==', teamId)
+                    .get();
+                
+                team.players = [];
+                playersSnapshot.forEach(doc => {
+                    const playerData = doc.data();
+                    team.players.push({
+                        id: doc.id,
+                        name: playerData.name || playerData.playerName,
+                        number: playerData.jerseyNumber || playerData.number || 0,
+                        division: playerData.division || currentGame.division,
+                        stats: {
+                            pts: 0,
+                            reb: 0,
+                            ast: 0,
+                            stl: 0,
+                            blk: 0,
+                            fls: 0
+                        }
+                    });
+                });
+                
+                console.log(`✅ Loaded ${team.players.length} players for ${team.name}`);
+            } catch (error) {
+                console.error(`Error loading team ${side}:`, error);
+            }
+        }
+
+        async function loadExistingGameStats(gameId) {
+            try {
+                // FIXED: Use subcollection pattern for consistency
+                const statsSnapshot = await db.collection('games').doc(gameId)
+                    .collection('gameStats')
+                    .get();
+
+                statsSnapshot.forEach(doc => {
+                    const statData = doc.data();
+                    const playerId = statData.playerId || doc.id;
+                    
+                    // Find player in either team
+                    let player = currentGame.homeTeam.players.find(p => p.id === playerId);
+                    if (!player) {
+                        player = currentGame.awayTeam.players.find(p => p.id === playerId);
+                    }
+                    
+                    if (player) {
+                        player.stats = {
+                            pts: statData.pts || statData.points || 0,
+                            reb: statData.reb || statData.rebounds || 0,
+                            ast: statData.ast || statData.assists || 0,
+                            stl: statData.stl || statData.steals || 0,
+                            blk: statData.blk || statData.blocks || 0,
+                            fls: statData.fls || statData.fouls || 0
+                        };
+                    }
+                });
+                
+                console.log('✅ Loaded existing game stats');
+            } catch (error) {
+                console.error('Error loading existing stats:', error);
+            }
+        }
+
+        // ===== REAL-TIME SYNC LISTENERS =====
+
+        function setupRealtimeListeners() {
+            // Clear any existing listeners
+            cleanupListeners();
+            
+            // ===== FIX #1: UI SYNCHRONIZATION =====
+            // Problem: Player ID mismatch causing 9/10 players to show "0 pts"
+            // Solution: Extract actual player ID from statsData instead of using document ID
+            // Date: October 23, 2026
+            if (currentGame.id) {
+                const gameStatsListener = db.collection('games').doc(currentGame.id)
+                    .collection('gameStats')
+                    .onSnapshot(snapshot => {
+                        console.log('🔄 Game stats updated - syncing UI');
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added' || change.type === 'modified') {
+                                const statsData = change.doc.data();
+                                const gameStatsDocId = change.doc.id;
+                                
+                                // CRITICAL FIX: Get the actual player ID from statsData
+                                const actualPlayerId = statsData.playerId || statsData.userId || statsData.player;
+                                
+                                if (!actualPlayerId) {
+                                    console.error('⚠️ No player ID found in stats data:', gameStatsDocId, statsData);
+                                    return;
+                                }
+                                
+                                console.log(`🔧 FIX #1: Player ID mapping: ${gameStatsDocId} → ${actualPlayerId}`);
+                                console.log(`📊 Syncing stats for player ID: ${actualPlayerId}`);
+                                updatePlayerStatsInUI(actualPlayerId, statsData);
+                            }
+                        });
+                        // Update team scores after all player updates
+                        updateScores();
+                    });
+                playersListeners.push(gameStatsListener);
+            }
+            
+            // Listen for new players added to home team
+            if (currentGame.homeTeam.id) {
+                const homeListener = db.collection('players')
+                    .where('teamId', '==', currentGame.homeTeam.id)
+                    .onSnapshot(snapshot => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                handlePlayerAdded(change.doc, 'home');
+                            }
+                        });
+                    });
+                playersListeners.push(homeListener);
+            }
+            
+            // Listen for new players added to away team
+            if (currentGame.awayTeam.id) {
+                const awayListener = db.collection('players')
+                    .where('teamId', '==', currentGame.awayTeam.id)
+                    .onSnapshot(snapshot => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                handlePlayerAdded(change.doc, 'away');
+                            }
+                        });
+                    });
+                playersListeners.push(awayListener);
+            }
+            
+            console.log('✅ Real-time listeners setup complete with game stats sync');
+        }
+
+        function handlePlayerAdded(doc, side) {
+            const playerData = doc.data();
+            const playerId = doc.id;
+            const team = side === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            
+            // Check if player already exists
+            const exists = team.players.find(p => p.id === playerId);
+            if (exists) return;
+            
+            // Add new player to team
+            const newPlayer = {
+                id: playerId,
+                name: playerData.name || playerData.playerName,
+                number: playerData.jerseyNumber || playerData.number || 0,
+                division: playerData.division || currentGame.division,
+                stats: {
+                    pts: 0,
+                    reb: 0,
+                    ast: 0,
+                    stl: 0,
+                    blk: 0,
+                    fls: 0
+                }
+            };
+            
+            team.players.push(newPlayer);
+            updateTeamDisplay(side);
+            showToast(`✅ ${newPlayer.name} added to ${team.name}`);
+            
+            console.log(`🆕 New player added: ${newPlayer.name} (#${newPlayer.number})`);
+        }
+
+        /**
+         * Update player stats in UI when Firebase data changes
+         * @param {string} playerId - Firebase player document ID
+         * @param {Object} statsData - Player stats data from Firebase
+         */
+        function updatePlayerStatsInUI(playerId, statsData) {
+            // Find player in either team
+            let player = currentGame.homeTeam.players.find(p => p.id === playerId);
+            let teamSide = 'home';
+            
+            if (!player) {
+                player = currentGame.awayTeam.players.find(p => p.id === playerId);
+                teamSide = 'away';
+            }
+            
+            // FALLBACK: Try matching by player number and name if direct ID fails
+            if (!player && statsData.jerseyNumber && statsData.playerName) {
+                console.log(`🔍 FIX #1: Fallback matching for ${statsData.playerName} #${statsData.jerseyNumber}`);
+                
+                // Try home team
+                player = currentGame.homeTeam.players.find(p => 
+                    p.number == statsData.jerseyNumber && 
+                    p.name.toLowerCase().includes(statsData.playerName.toLowerCase())
+                );
+                if (player) teamSide = 'home';
+                
+                // Try away team
+                if (!player) {
+                    player = currentGame.awayTeam.players.find(p => 
+                        p.number == statsData.jerseyNumber && 
+                        p.name.toLowerCase().includes(statsData.playerName.toLowerCase())
+                    );
+                    if (player) teamSide = 'away';
+                }
+            }
+            
+            if (!player) {
+                console.warn(`⚠️ Player not found for stats update: ${playerId}`, statsData);
+                console.warn(`🔍 Available home players:`, currentGame.homeTeam.players.map(p => `${p.name} (${p.id})`));
+                console.warn(`🔍 Available away players:`, currentGame.awayTeam.players.map(p => `${p.name} (${p.id})`));
+                return;
+            }
+            
+            // Update player stats object
+            player.stats = {
+                pts: statsData.pts || statsData.points || 0,
+                reb: statsData.reb || statsData.rebounds || 0,
+                ast: statsData.ast || statsData.assists || 0,
+                stl: statsData.stl || statsData.steals || 0,
+                blk: statsData.blk || statsData.blocks || 0,
+                fls: statsData.fls || statsData.fouls || 0
+            };
+            
+            // Update the player card display
+            updateTeamDisplay(teamSide);
+            
+            console.log(`✅ FIX #1: Successfully updated player: ${player.name} #${player.number}: ${player.stats.pts} pts, ${player.stats.reb} reb, ${player.stats.ast} ast`);
+        }
+
+        function cleanupListeners() {
+            playersListeners.forEach(unsubscribe => unsubscribe());
+            playersListeners = [];
+        }
+
+        // ===== DISPLAY FUNCTIONS =====
+
+        function updateGameDisplay() {
+            // Update team names
+            document.getElementById('homeTeamName').textContent = currentGame.homeTeam.name;
+            document.getElementById('awayTeamName').textContent = currentGame.awayTeam.name;
+            document.getElementById('homeTeamNameTop').textContent = currentGame.homeTeam.name;
+            document.getElementById('awayTeamNameTop').textContent = currentGame.awayTeam.name;
+            
+            // Update scores
+            updateScores();
+            
+            // Update team displays
+            updateTeamDisplay('home');
+            updateTeamDisplay('away');
+        }
+
+        function updateScores() {
+            // Safety check - try window.currentGame first, fallback to local currentGame
+            const gameData = window.currentGame || currentGame;
+            
+            if (!gameData || !gameData.homeTeam || !gameData.awayTeam) {
+                console.warn('⚠️ currentGame not initialized properly');
+                return;
+            }
+            
+            // Calculate scores with safety checks
+            const homeScore = gameData.homeTeam.players.reduce((sum, p) => sum + (p.stats.pts || 0), 0);
+            const awayScore = gameData.awayTeam.players.reduce((sum, p) => sum + (p.stats.pts || 0), 0);
+            
+            // Update ALL score display elements with null checks
+            const homeScoreEl = document.getElementById('homeScore');
+            const awayScoreEl = document.getElementById('awayScore');
+            const homeScoreTopEl = document.getElementById('homeScoreTop');
+            const awayScoreTopEl = document.getElementById('awayScoreTop');
+            
+            if (homeScoreEl) homeScoreEl.textContent = homeScore;
+            if (awayScoreEl) awayScoreEl.textContent = awayScore;
+            if (homeScoreTopEl) homeScoreTopEl.textContent = homeScore;
+            if (awayScoreTopEl) awayScoreTopEl.textContent = awayScore;
+            
+            // Update team fouls with safety checks
+            const homeFouls = gameData.homeTeam.players.reduce((sum, p) => sum + (p.stats.fls || 0), 0);
+            const awayFouls = gameData.awayTeam.players.reduce((sum, p) => sum + (p.stats.fls || 0), 0);
+            
+            const homeFoulsEl = document.getElementById('homeTeamFouls');
+            const awayFoulsEl = document.getElementById('awayTeamFouls');
+            
+            if (homeFoulsEl) homeFoulsEl.textContent = homeFouls;
+            if (awayFoulsEl) awayFoulsEl.textContent = awayFouls;
+            
+            console.log(`📊 Scores updated: Home ${homeScore} - Away ${awayScore}`);
+            // CACHE BUST 2026-10-11-14:30 - Bug #2 Fix - homeScoreTopEl implementation            
+            // Bug fix deployed on Oct 11, 2026
+            // CACHE BUST 2026-10-11-14:30 - Bug #2 homeScoreTopEl fix
+        }
+
+        // ===== SUBSTITUTION STATE =====
+        let selectedBenchPlayer = null; // {number, team, name}
+        
+        // ===== UNDO SYSTEM =====
+        let playerUndoStacks = {}; // playerId -> array of last 5 actions
+        
+        function addToUndoStack(playerId, action) {
+            if (!playerUndoStacks[playerId]) {
+                playerUndoStacks[playerId] = [];
+            }
+            
+            playerUndoStacks[playerId].unshift(action);
+            
+            // Keep only last 5 actions
+            if (playerUndoStacks[playerId].length > 5) {
+                playerUndoStacks[playerId] = playerUndoStacks[playerId].slice(0, 5);
+            }
+        }
+        
+        function undoLastAction(playerId) {
+            if (!playerUndoStacks[playerId] || playerUndoStacks[playerId].length === 0) {
+                showToast('No actions to undo for this player', 'warning');
+                return;
+            }
+            
+            const lastAction = playerUndoStacks[playerId].shift();
+            const timeSinceAction = Date.now() - lastAction.timestamp;
+            
+            // Confirm if action is older than 30 seconds
+            if (timeSinceAction > 30000) {
+                if (!confirm(`This action was ${Math.round(timeSinceAction/1000)}s ago. Undo anyway?`)) {
+                    // Put it back
+                    playerUndoStacks[playerId].unshift(lastAction);
+                    return;
+                }
+            }
+            
+            // Find player and update stat
+            const player = findPlayerById(playerId);
+            if (!player) {
+                showToast('Player not found', 'error');
+                return;
+            }
+            
+            // Revert the stat
+            if (lastAction.type === 'points') {
+                player.stats.pts = lastAction.previousValue;
+                updateTeamScore();
+            } else {
+                player.stats[lastAction.statType] = lastAction.previousValue;
+            }
+            
+            // Sync to Firebase
+            saveStatToFirebase(playerId, player, lastAction.statType || 'pts', lastAction.previousValue);
+            
+            // Update display
+            updateTeamDisplay(player.team);
+            
+            showToast(`↩️ Undid last action for #${player.number}`, 'success');
+        }
+        
+        function updateTeamDisplay(side) {
+            const team = side === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            const container = document.getElementById(side + 'Players');
+            
+            // Show only first 5 players (court players)
+            const courtPlayers = team.players.slice(0, 5);
+            
+            container.innerHTML = courtPlayers.map(player => {
+                const foulClass = player.stats.fls >= 5 ? (player.stats.fls >= 6 ? 'fouled-out' : 'warning') : '';
+                const lastAction = playerUndoStacks[player.id] && playerUndoStacks[player.id].length > 0 ? 
+                    playerUndoStacks[player.id][0] : null;
+                
+                const lastActionText = lastAction ? 
+                    `Last: ${lastAction.type === 'points' ? '+' + lastAction.value + ' ' + (lastAction.value === 3 ? '3PT' : lastAction.value === 2 ? 'FG' : 'FT') : 
+                    lastAction.type.toUpperCase() + ' ' + (lastAction.value > 0 ? '+' : '') + lastAction.value} (${Math.floor((Date.now() - lastAction.timestamp) / 1000)}s ago)` : 
+                    'No recent actions';
+                
+                const substitutionClass = selectedBenchPlayer && selectedBenchPlayer.team === side ? 'substitution-target' : '';
+                const onClick = selectedBenchPlayer && selectedBenchPlayer.team === side ? 
+                    `onclick="executeSubstitution('${player.id}')"` : '';
+                
+                return `
+                    <div class="player-card ${foulClass} ${substitutionClass}" data-player-id="${player.id}" ${onClick}>
+                        <!-- Header -->
+                        <div class="player-header">
+                            <div class="player-info">
+                                <div class="player-number">${player.number}</div>
+                                <div class="player-details">
+                                    <div class="player-name">${player.name}</div>
+                                    <div class="player-points">${player.stats.pts} pts</div>
+                                </div>
+                            </div>
+                            <button class="undo-btn" onclick="undoLastAction('${player.id}')" 
+                                ${!playerUndoStacks[player.id] || playerUndoStacks[player.id].length === 0 ? 'disabled' : ''}>
+                                ↩️
+                            </button>
+                        </div>
+                        
+                        <!-- Stats Grid -->
+                        <div class="player-stats">
+                            <!-- Scoring Buttons Row - STANDARDIZED ORDER: [FT] [+2] [+3] [- Points] -->
+                            <div class="scoring-buttons-row">
+                                <button class="stat-btn plus-one" onclick="updateStat('${player.id}', 'pts', 1)">FT</button>
+                                <button class="stat-btn plus-two" onclick="updateStat('${player.id}', 'pts', 2)">+2</button>
+                                <button class="stat-btn plus-three" onclick="updateStat('${player.id}', 'pts', 3)">+3</button>
+                                <button class="score-minus-single" onclick="promptSubtractPoints('${player.id}')">− Points</button>
+                            </div>
+                            
+                            <!-- Rebounds -->
+                            <div class="stat-group-compact">
+                                <div class="stat-group-label">R</div>
+                                <div class="stat-controls-compact">
+                                    <button class="stat-btn stat-btn-small" onclick="updateStat('${player.id}', 'reb', 1)">+</button>
+                                    <div class="stat-value-compact">${player.stats.reb}</div>
+                                    <button class="stat-btn stat-btn-small" onclick="updateStat('${player.id}', 'reb', -1)">−</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Assists -->
+                            <div class="stat-group-compact">
+                                <div class="stat-group-label">A</div>
+                                <div class="stat-controls-compact">
+                                    <button class="stat-btn stat-btn-small" onclick="updateStat('${player.id}', 'ast', 1)">+</button>
+                                    <div class="stat-value-compact">${player.stats.ast}</div>
+                                    <button class="stat-btn stat-btn-small" onclick="updateStat('${player.id}', 'ast', -1)">−</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Fouls -->
+                            <div class="stat-group-compact">
+                                <div class="stat-group-label">F</div>
+                                <div class="stat-controls-compact">
+                                    <button class="stat-btn stat-btn-small" onclick="updateStat('${player.id}', 'fls', 1)" 
+                                        ${player.stats.fls >= 5 ? 'style="background: var(--danger);"' : ''}>
+                                        +
+                                    </button>
+                                    <div class="stat-value-compact" 
+                                        ${player.stats.fls >= 4 ? 'style="color: var(--warning);"' : ''}
+                                        ${player.stats.fls >= 5 ? 'style="color: var(--danger);"' : ''}>
+                                        ${player.stats.fls}
+                                    </div>
+                                    <button class="stat-btn stat-btn-small" onclick="updateStat('${player.id}', 'fls', -1)">−</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Last Action -->
+                        <div class="last-action">${lastActionText}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Update bench numbers display
+            updateBenchDisplay(side);
+            
+            // Initialize bench state on first load
+            if (side === 'home') {
+                initializeBenchState();
+            }
+        }
+
+        // ===== STAT UPDATE WITH REAL-TIME SYNC =====
+
+        // DEBOUNCE PROTECTION VARIABLES
+        let lastTapTime = 0;
+        const TAP_DELAY = 200; // 200ms debounce to prevent double-taps
+
+        function updateStat(playerId, statType, change) {
+            // ===== FIX #5: DEBOUNCE PROTECTION =====
+            // CRITICAL: Block rapid taps within 200ms to prevent duplicates
+            const now = Date.now();
+            if (now - lastTapTime < TAP_DELAY) {
+                console.warn('⚠️ FIX #5: Debounce blocked click at', now - lastTapTime, 'ms');
+                showToast('⚠️ Tap slower to prevent duplicates', 'warning');
+                return;
+            }
+            lastTapTime = now;
+
+            // Find player in either team
+            let player = currentGame.homeTeam.players.find(p => p.id === playerId);
+            let team = 'home';
+            
+            if (!player) {
+                player = currentGame.awayTeam.players.find(p => p.id === playerId);
+                team = 'away';
+            }
+            
+            if (!player) return;
+            
+            // Store previous value for undo
+            const previousValue = player.stats[statType];
+            
+            // Don't allow negative stats or fouling out beyond 6
+            const newValue = Math.max(0, player.stats[statType] + change);
+            if (statType === 'fls' && newValue > 6) return;
+            
+            // Update stat
+            player.stats[statType] = newValue;
+            
+            // Add to undo stack
+            addToUndoStack(playerId, {
+                type: statType === 'pts' ? 'points' : statType,
+                statType: statType,
+                value: change,
+                previousValue: previousValue,
+                timestamp: Date.now()
+            });
+            
+            // Immediate UI update
+            updateScores();
+            updateTeamDisplay(team);
+            
+            // Visual feedback
+            highlightRecentAction(playerId);
+            
+            const statName = getStatName(statType);
+            if (change > 0) {
+                showToast(`${player.name}: +${change} ${statName}`);
+            }
+            
+            // Save to Firebase (syncs to leaderboards automatically)
+            saveStatToFirebase(playerId, player, statType, newValue);
+            
+            // Also save complete game state for public dashboard
+            if (statType === 'pts') {
+                saveGameToFirebase();
+            }
+        }
+
+        function highlightRecentAction(playerId) {
+            const playerCard = document.querySelector(`[data-player-id="${playerId}"]`);
+            if (!playerCard) return;
+            
+            playerCard.classList.add('recent-action');
+            
+            if (recentActionTimeout) clearTimeout(recentActionTimeout);
+            
+            recentActionTimeout = setTimeout(() => {
+                playerCard.classList.remove('recent-action');
+            }, 2000);
+        }
+
+        // ===== FIREBASE SAVE WITH LEADERBOARD SYNC =====
+
+        let saveTimeout = null;
+
+        async function saveStatToFirebase(playerId, player, statType, value) {
+            // Debounce rapid clicks
+            if (saveTimeout) clearTimeout(saveTimeout);
+            
+            saveTimeout = setTimeout(async () => {
+                try {
+                    // Calculate total points for accurate leaderboard
+                    const totalPoints = player.stats.pts;
+                    const gameId = currentGame.id;
+                    const teamId = currentGame.homeTeam.players.includes(player) 
+                        ? currentGame.homeTeam.id 
+                        : currentGame.awayTeam.id;
+                    
+                    console.log(`💾 Saving stats to: games/${gameId}/gameStats/${playerId}`);
+                    console.log(`📊 Player: ${player.name} (#${player.number}), Team: ${teamId}`);
+                    console.log(`📈 Stats:`, player.stats);
+                    
+                    // CRITICAL FIX: Save to games/{gameId}/gameStats/{playerId} subcollection
+                    // This is the path that the public dashboard reads from
+                    const gameStatsRef = db.collection('games').doc(gameId).collection('gameStats').doc(playerId);
+                    
+                    const statsData = {
+                        gameId: gameId,
+                        playerId: playerId,
+                        playerName: player.name,
+                        jerseyNumber: player.number,
+                        division: player.division || currentGame.division,
+                        teamId: teamId,
+                        // All stats
+                        pts: player.stats.pts,
+                        reb: player.stats.reb,
+                        ast: player.stats.ast,
+                        stl: player.stats.stl,
+                        blk: player.stats.blk,
+                        fls: player.stats.fls,
+                        points: player.stats.pts, // Alias for compatibility
+                        rebounds: player.stats.reb,
+                        assists: player.stats.ast,
+                        steals: player.stats.stl,
+                        blocks: player.stats.blk,
+                        fouls: player.stats.fls,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    await gameStatsRef.set(statsData, { merge: true });
+                    console.log(`✅ Saved stats for ${player.name} to games/${gameId}/gameStats/${playerId}`);
+                    
+                    // Update player's season totals (for leaderboards)
+                    const playerRef = db.collection('players').doc(playerId);
+                    const playerDoc = await playerRef.get();
+                    
+                    if (playerDoc.exists) {
+                        const currentSeasonStats = playerDoc.data().seasonStats || {};
+                        
+                        // Update season totals
+                        await playerRef.update({
+                            'seasonStats.totalPoints': firebase.firestore.FieldValue.increment(
+                                statType === 'pts' ? (value - (player.stats.pts - value)) : 0
+                            ),
+                            'seasonStats.totalRebounds': firebase.firestore.FieldValue.increment(
+                                statType === 'reb' ? (value - (player.stats.reb - value)) : 0
+                            ),
+                            'seasonStats.totalAssists': firebase.firestore.FieldValue.increment(
+                                statType === 'ast' ? (value - (player.stats.ast - value)) : 0
+                            ),
+                            'seasonStats.gamesPlayed': currentSeasonStats.gamesPlayed || 1,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                    
+                    console.log(`✅ Saved ${statType} for ${player.name}`);
+                } catch (error) {
+                    console.error('Error saving stat:', error);
+                    showToast('Error saving stat', 'error');
+                }
+            }, 500);
+        }
+
+        function getStatName(stat) {
+            const names = {
+                pts: 'Points',
+                reb: 'Rebounds',
+                ast: 'Assists',
+                stl: 'Steals',
+                blk: 'Blocks',
+                fls: 'Fouls'
+            };
+            return names[stat] || stat;
+        }
+
+        // ===== POINT SUBTRACTION WITH VALIDATION =====
+
+        function promptSubtractPoints(playerId) {
+            // ===== UX FIX: INSTANT -1 POINT SUBTRACTION =====
+            // Apply same debounce protection to minus points button
+            const now = Date.now();
+            if (now - lastTapTime < TAP_DELAY) {
+                console.warn('⚠️ FIX #5: Debounce blocked minus click at', now - lastTapTime, 'ms');
+                showToast('⚠️ Tap slower to prevent duplicates', 'warning');
+                return;
+            }
+            lastTapTime = now;
+
+            console.log(`⬇️ Instantly subtracting 1 point from player ${playerId}`);
+            
+            // Always subtract exactly 1 point - NO POPUP
+            const pointsToSubtract = 1;
+            
+            // Get current player
+            let player = currentGame.homeTeam.players.find(p => p.id === playerId);
+            if (!player) {
+                player = currentGame.awayTeam.players.find(p => p.id === playerId);
+            }
+            
+            if (!player) {
+                console.error('❌ Player not found');
+                showToast('Error: Player not found', 'error');
+                return;
+            }
+            
+            // Prevent negative points
+            if (player.stats.pts < pointsToSubtract) {
+                console.warn('⚠️ Cannot subtract - player has 0 points');
+                showToast('Cannot subtract - player has 0 points', 'warning');
+                return;
+            }
+            
+            // Instant subtraction without confirmation
+            subtractScore(playerId, pointsToSubtract);
+            
+            console.log(`✅ Subtracted ${pointsToSubtract} point - New total: ${player.stats.pts - pointsToSubtract} pts`);
+            showToast(`${player.name}: -${pointsToSubtract} point`, 'info');
+        }
+
+        function subtractScore(playerId, points) {
+            // Find player in either team
+            let player = currentGame.homeTeam.players.find(p => p.id === playerId);
+            let team = 'home';
+            
+            if (!player) {
+                player = currentGame.awayTeam.players.find(p => p.id === playerId);
+                team = 'away';
+            }
+            
+            if (!player) {
+                showToast('Player not found', 'error');
+                return;
+            }
+            
+            // Check if player has enough points to subtract
+            if (player.stats.pts < points) {
+                showToast(`Cannot subtract ${points} points. Player only has ${player.stats.pts} points.`, 'error');
+                return;
+            }
+            
+            // Get player name for logging
+            const playerName = player.name || `#${player.number}`;
+            
+            // Store action for undo functionality
+            const undoAction = {
+                type: 'stat',
+                playerId: playerId,
+                stat: 'pts',
+                oldValue: player.stats.pts,
+                newValue: player.stats.pts - points,
+                timestamp: Date.now(),
+                action: `Subtracted ${points} point${points > 1 ? 's' : ''}`
+            };
+            
+            // Initialize undo stack if needed
+            if (!playerUndoStacks[playerId]) {
+                playerUndoStacks[playerId] = [];
+            }
+            
+            // Add to undo stack (keep only last 5 actions)
+            playerUndoStacks[playerId].unshift(undoAction);
+            if (playerUndoStacks[playerId].length > 5) {
+                playerUndoStacks[playerId] = playerUndoStacks[playerId].slice(0, 5);
+            }
+            
+            // Update player stats
+            player.stats.pts -= points;
+            
+            // Update display
+            updateTeamDisplay(team);
+            
+            // Update score displays
+            updateScores();
+            
+            // Save to Firebase (both individual stats and game state)
+            saveStatToFirebase(playerId, player, 'pts', player.stats.pts);
+            saveGameToFirebase();
+            
+            // Show success toast
+            showToast(`✅ -${points} point${points > 1 ? 's' : ''} from ${playerName}`, 'success');
+            
+            // Log action
+            console.log(`Subtracted ${points} points from ${playerName} (${player.stats.pts + points} → ${player.stats.pts})`);
+        }
+
+        // ===== ADD PLAYER MODAL =====
+
+        function showAddPlayerModal(team) {
+            document.getElementById('playerTeam').value = team;
+            document.getElementById('addPlayerModal').classList.add('show');
+            document.getElementById('playerName').focus();
+        }
+
+        function hideAddPlayerModal() {
+            document.getElementById('addPlayerModal').classList.remove('show');
+            document.getElementById('addPlayerForm').reset();
+        }
+
+        async function addNewPlayer(event) {
+            event.preventDefault();
+            
+            const team = document.getElementById('playerTeam').value;
+            const teamData = team === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            const jerseyNumber = parseInt(document.getElementById('playerNumber').value);
+            const playerName = document.getElementById('playerName').value;
+            
+            try {
+                // CHECK FOR DUPLICATES FIRST - prevent duplicate jersey numbers on same team
+                const existingPlayers = await db.collection('players')
+                    .where('teamId', '==', teamData.id)
+                    .where('jerseyNumber', '==', jerseyNumber)
+                    .get();
+                
+                if (!existingPlayers.empty) {
+                    // Player with same jersey number already exists - use existing player
+                    const existingPlayer = existingPlayers.docs[0];
+                    const existingPlayerData = existingPlayer.data();
+                    
+                    console.log(`✅ Player #${jerseyNumber} already exists - using existing: ${existingPlayerData.name}`);
+                    
+                    // Add existing player to local game state if not already there
+                    const localPlayer = teamData.players.find(p => p.id === existingPlayer.id);
+                    if (!localPlayer) {
+                        const playerToAdd = {
+                            id: existingPlayer.id,
+                            name: existingPlayerData.name || existingPlayerData.playerName,
+                            number: existingPlayerData.jerseyNumber || existingPlayerData.number || 0,
+                            division: existingPlayerData.division || currentGame.division,
+                            stats: {
+                                pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, fls: 0
+                            }
+                        };
+                        teamData.players.push(playerToAdd);
+                        updateTeamDisplay(team);
+                    }
+                    
+                    hideAddPlayerModal();
+                    showToast(`✅ Using existing player: ${existingPlayerData.name} (#${jerseyNumber})`);
+                    return;
+                }
+                
+                // Only create new player if doesn't exist
+                const playerData = {
+                    name: playerName,
+                    jerseyNumber: jerseyNumber,
+                    teamId: teamData.id,
+                    teamName: teamData.name,
+                    division: currentGame.division,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    addedDuringGame: true,
+                    gameId: currentGame.id,
+                    seasonStats: {
+                        totalPoints: 0,
+                        totalRebounds: 0,
+                        totalAssists: 0,
+                        gamesPlayed: 0
+                    }
+                };
+                
+                // Add to Firebase (real-time listener will add to local state automatically)
+                const docRef = await db.collection('players').add(playerData);
+                
+                console.log(`✅ New player #${jerseyNumber} created: ${playerName} (${docRef.id})`);
+                
+                hideAddPlayerModal();
+                showToast(`✅ ${playerName} (#${jerseyNumber}) added to roster!`);
+                
+            } catch (error) {
+                console.error('Error adding player:', error);
+                showToast('Error adding player', 'error');
+            }
+        }
+
+        // ===== EXIT FUNCTIONS =====
+
+        function exitScoring() {
+            if (confirm('Return to game selection? Make sure to save first!')) {
+                cleanupListeners();
+                document.getElementById('scoring-screen').style.display = 'none';
+                document.getElementById('game-selection-screen').style.display = 'block';
+                loadTodaysGames();
+            }
+        }
+
+        function updatePeriod() {
+            const newPeriod = document.getElementById('periodSelector').value;
+            currentGame.period = newPeriod;
+            
+            // Update display in score bar
+            const periodDisplayEl = document.getElementById('periodDisplay');
+            if (periodDisplayEl) {
+                periodDisplayEl.textContent = newPeriod;
+            }
+        }
+
+        // ===== SAVE GAME =====
+
+        async function saveGame() {
+            if (!currentGame.id) {
+                showToast('No active game', 'error');
+                return;
+            }
+            
+            try {
+                showToast('Saving game...');
+                
+                const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                
+                // Update game document
+                await db.collection('games').doc(currentGame.id).update({
+                    homeScore: homeScore,
+                    awayScore: awayScore,
+                    period: currentGame.period,
+                    status: 'in-progress',
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Save all player stats - FIXED: Use subcollection pattern
+                const batch = db.batch();
+
+                [...currentGame.homeTeam.players, ...currentGame.awayTeam.players].forEach(player => {
+                    const statRef = db.collection('games').doc(currentGame.id)
+                        .collection('gameStats').doc(player.id);
+                    batch.set(statRef, {
+                        gameId: currentGame.id,
+                        playerId: player.id,
+                        playerName: player.name,
+                        playerNumber: player.number,
+                        jerseyNumber: player.number,
+                        division: player.division || currentGame.division,
+                        teamId: currentGame.homeTeam.players.includes(player)
+                            ? currentGame.homeTeam.id
+                            : currentGame.awayTeam.id,
+                        pts: player.stats.pts,
+                        reb: player.stats.reb,
+                        ast: player.stats.ast,
+                        stl: player.stats.stl,
+                        blk: player.stats.blk,
+                        fls: player.stats.fls,
+                        points: player.stats.pts,
+                        rebounds: player.stats.reb,
+                        assists: player.stats.ast,
+                        steals: player.stats.stl,
+                        blocks: player.stats.blk,
+                        fouls: player.stats.fls,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                });
+                
+                await batch.commit();
+                
+                showToast('✅ Game saved successfully!');
+            } catch (error) {
+                console.error('Error saving game:', error);
+                showToast('Error saving game', 'error');
+            }
+        }
+
+        // ===== END GAME WITH MVP SELECTION =====
+
+        async function endGame() {
+            if (!currentGame.id) {
+                showToast('No active game', 'error');
+                return;
+            }
+            
+            // PHASE 5: Add confirmation dialog for critical action
+            const confirmed = confirm('⚠️ Are you sure you want to end this game?\n\nThis will finalize all stats and cannot be undone.');
+            if (!confirmed) {
+                return;
+            }
+            
+            // Calculate final stats and leaders
+            const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+            const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+            
+            // Find game leaders
+            let allPlayers = [...currentGame.homeTeam.players, ...currentGame.awayTeam.players];
+            
+            const leadingScorer = allPlayers.reduce((max, p) => 
+                p.stats.pts > (max?.stats.pts || 0) ? p : max, null);
+            
+            const leadingRebounder = allPlayers.reduce((max, p) => 
+                p.stats.reb > (max?.stats.reb || 0) ? p : max, null);
+            
+            const leadingAssister = allPlayers.reduce((max, p) => 
+                p.stats.ast > (max?.stats.ast || 0) ? p : max, null);
+            
+            // Update modal with game data
+            document.getElementById('finalHomeTeam').textContent = currentGame.homeTeam.name;
+            document.getElementById('finalAwayTeam').textContent = currentGame.awayTeam.name;
+            document.getElementById('finalHomeScore').textContent = homeScore;
+            document.getElementById('finalAwayScore').textContent = awayScore;
+            
+            // Update leaders
+            if (leadingScorer) {
+                document.getElementById('leadingScorer').textContent = 
+                    `${leadingScorer.name} - ${leadingScorer.stats.pts} pts`;
+            }
+            if (leadingRebounder) {
+                document.getElementById('leadingRebounder').textContent = 
+                    `${leadingRebounder.name} - ${leadingRebounder.stats.reb} reb`;
+            }
+            if (leadingAssister) {
+                document.getElementById('leadingAssists').textContent = 
+                    `${leadingAssister.name} - ${leadingAssister.stats.ast} ast`;
+            }
+            
+            // Populate MVP selection list (top 8 performers)
+            const topPerformers = allPlayers
+                .filter(p => p.stats.pts > 0 || p.stats.reb > 0 || p.stats.ast > 0)
+                .sort((a, b) => {
+                    // Sort by points, then rebounds, then assists
+                    if (b.stats.pts !== a.stats.pts) return b.stats.pts - a.stats.pts;
+                    if (b.stats.reb !== a.stats.reb) return b.stats.reb - a.stats.reb;
+                    return b.stats.ast - a.stats.ast;
+                })
+                .slice(0, 8); // Top 8 players
+            
+            const mvpList = document.getElementById('mvpPlayersList');
+            mvpList.innerHTML = topPerformers.map((player, index) => `
+                <div class="mvp-player-option ${index === 0 ? 'selected' : ''}" onclick="selectMVP('${player.id}', this)">
+                    <input type="radio" name="mvp" value="${player.id}" class="mvp-radio" ${index === 0 ? 'checked' : ''}>
+                    <div class="mvp-player-info">
+                        <div class="mvp-player-name">${player.name} (#${player.number})</div>
+                        <div class="mvp-player-stats">
+                            ${player.stats.pts} pts, ${player.stats.reb} reb, ${player.stats.ast} ast
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Show modal
+            document.getElementById('endGameModal').classList.add('show');
+        }
+
+        // ===== MVP SELECTION HELPER FUNCTIONS =====
+
+        // Select MVP
+        function selectMVP(playerId, element) {
+            // Remove selected class from all options
+            document.querySelectorAll('.mvp-player-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio button
+            element.querySelector('input[type="radio"]').checked = true;
+        }
+
+        // Hide end game modal
+        function hideEndGameModal() {
+            document.getElementById('endGameModal').classList.remove('show');
+        }
+
+        // Save individual player stats to gameStats subcollection
+        async function savePlayerStats(gameId, players) {
+            console.log(`💾 Saving individual player stats to gameStats subcollection...`);
+            
+            const batch = db.batch();
+            let statsCount = 0;
+            
+            players.forEach(player => {
+                // Only save stats for players who actually played (have any stats > 0)
+                if (player.stats.pts > 0 || player.stats.reb > 0 || player.stats.ast > 0 || 
+                    player.stats.stl > 0 || player.stats.blk > 0 || player.stats.fls > 0) {
+                    
+                    const statsRef = db.collection('games').doc(gameId)
+                                      .collection('gameStats').doc(player.id);
+                    
+                    // CRITICAL FIX: Calculate teamId and ensure no undefined values
+                    const teamId = currentGame.homeTeam.players.includes(player) 
+                        ? currentGame.homeTeam.id 
+                        : currentGame.awayTeam.id;
+                    
+                    // CRITICAL FIX: Validate all fields before writing to prevent undefined errors
+                    const statsData = {
+                        playerId: player.id || '',
+                        playerNumber: player.number || 0,
+                        playerName: player.name || '',
+                        teamId: teamId || '',
+                        points: player.stats.pts || 0,
+                        rebounds: player.stats.reb || 0,
+                        assists: player.stats.ast || 0,
+                        steals: player.stats.stl || 0,
+                        blocks: player.stats.blk || 0,
+                        fouls: player.stats.fls || 0  // Fixed: was player.stats.fouls, now player.stats.fls
+                    };
+                    
+                    // Debug log to verify no undefined values
+                    console.log(`🔍 Stats data for ${player.name}:`, statsData);
+                    const undefinedFields = Object.keys(statsData).filter(k => statsData[k] === undefined);
+                    if (undefinedFields.length > 0) {
+                        console.error(`❌ Undefined fields for ${player.name}:`, undefinedFields);
+                    }
+                    
+                    batch.set(statsRef, statsData);
+                    
+                    statsCount++;
+                    console.log(`  📊 Adding stats for ${player.name} (#${player.number}): ${player.stats.pts} pts, ${player.stats.reb} reb, ${player.stats.ast} ast`);
+                }
+            });
+            
+            if (statsCount > 0) {
+                await batch.commit();
+                console.log(`✅ Saved stats for ${statsCount} players to gameStats subcollection`);
+            } else {
+                console.log(`⚠️ No player stats to save (no players with stats > 0)`);
+            }
+        }
+
+        // Confirm and complete game
+        async function confirmEndGame() {
+            const selectedMVP = document.querySelector('input[name="mvp"]:checked');
+            
+            if (!selectedMVP) {
+                showToast('Please select Player of the Game', 'error');
+                return;
+            }
+            
+            const mvpPlayerId = selectedMVP.value;
+            const mvpPlayer = [...currentGame.homeTeam.players, ...currentGame.awayTeam.players]
+                .find(p => p.id === mvpPlayerId);
+            
+            if (!mvpPlayer) {
+                showToast('Error: MVP player not found', 'error');
+                return;
+            }
+            
+            try {
+                showToast('Finalizing game...');
+                
+                // Save game first
+                await saveGame();
+                
+                // Calculate final stats
+                const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                
+                // Find all leaders
+                allPlayers = [...currentGame.homeTeam.players, ...currentGame.awayTeam.players];
+                const leadingScorer = allPlayers.reduce((max, p) => 
+                    p.stats.pts > (max?.stats.pts || 0) ? p : max, null);
+                const leadingRebounder = allPlayers.reduce((max, p) => 
+                    p.stats.reb > (max?.stats.reb || 0) ? p : max, null);
+                const leadingAssister = allPlayers.reduce((max, p) => 
+                    p.stats.ast > (max?.stats.ast || 0) ? p : max, null);
+                
+                // Update game with completion data
+                await db.collection('games').doc(currentGame.id).update({
+                    status: 'completed',
+                    completedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    mvp: {
+                        playerId: mvpPlayer.id,
+                        playerName: mvpPlayer.name,
+                        playerNumber: mvpPlayer.number,
+                        points: mvpPlayer.stats.pts,
+                        rebounds: mvpPlayer.stats.reb,
+                        assists: mvpPlayer.stats.ast
+                    },
+                    gameLeaders: {
+                        scorer: leadingScorer ? {
+                            playerId: leadingScorer.id,
+                            playerName: leadingScorer.name,
+                            points: leadingScorer.stats.pts
+                        } : null,
+                        rebounder: leadingRebounder ? {
+                            playerId: leadingRebounder.id,
+                            playerName: leadingRebounder.name,
+                            rebounds: leadingRebounder.stats.reb
+                        } : null,
+                        assists: leadingAssister ? {
+                            playerId: leadingAssister.id,
+                            playerName: leadingAssister.name,
+                            assists: leadingAssister.stats.ast
+                        } : null
+                    }
+                });
+                
+                // ========== STANDINGS UPDATE WITH DIAGNOSTIC LOGGING ==========
+                try {
+                    console.log('🎯 Starting standings update process...');
+                    console.log('📊 Game data:', {
+                        gameId: currentGame.id,
+                        homeTeam: currentGame.homeTeam,
+                        homeTeamId: currentGame.homeTeam?.id,
+                        awayTeam: currentGame.awayTeam,
+                        awayTeamId: currentGame.awayTeam?.id,
+                        homeScore: homeScore,
+                        awayScore: awayScore,
+                        status: 'completed'
+                    });
+
+                    // Validate we have required data
+                    if (!currentGame.homeTeam?.id || !currentGame.awayTeam?.id) {
+                        console.error('❌ CRITICAL: Missing team IDs!', {
+                            homeTeamId: currentGame.homeTeam?.id,
+                            awayTeamId: currentGame.awayTeam?.id
+                        });
+                        throw new Error('Cannot update standings: missing team IDs');
+                    }
+
+                    if (homeScore === undefined || awayScore === undefined) {
+                        console.error('❌ CRITICAL: Missing scores!', {
+                            homeScore: homeScore,
+                            awayScore: awayScore
+                        });
+                        throw new Error('Cannot update standings: missing scores');
+                    }
+
+                    // Determine winner
+                    const homeWon = homeScore > awayScore;
+                    console.log(`🏆 Winner: ${homeWon ? currentGame.homeTeam.name : currentGame.awayTeam.name}`);
+
+                    // Update home team
+                    console.log(`📝 Updating ${currentGame.homeTeam.name} (${currentGame.homeTeam.id})...`);
+                    const homeTeamRef = db.collection('teams').doc(currentGame.homeTeam.id);
+                    
+                    // Check if team document exists first
+                    const homeTeamDoc = await homeTeamRef.get();
+                    if (!homeTeamDoc.exists) {
+                        console.error(`❌ CRITICAL: Home team document not found!`, {
+                            teamId: currentGame.homeTeam.id,
+                            teamName: currentGame.homeTeam.name
+                        });
+                        throw new Error(`Team document not found: ${currentGame.homeTeam.id}`);
+                    }
+                    
+                    await homeTeamRef.update({
+                        wins: homeWon ? firebase.firestore.FieldValue.increment(1) : firebase.firestore.FieldValue.increment(0),
+                        losses: homeWon ? firebase.firestore.FieldValue.increment(0) : firebase.firestore.FieldValue.increment(1)
+                    });
+                    console.log(`✅ Updated ${currentGame.homeTeam.name} record: ${homeWon ? 'W' : 'L'}`);
+
+                    // Update away team
+                    console.log(`📝 Updating ${currentGame.awayTeam.name} (${currentGame.awayTeam.id})...`);
+                    const awayTeamRef = db.collection('teams').doc(currentGame.awayTeam.id);
+                    
+                    // Check if team document exists first
+                    const awayTeamDoc = await awayTeamRef.get();
+                    if (!awayTeamDoc.exists) {
+                        console.error(`❌ CRITICAL: Away team document not found!`, {
+                            teamId: currentGame.awayTeam.id,
+                            teamName: currentGame.awayTeam.name
+                        });
+                        throw new Error(`Team document not found: ${currentGame.awayTeam.id}`);
+                    }
+                    
+                    await awayTeamRef.update({
+                        wins: homeWon ? firebase.firestore.FieldValue.increment(0) : firebase.firestore.FieldValue.increment(1),
+                        losses: homeWon ? firebase.firestore.FieldValue.increment(1) : firebase.firestore.FieldValue.increment(0)
+                    });
+                    console.log(`✅ Updated ${currentGame.awayTeam.name} record: ${homeWon ? 'L' : 'W'}`);
+
+                    console.log(`✅ Standings updated: ${currentGame.homeTeam.name} ${homeWon ? 'W' : 'L'}, ${currentGame.awayTeam.name} ${homeWon ? 'L' : 'W'}`);
+                    
+                } catch (error) {
+                    console.error('❌ ========== STANDINGS UPDATE FAILED ==========');
+                    console.error('Error type:', error.name);
+                    console.error('Error message:', error.message);
+                    console.error('Error code:', error.code);
+                    console.error('Full error:', error);
+                    console.error('Game data at time of failure:', {
+                        gameId: currentGame.id,
+                        homeTeam: currentGame.homeTeam,
+                        homeTeamId: currentGame.homeTeam?.id,
+                        awayTeam: currentGame.awayTeam,
+                        awayTeamId: currentGame.awayTeam?.id,
+                        homeScore: homeScore,
+                        awayScore: awayScore
+                    });
+                    console.error('============================================');
+                    
+                    // Show warning toast to user
+                    if (typeof showToast === 'function') {
+                        showToast('⚠️ Warning: Game saved but standings may not have updated. Check console for details.', 'warning');
+                    }
+                }
+                // ========== END STANDINGS UPDATE ==========
+                
+                // CRITICAL FIX: Save individual player stats to gameStats subcollection
+                allPlayers = [...currentGame.homeTeam.players, ...currentGame.awayTeam.players];
+                await savePlayerStats(currentGame.id, allPlayers);
+                
+                showToast('✅ Game completed successfully!');
+                
+                // Hide modal
+                hideEndGameModal();
+                
+                // Cleanup and redirect
+                cleanupListeners();
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error completing game:', error);
+                showToast('Error completing game', 'error');
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            cleanupListeners();
+        });
+
+        // ===== ORIGINAL SETUP FUNCTION (to be replaced) =====
+
+        function setupRealtimeListeners_OLD() {
+            if (!currentGame.id) return;
+            
+            // Listen for player additions
+            if (currentGame.homeTeam.id) {
+                db.collection('players')
+                    .where('teamId', '==', currentGame.homeTeam.id)
+                    .onSnapshot(snapshot => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                const playerExists = currentGame.homeTeam.players.find(p => p.id === change.doc.id);
+                                if (!playerExists) {
+                                    const playerData = change.doc.data();
+                                    currentGame.homeTeam.players.push({
+                                        id: change.doc.id,
+                                        name: playerData.name,
+                                        number: playerData.jerseyNumber || 0,
+                                        stats: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, fls: 0 }
+                                    });
+                                    updateTeamDisplay('home');
+                                    showToast(`Player ${playerData.name} added to roster`);
+                                }
+                            }
+                        });
+                    });
+            }
+            
+            if (currentGame.awayTeam.id) {
+                db.collection('players')
+                    .where('teamId', '==', currentGame.awayTeam.id)
+                    .onSnapshot(snapshot => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                const playerExists = currentGame.awayTeam.players.find(p => p.id === change.doc.id);
+                                if (!playerExists) {
+                                    const playerData = change.doc.data();
+                                    currentGame.awayTeam.players.push({
+                                        id: change.doc.id,
+                                        name: playerData.name,
+                                        number: playerData.jerseyNumber || 0,
+                                        stats: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, fls: 0 }
+                                    });
+                                    updateTeamDisplay('away');
+                                    showToast(`Player ${playerData.name} added to roster`);
+                                }
+                            }
+                        });
+                    });
+            }
+        }
+
+        // Update game display
+        function updateGameDisplay() {
+            // Update team names in both score bar and team sections
+            document.getElementById('homeTeamName').textContent = currentGame.homeTeam.name;
+            document.getElementById('awayTeamName').textContent = currentGame.awayTeam.name;
+            document.getElementById('homeTeamNameTop').textContent = currentGame.homeTeam.name;
+            document.getElementById('awayTeamNameTop').textContent = currentGame.awayTeam.name;
+            
+            const gameTeamsEl = document.getElementById('gameTeams');
+            if (gameTeamsEl) {
+                gameTeamsEl.textContent = `${currentGame.homeTeam.name} vs ${currentGame.awayTeam.name}`;
+            }
+            
+            // Update scores
+            updateScores();
+            
+            // Update team displays
+            updateTeamDisplay('home');
+            updateTeamDisplay('away');
+        }
+
+        // Helper function to find player by ID
+        function findPlayerById(playerId) {
+            const homePlayer = currentGame.homeTeam.players.find(p => p.id === playerId);
+            if (homePlayer) {
+                homePlayer.team = 'home';
+                return homePlayer;
+            }
+            
+            const awayPlayer = currentGame.awayTeam.players.find(p => p.id === playerId);
+            if (awayPlayer) {
+                awayPlayer.team = 'away';
+                return awayPlayer;
+            }
+            
+            return null;
+        }
+        
+        // Toggle bench section visibility
+        function toggleBench() {
+            const benchSection = document.getElementById('benchSection');
+            const benchToggle = document.getElementById('benchToggle');
+            const isCollapsed = benchSection.classList.contains('collapsed');
+            
+            if (isCollapsed) {
+                benchSection.classList.remove('collapsed');
+                benchSection.classList.add('expanded');
+                benchToggle.innerHTML = '⬇️ HIDE BENCH';
+                localStorage.setItem('benchExpanded', 'true');
+            } else {
+                benchSection.classList.remove('expanded');
+                benchSection.classList.add('collapsed');
+                updateBenchToggleText();
+                localStorage.setItem('benchExpanded', 'false');
+            }
+        }
+        
+        // Update bench toggle button text with player count
+        function updateBenchToggleText() {
+            const benchToggle = document.getElementById('benchToggle');
+            const homeBench = currentGame?.homeTeam?.players?.slice(5) || [];
+            const awayBench = currentGame?.awayTeam?.players?.slice(5) || [];
+            const totalBenchPlayers = homeBench.length + awayBench.length;
+            benchToggle.innerHTML = `⬆️ SHOW BENCH (${totalBenchPlayers} players)`;
+        }
+        
+        // Initialize bench state from localStorage
+        function initializeBenchState() {
+            const benchExpanded = localStorage.getItem('benchExpanded') === 'true';
+            const benchSection = document.getElementById('benchSection');
+            const benchToggle = document.getElementById('benchToggle');
+            
+            if (benchExpanded) {
+                benchSection.classList.remove('collapsed');
+                benchSection.classList.add('expanded');
+                benchToggle.innerHTML = '⬇️ HIDE BENCH';
+            } else {
+                updateBenchToggleText();
+            }
+        }
+
+        // Update bench numbers display (updated for new compact layout)
+        function updateBenchDisplay(side) {
+            const team = side === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            const BarbarianContainer = document.getElementById(side + 'BenchNumbers');
+            const compactContainer = document.getElementById(side + 'BenchCompact');
+            
+            // Show bench players (players 6+)
+            const benchPlayers = team.players.slice(5);
+            
+            // Update Barbarian container (if it exists)
+            if (BarbarianContainer) {
+                BarbarianContainer.innerHTML = benchPlayers.map(player => {
+                    const isSelected = selectedBenchPlayer && 
+                        selectedBenchPlayer.number === player.number && 
+                        selectedBenchPlayer.team === side;
+                    
+                    return `
+                        <button class="bench-number ${isSelected ? 'selected' : ''}" 
+                                onclick="selectBenchPlayer(${player.number}, '${side}', '${player.name}')">
+                            ${player.number}
+                        </button>
+                    `;
+                }).join('');
+            }
+            
+            // Update compact container
+            if (compactContainer) {
+                compactContainer.innerHTML = benchPlayers.map(player => {
+                    const isSelected = selectedBenchPlayer && 
+                        selectedBenchPlayer.number === player.number && 
+                        selectedBenchPlayer.team === side;
+                    
+                    return `
+                        <span class="compact-bench-number ${isSelected ? 'selected' : ''}" 
+                              onclick="selectBenchPlayer(${player.number}, '${side}', '${player.name}')">
+                            ${player.number}
+                        </span>
+                    `;
+                }).join('');
+            }
+            
+            // Update toggle button text
+            updateBenchToggleText();
+        }
+        
+        // Select bench player for substitution
+        function selectBenchPlayer(number, team, name) {
+            // Clear previous selection
+            if (selectedBenchPlayer) {
+                selectedBenchPlayer = null;
+                // Remove glow from court players
+                document.querySelectorAll('.player-card').forEach(card => {
+                    card.classList.remove('substitution-target');
+                    card.removeAttribute('onclick');
+                });
+            }
+            
+            // Set new selection
+            selectedBenchPlayer = { number, team, name };
+            
+            // Update bench display to show selection
+            updateBenchDisplay(team);
+            
+            // Add glow to court players on same team
+            updateTeamDisplay(team);
+            
+            showToast(`✅ Selected #${number} ${name} for substitution. Tap a court player to swap.`, 'info');
+        }
+        
+        // Execute substitution
+        function executeSubstitution(courtPlayerId) {
+            if (!selectedBenchPlayer) {
+                showToast('No bench player selected', 'warning');
+                return;
+            }
+            
+            const team = selectedBenchPlayer.team === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            
+            // Find court player
+            const courtPlayerIndex = team.players.findIndex(p => p.id === courtPlayerId);
+            if (courtPlayerIndex === -1 || courtPlayerIndex >= 5) {
+                showToast('Invalid court player', 'error');
+                return;
+            }
+            
+            // Find bench player
+            const benchPlayerIndex = team.players.findIndex(p => p.number === selectedBenchPlayer.number);
+            if (benchPlayerIndex === -1 || benchPlayerIndex < 5) {
+                showToast('Invalid bench player', 'error');
+                return;
+            }
+            
+            const courtPlayer = team.players[courtPlayerIndex];
+            const benchPlayer = team.players[benchPlayerIndex];
+            
+            // Confirm if court player has significant stats
+            if (courtPlayer.stats.pts > 10) {
+                if (!confirm(`#${courtPlayer.number} ${courtPlayer.name} has ${courtPlayer.stats.pts} points. Substitute anyway?`)) {
+                    return;
+                }
+            }
+            
+            // Swap players in array (court = 0-4, bench = 5+)
+            [team.players[courtPlayerIndex], team.players[benchPlayerIndex]] = 
+            [team.players[benchPlayerIndex], team.players[courtPlayerIndex]];
+            
+            // Add substitution to undo stacks
+            addToUndoStack(courtPlayer.id, {
+                type: 'substitution',
+                timestamp: Date.now(),
+                swappedWith: benchPlayer.id,
+                previousPosition: 'court'
+            });
+            
+            addToUndoStack(benchPlayer.id, {
+                type: 'substitution',
+                timestamp: Date.now(),
+                swappedWith: courtPlayer.id,
+                previousPosition: 'bench'
+            });
+            
+            // Store team side before clearing selection
+            const teamSide = selectedBenchPlayer?.team || (team === currentGame.homeTeam ? 'home' : 'away');
+            
+            // Clear selection
+            selectedBenchPlayer = null;
+            
+            // Update displays
+            updateTeamDisplay(teamSide);
+            
+            // Save to Firebase
+            saveGameToFirebase();
+            
+            showToast(`✅ #${benchPlayer.number} IN for #${courtPlayer.number} OUT`, 'success');
+        }
+
+        // Update player stat
+
+        // Save entire game state to Firebase (for substitutions)
+        async function saveGameToFirebase() {
+            if (!currentGame.id) return;
+            
+            try {
+                // Calculate current team scores
+                const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + (p.stats.pts || 0), 0);
+                const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + (p.stats.pts || 0), 0);
+                
+                console.log(`🎯 Saving game state: ${currentGame.homeTeam.name} ${homeScore} - ${awayScore} ${currentGame.awayTeam.name}`);
+                
+                // Save basic game state with current scores
+                await db.collection('games').doc(currentGame.id).update({
+                    homeTeam: {
+                        ...currentGame.homeTeam,
+                        players: currentGame.homeTeam.players.map(p => ({
+                            id: p.id,
+                            name: p.name,
+                            number: p.number,
+                            stats: p.stats
+                        }))
+                    },
+                    awayTeam: {
+                        ...currentGame.awayTeam,
+                        players: currentGame.awayTeam.players.map(p => ({
+                            id: p.id,
+                            name: p.name,
+                            number: p.number,
+                            stats: p.stats
+                        }))
+                    },
+                    // CRITICAL: Update current game scores for public dashboard
+                    'score.home': homeScore,
+                    'score.away': awayScore,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                console.log(`✅ Game state saved to Firebase: games/${currentGame.id}`);
+            } catch (error) {
+                console.error('❌ Error saving game state:', error);
+            }
+        }
+
+        // Get stat name
+        function getStatName(stat) {
+            const names = {
+                pts: 'Points',
+                reb: 'Rebounds',
+                ast: 'Assists',
+                stl: 'Steals',
+                blk: 'Blocks',
+                fls: 'Fouls'
+            };
+            return names[stat] || stat;
+        }
+
+        // Show add player modal
+        function showAddPlayerModal(team) {
+            document.getElementById('playerTeam').value = team;
+            document.getElementById('addPlayerModal').classList.add('show');
+            document.getElementById('playerName').focus();
+        }
+
+        // Hide add player modal
+        function hideAddPlayerModal() {
+            document.getElementById('addPlayerModal').classList.remove('show');
+            document.getElementById('addPlayerForm').reset();
+        }
+
+        // Duplicate removed - using the enhanced version above
+
+        // Save game
+        async function saveGame() {
+            if (!currentGame.id) return;
+            
+            try {
+                const batch = db.batch();
+                
+                // Calculate totals
+                const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                
+                // Save game state
+                const gameRef = db.collection('games').doc(currentGame.id);
+                batch.update(gameRef, {
+                    homeScore: homeScore,
+                    awayScore: awayScore,
+                    period: currentGame.period,
+                    status: 'in-progress',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update team stats (points for/against only, not wins/losses)
+                if (currentGame.homeTeam.id && currentGame.awayTeam.id) {
+                    const homeTeamRef = db.collection('teams').doc(currentGame.homeTeam.id);
+                    const awayTeamRef = db.collection('teams').doc(currentGame.awayTeam.id);
+                    
+                    batch.update(homeTeamRef, {
+                        pointsFor: firebase.firestore.FieldValue.increment(homeScore),
+                        pointsAgainst: firebase.firestore.FieldValue.increment(awayScore),
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    batch.update(awayTeamRef, {
+                        pointsFor: firebase.firestore.FieldValue.increment(awayScore),
+                        pointsAgainst: firebase.firestore.FieldValue.increment(homeScore),
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                
+                // Save all player stats - FIXED: Use subcollection pattern
+                for (const player of [...currentGame.homeTeam.players, ...currentGame.awayTeam.players]) {
+                    const statsRef = db.collection('games').doc(currentGame.id)
+                        .collection('gameStats').doc(player.id);
+                    batch.set(statsRef, {
+                        gameId: currentGame.id,
+                        playerId: player.id,
+                        playerName: player.name,
+                        playerNumber: player.number,
+                        teamId: currentGame.homeTeam.players.includes(player)
+                            ? currentGame.homeTeam.id
+                            : currentGame.awayTeam.id,
+                        points: player.stats.pts,
+                        rebounds: player.stats.reb,
+                        assists: player.stats.ast,
+                        steals: player.stats.stl,
+                        blocks: player.stats.blk,
+                        fouls: player.stats.fls,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                }
+                
+                await batch.commit();
+                showToast('Game saved and synced!');
+                
+            } catch (error) {
+                console.error('Error saving game:', error);
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast show ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Load today's games for selection
+
+        // Phase 4.2: Player Search Functionality
+        function filterPlayers(teamSide) {
+            const searchTerm = document.getElementById(teamSide + 'PlayerSearch').value.toLowerCase();
+            const playerCards = document.querySelectorAll(`#${teamSide}Players .player-card-compact`);
+            
+            playerCards.forEach(card => {
+                const playerName = card.querySelector('.player-name-compact').textContent.toLowerCase();
+                const jerseyNum = card.querySelector('.player-number-compact').textContent;
+                
+                if (playerName.includes(searchTerm) || jerseyNum.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Clear search when game loads
+        function clearPlayerSearch() {
+            const homeSearch = document.getElementById('homePlayerSearch');
+            const awaySearch = document.getElementById('awayPlayerSearch');
+            
+            if (homeSearch) {
+                homeSearch.value = '';
+                filterPlayers('home');
+            }
+            if (awaySearch) {
+                awaySearch.value = '';
+                filterPlayers('away');
+            }
+        }
+
+        /* ===================================
+           LEAGUE LOGO LOADING - PHASE 4
+           =================================== */
+
+        // Load League Logo
+        async function loadLeagueLogo() {
+            try {
+                const brandingDoc = await db.collection('settings').doc('branding').get();
+                
+                if (brandingDoc.exists && brandingDoc.data().logoUrl) {
+                    const logoUrl = brandingDoc.data().logoUrl;
+                    console.log('✅ Loading custom logo:', logoUrl);
+                    
+                    // Replace basketball icon with logo
+                    const logoElements = document.querySelectorAll('.logo-icon');
+                    logoElements.forEach(el => {
+                        el.innerHTML = `<img src="${logoUrl}" alt="League Logo" style="max-height: 50px; max-width: 150px; object-fit: contain;">`;
+                    });
+                }
+            } catch (error) {
+                console.log('ℹ️ Using default logo');
+            }
+        }
+
+        // Load logo on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLeagueLogo();
+        });
+
+        console.log('🎨 League Logo Loading System - Phase 4 Complete');
+    </script>
+
+    </div> <!-- End scoring-screen -->
+    
+    </div> <!-- End scorekeeper-container -->
+
+</body>
+</html>
+

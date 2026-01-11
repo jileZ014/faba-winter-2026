@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Suite - Clash of the Barbarians 2026</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #0f172a; 
+            color: white; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        button { 
+            padding: 15px 30px; 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin: 10px; 
+        }
+        button:hover { 
+            background: #2563eb; 
+        }
+        button:disabled {
+            background: #64748b;
+            cursor: not-allowed;
+        }
+        .log { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            height: 600px; 
+            overflow-y: auto; 
+            font-family: monospace; 
+            font-size: 12px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #06b6d4; }
+        .warning { color: #f59e0b; }
+        .test-section {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .result-card {
+            background: #334155;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #64748b;
+        }
+        .result-card.success { border-left-color: #10b981; }
+        .result-card.error { border-left-color: #ef4444; }
+        .result-card.warning { border-left-color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>West Valley Basketball League - Comprehensive Test Suite</h1>
+        <h2>Phase 8.1: Testing All Implemented Functionality</h2>
+        
+        <div class="test-section">
+            <h3>🧪 Test Controls</h3>
+            <button onclick="runAllTests()">🚀 Run All Tests</button>
+            <button onclick="testOrganizations()">🏢 Test Organizations</button>
+            <button onclick="testTeams()">👥 Test Teams Structure</button>
+            <button onclick="testCrossDivisionGames()">⚡ Test Cross-Division Games</button>
+            <button onclick="testStandings()">📊 Test Standings Logic</button>
+            <button onclick="testPlayerLeaders()">🏆 Test Player Leaders</button>
+            <button onclick="testScheduleDisplay()">📅 Test Week-Based Schedule</button>
+            <button onclick="clearLog()">🧹 Clear Log</button>
+        </div>
+        
+        <div id="testResults" class="test-results"></div>
+        
+        <div id="log" class="log">
+            <div class="info">Ready to run comprehensive tests...</div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4QaqS8c0Yl3SlpaCgxA9PxvWAkg3cKRg",
+            authDomain: "az-flight-fall-league---2026.firebaseapp.com",
+            projectId: "az-flight-fall-league---2026",
+            storageBucket: "az-flight-fall-league---2026.firebasestorage.app",
+            messagingSenderId: "370360541933",
+            appId: "1:370360541933:web:53e7f2f4f70bd2b1bcf7a5"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        let testResults = {
+            organizations: { status: 'pending', details: [] },
+            teams: { status: 'pending', details: [] },
+            crossDivision: { status: 'pending', details: [] },
+            standings: { status: 'pending', details: [] },
+            playerLeaders: { status: 'pending', details: [] },
+            schedule: { status: 'pending', details: [] }
+        };
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<div class="info">Log cleared...</div>';
+        }
+        
+        function updateTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '';
+            
+            Object.entries(testResults).forEach(([testName, result]) => {
+                const card = document.createElement('div');
+                card.className = `result-card ${result.status}`;
+                
+                const statusIcon = result.status === 'success' ? '✅' : 
+                                 result.status === 'error' ? '❌' : 
+                                 result.status === 'warning' ? '⚠️' : '⏳';
+                
+                card.innerHTML = `
+                    <h4>${statusIcon} ${testName.toUpperCase()} Test</h4>
+                    <p>Status: ${result.status}</p>
+                    <ul>
+                        ${result.details.map(detail => `<li>${detail}</li>`).join('')}
+                    </ul>
+                `;
+                
+                resultsDiv.appendChild(card);
+            });
+        }
+        
+        async function runAllTests() {
+            log('🚀 Starting comprehensive test suite...', 'info');
+            
+            // Reset results
+            Object.keys(testResults).forEach(key => {
+                testResults[key] = { status: 'pending', details: [] };
+            });
+            updateTestResults();
+            
+            try {
+                await testOrganizations();
+                await testTeams();
+                await testCrossDivisionGames();
+                await testStandings();
+                await testPlayerLeaders();
+                await testScheduleDisplay();
+                
+                const totalTests = Object.keys(testResults).length;
+                const passedTests = Object.values(testResults).filter(r => r.status === 'success').length;
+                const failedTests = Object.values(testResults).filter(r => r.status === 'error').length;
+                const warningTests = Object.values(testResults).filter(r => r.status === 'warning').length;
+                
+                log(`🎉 Test Suite Complete!`, 'success');
+                log(`📊 Results: ${passedTests}/${totalTests} passed, ${failedTests} failed, ${warningTests} warnings`, 'info');
+                
+                if (failedTests === 0) {
+                    log('✅ ALL TESTS PASSED - System ready for production!', 'success');
+                } else {
+                    log('⚠️ Some tests failed - Please review and fix issues before deployment', 'warning');
+                }
+                
+            } catch (error) {
+                log(`❌ Test suite failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testOrganizations() {
+            log('🏢 Testing Organizations Collection...', 'info');
+            
+            try {
+                const snapshot = await db.collection('organizations').get();
+                const details = [];
+                
+                if (snapshot.empty) {
+                    testResults.organizations = { 
+                        status: 'error', 
+                        details: ['No organizations found in database'] 
+                    };
+                    log('❌ No organizations found!', 'error');
+                    updateTestResults();
+                    return;
+                }
+                
+                log(`📋 Found ${snapshot.size} organizations`, 'info');
+                details.push(`Total organizations: ${snapshot.size}`);
+                
+                let multiTeamOrgs = 0;
+                let singleTeamOrgs = 0;
+                let azFlightFound = false;
+                
+                snapshot.forEach(doc => {
+                    const org = doc.data();
+                    
+                    if (org.name === 'AZ Flight') azFlightFound = true;
+                    
+                    if (org.type === 'multi-team') {
+                        multiTeamOrgs++;
+                    } else if (org.type === 'single-team') {
+                        singleTeamOrgs++;
+                    }
+                    
+                    log(`  📁 ${org.name} (${org.type}) - ${org.description || 'No description'}`, 'info');
+                });
+                
+                details.push(`Multi-team organizations: ${multiTeamOrgs}`);
+                details.push(`Single-team organizations: ${singleTeamOrgs}`);
+                details.push(`AZ Flight organization: ${azFlightFound ? 'Found' : 'Missing'}`);
+                
+                if (snapshot.size >= 13 && azFlightFound) {
+                    testResults.organizations = { status: 'success', details };
+                    log('✅ Organizations test passed!', 'success');
+                } else {
+                    testResults.organizations = { status: 'warning', details };
+                    log('⚠️ Organizations test has warnings', 'warning');
+                }
+                
+            } catch (error) {
+                testResults.organizations = { 
+                    status: 'error', 
+                    details: [`Error: ${error.message}`] 
+                };
+                log(`❌ Organizations test failed: ${error.message}`, 'error');
+            }
+            
+            updateTestResults();
+        }
+        
+        async function testTeams() {
+            log('👥 Testing Teams Collection Structure...', 'info');
+            
+            try {
+                const snapshot = await db.collection('teams').get();
+                const details = [];
+                
+                if (snapshot.empty) {
+                    testResults.teams = { 
+                        status: 'error', 
+                        details: ['No teams found in database'] 
+                    };
+                    log('❌ No teams found!', 'error');
+                    updateTestResults();
+                    return;
+                }
+                
+                log(`📋 Found ${snapshot.size} teams`, 'info');
+                details.push(`Total teams: ${snapshot.size}`);
+                
+                let teamsWithOrganizationId = 0;
+                let teamsWithPrimaryDivision = 0;
+                let teamsWithEligibleDivisions = 0;
+                let teamsWithDivisionRecords = 0;
+                
+                const divisionCounts = {};
+                
+                snapshot.forEach(doc => {
+                    const team = doc.data();
+                    
+                    if (team.organizationId) teamsWithOrganizationId++;
+                    if (team.primaryDivision) {
+                        teamsWithPrimaryDivision++;
+                        divisionCounts[team.primaryDivision] = (divisionCounts[team.primaryDivision] || 0) + 1;
+                    }
+                    if (team.eligibleDivisions && Array.isArray(team.eligibleDivisions)) teamsWithEligibleDivisions++;
+                    if (team.divisionRecords && typeof team.divisionRecords === 'object') teamsWithDivisionRecords++;
+                    
+                    log(`  👥 ${team.name} - Org: ${team.organizationId || 'None'} - Division: ${team.primaryDivision || team.division}`, 'info');
+                });
+                
+                details.push(`Teams with organizationId: ${teamsWithOrganizationId}/${snapshot.size}`);
+                details.push(`Teams with primaryDivision: ${teamsWithPrimaryDivision}/${snapshot.size}`);
+                details.push(`Teams with eligibleDivisions: ${teamsWithEligibleDivisions}/${snapshot.size}`);
+                details.push(`Teams with divisionRecords: ${teamsWithDivisionRecords}/${snapshot.size}`);
+                
+                Object.entries(divisionCounts).forEach(([division, count]) => {
+                    details.push(`${division} division: ${count} teams`);
+                });
+                
+                const requiredFieldsComplete = (
+                    teamsWithOrganizationId === snapshot.size &&
+                    teamsWithPrimaryDivision === snapshot.size &&
+                    teamsWithEligibleDivisions === snapshot.size &&
+                    teamsWithDivisionRecords === snapshot.size
+                );
+                
+                if (requiredFieldsComplete) {
+                    testResults.teams = { status: 'success', details };
+                    log('✅ Teams structure test passed!', 'success');
+                } else {
+                    testResults.teams = { status: 'warning', details };
+                    log('⚠️ Some teams missing required fields', 'warning');
+                }
+                
+            } catch (error) {
+                testResults.teams = { 
+                    status: 'error', 
+                    details: [`Error: ${error.message}`] 
+                };
+                log(`❌ Teams test failed: ${error.message}`, 'error');
+            }
+            
+            updateTestResults();
+        }
+        
+        async function testCrossDivisionGames() {
+            log('⚡ Testing Cross-Division Games...', 'info');
+            
+            try {
+                const snapshot = await db.collection('games').get();
+                const details = [];
+                
+                if (snapshot.empty) {
+                    testResults.crossDivision = { 
+                        status: 'warning', 
+                        details: ['No games found in database'] 
+                    };
+                    log('⚠️ No games found!', 'warning');
+                    updateTestResults();
+                    return;
+                }
+                
+                log(`📋 Found ${snapshot.size} games`, 'info');
+                details.push(`Total games: ${snapshot.size}`);
+                
+                let gamesWithCrossDivisionField = 0;
+                let gamesWithCountsForStandings = 0;
+                let gamesWithAffectedDivisions = 0;
+                let crossDivisionGames = 0;
+                let sameDivisionGames = 0;
+                
+                snapshot.forEach(doc => {
+                    const game = doc.data();
+                    
+                    if (typeof game.isCrossDivision === 'boolean') gamesWithCrossDivisionField++;
+                    if (game.countsForStandings) gamesWithCountsForStandings++;
+                    if (game.affectedDivisions && Array.isArray(game.affectedDivisions)) gamesWithAffectedDivisions++;
+                    
+                    if (game.isCrossDivision === true) {
+                        crossDivisionGames++;
+                        log(`  ⚡ Cross-division: ${game.homeTeam || 'Team'} vs ${game.awayTeam || 'Team'} (counts for ${game.countsForStandings})`, 'warning');
+                    } else if (game.isCrossDivision === false) {
+                        sameDivisionGames++;
+                    }
+                });
+                
+                details.push(`Games with isCrossDivision field: ${gamesWithCrossDivisionField}/${snapshot.size}`);
+                details.push(`Games with countsForStandings field: ${gamesWithCountsForStandings}/${snapshot.size}`);
+                details.push(`Games with affectedDivisions field: ${gamesWithAffectedDivisions}/${snapshot.size}`);
+                details.push(`Cross-division games: ${crossDivisionGames}`);
+                details.push(`Same-division games: ${sameDivisionGames}`);
+                
+                const crossDivisionFieldsComplete = (
+                    gamesWithCrossDivisionField === snapshot.size &&
+                    gamesWithCountsForStandings === snapshot.size &&
+                    gamesWithAffectedDivisions === snapshot.size
+                );
+                
+                if (crossDivisionFieldsComplete) {
+                    testResults.crossDivision = { status: 'success', details };
+                    log('✅ Cross-division games test passed!', 'success');
+                } else {
+                    testResults.crossDivision = { status: 'error', details };
+                    log('❌ Some games missing cross-division fields', 'error');
+                }
+                
+            } catch (error) {
+                testResults.crossDivision = { 
+                    status: 'error', 
+                    details: [`Error: ${error.message}`] 
+                };
+                log(`❌ Cross-division games test failed: ${error.message}`, 'error');
+            }
+            
+            updateTestResults();
+        }
+        
+        async function testStandings() {
+            log('📊 Testing Cross-Division Standings Logic...', 'info');
+            
+            try {
+                // Simulate the standings calculation logic
+                const teamsSnapshot = await db.collection('teams').get();
+                const gamesSnapshot = await db.collection('games').get();
+                const details = [];
+                
+                if (teamsSnapshot.empty) {
+                    testResults.standings = { 
+                        status: 'error', 
+                        details: ['No teams found for standings calculation'] 
+                    };
+                    updateTestResults();
+                    return;
+                }
+                
+                const teamsByDivision = {
+                    '4th': [],
+                    '5th': [],
+                    '6th': [],
+                    '7th': [],
+                    '8th': []
+                };
+                
+                // Group teams by division
+                teamsSnapshot.forEach(doc => {
+                    const team = { id: doc.id, ...doc.data() };
+                    const division = team.primaryDivision || team.division;
+                    
+                    if (teamsByDivision[division]) {
+                        teamsByDivision[division].push({
+                            id: team.id,
+                            name: team.name,
+                            wins: 0,
+                            losses: 0
+                        });
+                    }
+                });
+                
+                // Calculate wins/losses using cross-division rules
+                let crossDivisionGamesProcessed = 0;
+                let totalCompletedGames = 0;
+                
+                gamesSnapshot.forEach(doc => {
+                    const game = doc.data();
+                    
+                    if (game.status !== 'completed') return;
+                    totalCompletedGames++;
+                    
+                    if (game.isCrossDivision) crossDivisionGamesProcessed++;
+                    
+                    Object.keys(teamsByDivision).forEach(division => {
+                        if (game.countsForStandings === division) {
+                            const homeTeam = teamsByDivision[division].find(t => t.id === game.homeTeamId);
+                            const awayTeam = teamsByDivision[division].find(t => t.id === game.awayTeamId);
+                            
+                            if (homeTeam || awayTeam) {
+                                const homeWon = game.homeScore > game.awayScore;
+                                
+                                if (homeTeam) {
+                                    if (homeWon) homeTeam.wins++; else homeTeam.losses++;
+                                }
+                                if (awayTeam) {
+                                    if (homeWon) awayTeam.losses++; else awayTeam.wins++;
+                                }
+                            }
+                        }
+                    });
+                });
+                
+                details.push(`Total teams processed: ${teamsSnapshot.size}`);
+                details.push(`Total completed games: ${totalCompletedGames}`);
+                details.push(`Cross-division games processed: ${crossDivisionGamesProcessed}`);
+                
+                Object.entries(teamsByDivision).forEach(([division, teams]) => {
+                    const totalTeams = teams.length;
+                    const teamsWithGames = teams.filter(t => t.wins + t.losses > 0).length;
+                    details.push(`${division} division: ${totalTeams} teams, ${teamsWithGames} with games played`);
+                });
+                
+                if (totalCompletedGames > 0) {
+                    testResults.standings = { status: 'success', details };
+                    log('✅ Standings logic test passed!', 'success');
+                } else {
+                    testResults.standings = { status: 'warning', details };
+                    log('⚠️ No completed games found for standings test', 'warning');
+                }
+                
+            } catch (error) {
+                testResults.standings = { 
+                    status: 'error', 
+                    details: [`Error: ${error.message}`] 
+                };
+                log(`❌ Standings test failed: ${error.message}`, 'error');
+            }
+            
+            updateTestResults();
+        }
+        
+        async function testPlayerLeaders() {
+            log('🏆 Testing Player Leaders Display...', 'info');
+            
+            try {
+                const details = [];
+                let totalPlayersFound = 0;
+                let playersWithStats = 0;
+                
+                // Test each division
+                for (const division of ['4th', '5th', '6th', '7th', '8th']) {
+                    const teamsSnap = await db.collection('teams')
+                        .where('primaryDivision', '==', division)
+                        .get();
+                    
+                    if (teamsSnap.empty) continue;
+                    
+                    const teamIds = [];
+                    teamsSnap.forEach(doc => {
+                        teamIds.push(doc.id);
+                    });
+                    
+                    if (teamIds.length > 0) {
+                        const playersSnap = await db.collection('players')
+                            .where('teamId', 'in', teamIds)
+                            .get();
+                        
+                        totalPlayersFound += playersSnap.size;
+                        
+                        playersSnap.forEach(doc => {
+                            const player = doc.data();
+                            const stats = player.stats || {};
+                            const totalPoints = stats.points || player.totalPoints || player.points || 0;
+                            const totalRebounds = stats.rebounds || player.totalRebounds || player.rebounds || 0;
+                            const totalAssists = stats.assists || player.totalAssists || player.assists || 0;
+                            
+                            if (totalPoints > 0 || totalRebounds > 0 || totalAssists > 0) {
+                                playersWithStats++;
+                            }
+                        });
+                        
+                        details.push(`${division} division: ${playersSnap.size} players`);
+                    } else {
+                        details.push(`${division} division: No teams found`);
+                    }
+                }
+                
+                details.push(`Total players found: ${totalPlayersFound}`);
+                details.push(`Players with stats: ${playersWithStats}`);
+                
+                if (totalPlayersFound > 0) {
+                    testResults.playerLeaders = { status: 'success', details };
+                    log('✅ Player leaders test passed!', 'success');
+                } else {
+                    testResults.playerLeaders = { status: 'warning', details };
+                    log('⚠️ No players found for leaders test', 'warning');
+                }
+                
+            } catch (error) {
+                testResults.playerLeaders = { 
+                    status: 'error', 
+                    details: [`Error: ${error.message}`] 
+                };
+                log(`❌ Player leaders test failed: ${error.message}`, 'error');
+            }
+            
+            updateTestResults();
+        }
+        
+        async function testScheduleDisplay() {
+            log('📅 Testing Week-Based Schedule Display...', 'info');
+            
+            try {
+                const details = [];
+                
+                // Test season weeks configuration
+                const SEASON_WEEKS = [
+                    { week: 1, date: '2026-10-05', label: 'October 5, 2026' },
+                    { week: 2, date: '2026-10-12', label: 'October 12, 2026' },
+                    { week: 3, date: '2026-10-19', label: 'October 19, 2026' },
+                    { week: 4, date: '2026-10-26', label: 'October 26, 2026' },
+                    { week: 5, date: '2026-11-02', label: 'November 2, 2026' },
+                    { week: 6, date: '2026-11-09', label: 'November 9, 2026' },
+                    { week: 7, date: '2026-11-16', label: 'November 16, 2026' },
+                    { week: 8, date: '2026-11-23', label: 'November 23, 2026 - PLAYOFFS' }
+                ];
+                
+                details.push(`Season weeks configured: ${SEASON_WEEKS.length}`);
+                
+                // Test games with scheduledFor field
+                const gamesSnapshot = await db.collection('games').get();
+                let gamesWithScheduledFor = 0;
+                let gamesInSeasonRange = 0;
+                
+                const seasonStart = new Date('2026-10-05');
+                const seasonEnd = new Date('2026-11-30');
+                
+                gamesSnapshot.forEach(doc => {
+                    const game = doc.data();
+                    
+                    if (game.scheduledFor) {
+                        gamesWithScheduledFor++;
+                        
+                        const gameDate = game.scheduledFor.toDate ? game.scheduledFor.toDate() : new Date(game.scheduledFor);
+                        if (gameDate >= seasonStart && gameDate <= seasonEnd) {
+                            gamesInSeasonRange++;
+                        }
+                    }
+                });
+                
+                details.push(`Total games: ${gamesSnapshot.size}`);
+                details.push(`Games with scheduledFor field: ${gamesWithScheduledFor}`);
+                details.push(`Games in season range: ${gamesInSeasonRange}`);
+                
+                if (gamesWithScheduledFor > 0) {
+                    testResults.schedule = { status: 'success', details };
+                    log('✅ Schedule display test passed!', 'success');
+                } else {
+                    testResults.schedule = { status: 'warning', details };
+                    log('⚠️ No games with scheduledFor field found', 'warning');
+                }
+                
+            } catch (error) {
+                testResults.schedule = { 
+                    status: 'error', 
+                    details: [`Error: ${error.message}`] 
+                };
+                log(`❌ Schedule display test failed: ${error.message}`, 'error');
+            }
+            
+            updateTestResults();
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            log('🧪 Comprehensive Test Suite Ready', 'info');
+            log('📋 Click "Run All Tests" to validate all functionality', 'info');
+            updateTestResults();
+        });
+    </script>
+</body>
+</html>

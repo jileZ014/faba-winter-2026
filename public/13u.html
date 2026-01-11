@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13U (7th) Division - Clash of the Barbarians 2026</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="13U (7th) Division of Clash of the Barbarians 2026 - Arizona's premier youth basketball tournament.">
+    <meta name="keywords" content="basketball, 13U, 7th grade, January 10 2026, youth sports, Barbarian Sports">
+    <meta name="author" content="Barbarian Sports">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="13U (7th) Division - Clash of the Barbarians 2026">
+    <meta property="og:description" content="Follow the 13U (7th) Division games, standings, and player statistics in Arizona's premier youth basketball tournament.">
+    <meta property="og:url" content="https://cotb26.gametriq.com/13u.html">
+    <meta property="og:image" content="https://cotb26.gametriq.com/images/barbarian-logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Clash of the Barbarians 2026 Stylesheets -->
+    <link rel="stylesheet" href="css/legacy-theme-blue.css">
+</head>
+<body data-page="division" data-division="13u">
+
+    <!-- Mobile Nav Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-section">
+                <img src="images/barbarian-logo.png" alt="Barbarian Sports" class="site-logo">
+                <div class="site-title">
+                    <h1>Clash of the Barbarians 2026</h1>
+                    <p class="site-tagline">Warrior Tournament Series</p>
+                </div>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="10u.html">10U (4TH)</a></li>
+                    <li><a href="11u.html">11U (5TH)</a></li>
+                    <li><a href="12u.html">12U (6TH)</a></li>
+                    <li><a href="13u.html" class="active">13U (7TH)</a></li>
+                    <li><a href="14u.html">14U (8TH)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="index.html">&larr; Back to Main Page</a>
+        </div>
+
+        <div class="page-title">
+            <h1>13U (7TH) DIVISION</h1>
+        </div>
+
+        <!-- Venue Information -->
+        <section class="section venue-info" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid #FFD700; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: #FFD700; margin-bottom: 10px;">Venue: Griffith Elementary</h3>
+            <p style="color: #fff;">4505 E Palm Ln, Phoenix, AZ 85007</p>
+            <p style="color: #aaa; font-size: 14px; margin-top: 10px;">Court 2 - All 13U games played here</p>
+        </section>
+
+        <!-- West Valley Style Ticker -->
+        <div class="ticker-wrapper">
+            <div class="ticker-content">
+                <div class="ticker-track">
+                    <!-- Dynamic content loaded by ticker.js -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Filter Banner (hidden by default) -->
+        <div id="filterBanner" class="filter-banner" style="display: none;">
+            <span class="filter-text">Filtered by: <strong id="filterTeamName"></strong></span>
+            <button id="clearFilter" class="clear-filter-btn">Clear</button>
+        </div>
+
+        <!-- 1. This Week's Games -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Tournament Schedule</h2>
+            </div>
+            <div id="thisWeekGames">
+                <p>Loading games...</p>
+            </div>
+        </section>
+
+        <!-- 2. Division Leaders (Top 5) -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Division Leaders</h2>
+            </div>
+            <p style="color: #888; text-align: center; padding: 40px; font-size: 16px;">
+                Player stats will be updated during the tournament on January 10, 2026
+            </p>
+        </section>
+
+        <!-- 3. Division Standings -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Pool Play Standings</h2>
+            </div>
+            <div class="standings-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team</th>
+                            <th>W</th>
+                            <th>L</th>
+                            <th>PCT</th>
+                            <th>PF</th>
+                            <th>PA</th>
+                            <th>DIFF</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standingsBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 2rem;">Loading standings...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. Past Results (at bottom) -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Results</h2>
+            </div>
+            <p style="color: #888; text-align: center; padding: 40px; font-size: 16px;">
+                Results will appear here after games are completed on January 10, 2026
+            </p>
+            <div id="pastResults" style="display: none;">
+                <p>Loading results...</p>
+            </div>
+        </section>
+
+        <div class="breadcrumb">
+            <a href="index.html">&larr; Back to Main Page</a>
+        </div>
+    </main>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Division-specific configuration
+        const DIVISION = '13U (7th)';
+        const DIVISION_NAME = '13U (7th)';
+
+        console.log(`Loading ${DIVISION_NAME} Division Page`);
+
+        window.DIVISION_CONFIG = {
+            id: DIVISION,
+            name: DIVISION_NAME,
+            displayName: '13U (7TH)'
+        };
+
+        // Load schedule and standings for this division
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log(`Loading data for ${DIVISION}`);
+
+            try {
+                const gamesSnapshot = await db.collection('games').get();
+                const games = [];
+                gamesSnapshot.forEach(doc => {
+                    const gameData = { id: doc.id, ...doc.data() };
+                    if (gameData.division === DIVISION) {
+                        games.push(gameData);
+                    }
+                });
+                games.sort((a, b) => {
+                    const timeA = a.scheduledFor?.toDate() || new Date(a.scheduledFor || '');
+                    const timeB = b.scheduledFor?.toDate() || new Date(b.scheduledFor || '');
+                    return timeA - timeB;
+                });
+                renderGradeSchedule(games);
+            } catch (error) {
+                console.error('Error loading schedule:', error);
+                document.getElementById('thisWeekGames').innerHTML =
+                    '<p style="color: #888; text-align: center;">Error loading schedule</p>';
+            }
+
+            try {
+                const teamsSnapshot = await db.collection('teams')
+                    .where('division', '==', DIVISION)
+                    .get();
+                const teams = [];
+                teamsSnapshot.forEach(doc => {
+                    teams.push({ id: doc.id, ...doc.data() });
+                });
+                renderGradeStandings(teams);
+            } catch (error) {
+                console.error('Error loading standings:', error);
+                document.getElementById('standingsBody').innerHTML =
+                    '<tr><td colspan="8" style="text-align: center;">Error loading standings</td></tr>';
+            }
+        });
+
+        function renderGradeSchedule(games) {
+            const container = document.getElementById('thisWeekGames');
+            if (games.length === 0) {
+                container.innerHTML = '<p style="color: #888; text-align: center;">No games scheduled for this division</p>';
+                return;
+            }
+            const poolGames = games.filter(g => g.gameType === 'Pool Play');
+            const bracketGames = games.filter(g => g.gameType === 'Bracket');
+            const championshipGames = games.filter(g => g.gameType === 'Championship');
+            let html = '';
+            if (poolGames.length > 0) {
+                html += '<h3>Pool Play</h3><div class="games-grid">';
+                html += poolGames.map(game => createGradeGameCard(game)).join('');
+                html += '</div>';
+            }
+            if (bracketGames.length > 0) {
+                html += '<h3>Bracket Play</h3><div class="games-grid">';
+                html += bracketGames.map(game => createGradeGameCard(game)).join('');
+                html += '</div>';
+            }
+            if (championshipGames.length > 0) {
+                html += '<h3>Championship</h3><div class="games-grid">';
+                html += championshipGames.map(game => createGradeGameCard(game)).join('');
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function createGradeGameCard(game) {
+            const homeName = typeof game.homeTeam === 'object'
+                ? (game.homeTeam?.name || game.homeTeamName || 'TBD')
+                : (game.homeTeam || game.homeTeamName || 'TBD');
+            const awayName = typeof game.awayTeam === 'object'
+                ? (game.awayTeam?.name || game.awayTeamName || 'TBD')
+                : (game.awayTeam || game.awayTeamName || 'TBD');
+            const gameLabel = game.gameLabel || '';
+            return `
+                <div class="game-card">
+                    <div class="game-info">
+                        <span class="game-time">${game.time || ''}</span>
+                        <span class="game-court">${game.court || ''}</span>
+                        ${gameLabel ? `<span class="game-label">${gameLabel}</span>` : ''}
+                    </div>
+                    <div class="game-teams">
+                        <span class="team-name">${homeName}</span>
+                        <span class="vs">vs</span>
+                        <span class="team-name">${awayName}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderGradeStandings(teams) {
+            const tbody = document.getElementById('standingsBody');
+            if (teams.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No teams in this division</td></tr>';
+                return;
+            }
+            teams.sort((a, b) => {
+                if ((b.wins || 0) !== (a.wins || 0)) return (b.wins || 0) - (a.wins || 0);
+                return ((b.pointsFor || 0) - (b.pointsAgainst || 0)) - ((a.pointsFor || 0) - (a.pointsAgainst || 0));
+            });
+            tbody.innerHTML = teams.map((team, index) => {
+                const wins = team.wins || 0;
+                const losses = team.losses || 0;
+                const pf = team.pointsFor || 0;
+                const pa = team.pointsAgainst || 0;
+                const pct = (wins + losses) === 0 ? '.000' : (wins / (wins + losses)).toFixed(3).replace('0.', '.');
+                return `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${team.name}</td>
+                        <td>${wins}</td>
+                        <td>${losses}</td>
+                        <td>${pct}</td>
+                        <td>${pf}</td>
+                        <td>${pa}</td>
+                        <td>${pf - pa}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    </script>
+
+    <!-- Application Scripts -->
+    <script src="config/app.config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app-final.js"></script>
+    <script src="js/division-filter.js"></script>
+    <script src="js/ticker.js"></script>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <img src="images/barbarian-logo.png" alt="Barbarian Sports" class="footer-logo">
+            <p class="footer-tagline">Warrior Tournament Series</p>
+            <div class="footer-links">
+                <a href="admin-scoring.html">Admin</a>
+            </div>
+            <p class="copyright">&copy; 2026 Barbarian Sports. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Import - Clash of the Barbarians 2026</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #000; color: #0f0; }
+        .log { margin: 5px 0; }
+        .success { color: #0f0; }
+        .error { color: #f00; }
+        .info { color: #ff0; }
+        button { padding: 10px 20px; font-size: 16px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🏀 Clash of the Barbarians 2026 - Data Import</h1>
+    <button onclick="importAllData()">Import All Data</button>
+    <div id="log"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = new Date().toLocaleTimeString() + ' - ' + message;
+            document.getElementById('log').appendChild(div);
+            console.log(message);
+        }
+
+        // All teams from QuickScores anaBarbarian Sportsis
+        const allTeams = [
+            // 4th Grade Co-Ed (10 teams)
+            { name: 'FOE Elite', division: '4th Grade', wins: 1, losses: 0 },
+            { name: 'PHX Fire', division: '4th Grade', wins: 1, losses: 0 },
+            { name: 'Zone 6', division: '4th Grade', wins: 1, losses: 1 },
+            { name: 'AYB Girls', division: '4th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Flight', division: '4th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Barbarian', division: '4th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Rise', division: '4th Grade', wins: 0, losses: 0 },
+            { name: 'Jump Athletic', division: '4th Grade', wins: 0, losses: 0 },
+            { name: 'Baller Central Girls', division: '4th Grade', wins: 0, losses: 1 },
+            { name: 'Dime Academy', division: '4th Grade', wins: 0, losses: 2 },
+            
+            // 5th Grade Boys (10 teams)
+            { name: 'Phenoms', division: '5th Grade', wins: 1, losses: 0 },
+            { name: 'PHX Fire', division: '5th Grade', wins: 1, losses: 0 },
+            { name: 'AZ Flight', division: '5th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Rise', division: '5th Grade', wins: 0, losses: 0 },
+            { name: 'Hoop Code', division: '5th Grade', wins: 0, losses: 0 },
+            { name: 'Jump Athletic East', division: '5th Grade', wins: 0, losses: 0 },
+            { name: 'Jump Athletic West', division: '5th Grade', wins: 0, losses: 0 },
+            { name: 'Valley Hoopers', division: '5th Grade', wins: 0, losses: 0 },
+            { name: 'Zone 6 Black', division: '5th Grade', wins: 0, losses: 1 },
+            { name: 'Zone 6 Red', division: '5th Grade', wins: 0, losses: 1 },
+            
+            // 7th Grade Boys (12 teams)
+            { name: 'Blue Chip Elite UA Future Black', division: '7th Grade', wins: 2, losses: 0 },
+            { name: 'AZ Finest', division: '7th Grade', wins: 1, losses: 0 },
+            { name: 'Blue Chip Elite UA Future Green', division: '7th Grade', wins: 1, losses: 1 },
+            { name: '6zero2 Sports', division: '7th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Flight', division: '7th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Barbarian', division: '7th Grade', wins: 0, losses: 0 },
+            { name: 'Hoop Code', division: '7th Grade', wins: 0, losses: 0 },
+            { name: 'Valley Hoopers', division: '7th Grade', wins: 0, losses: 0 },
+            { name: 'Zone 6', division: '7th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Rise PJ', division: '7th Grade', wins: 0, losses: 1 },
+            { name: 'PHX Fire', division: '7th Grade', wins: 0, losses: 1 },
+            { name: 'Humble Savage 2031', division: '7th Grade', wins: 0, losses: 1 },
+            
+            // 8th Grade Boys (16 teams)
+            { name: 'Skilled Game White', division: '8th Grade', wins: 2, losses: 0 },
+            { name: 'Dime Academy Red', division: '8th Grade', wins: 2, losses: 0 },
+            { name: 'PHX Fire', division: '8th Grade', wins: 1, losses: 0 },
+            { name: 'Dime Academy White', division: '8th Grade', wins: 1, losses: 1 },
+            { name: 'Forge Basketball Club', division: '8th Grade', wins: 1, losses: 1 },
+            { name: 'AZ Flight Grit', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Hoop Hounds', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Barbarian Gold', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'AZ Rise - Tasby', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'Basketball Factory', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'PBC 13U', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'Zone 6', division: '8th Grade', wins: 0, losses: 0 },
+            { name: 'Humble Savage 2030', division: '8th Grade', wins: 0, losses: 1 },
+            { name: 'AZ Flight Grind', division: '8th Grade', wins: 0, losses: 1 },
+            { name: 'AZ Phenoms', division: '8th Grade', wins: 0, losses: 1 },
+            { name: 'NV Jags', division: '8th Grade', wins: 0, losses: 2 }
+        ];
+
+        // Week 1 Games (November 15, 2026)
+        const week1Games = [
+            // 4th Grade
+            { 
+                division: '4th Grade',
+                team1: 'Dime Academy', 
+                team2: 'FOE Elite',
+                score1: 20, 
+                score2: 44,
+                date: new Date('2026-11-15T10:00:00'),
+                time: '10:00 AM',
+                location: 'Court 1',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '4th Grade',
+                team1: 'Zone 6',
+                team2: 'Dime Academy',
+                score1: 14,
+                score2: 8,
+                date: new Date('2026-11-15T11:00:00'),
+                time: '11:00 AM',
+                location: 'Court 1',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '4th Grade',
+                team1: 'PHX Fire',
+                team2: 'Zone 6',
+                score1: 27,
+                score2: 15,
+                date: new Date('2026-11-15T12:00:00'),
+                time: '12:00 PM',
+                location: 'Court 1',
+                status: 'completed',
+                week: 1
+            },
+            
+            // 5th Grade
+            { 
+                division: '5th Grade',
+                team1: 'Phenoms',
+                team2: 'Zone 6 Black',
+                score1: 34,
+                score2: 17,
+                date: new Date('2026-11-15T10:00:00'),
+                time: '10:00 AM',
+                location: 'Court 2',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '5th Grade',
+                team1: 'PHX Fire',
+                team2: 'Zone 6 Red',
+                score1: 42,
+                score2: 25,
+                date: new Date('2026-11-15T11:00:00'),
+                time: '11:00 AM',
+                location: 'Court 2',
+                status: 'completed',
+                week: 1
+            },
+            
+            // 7th Grade
+            { 
+                division: '7th Grade',
+                team1: 'AZ Rise PJ',
+                team2: 'Blue Chip Elite UA Future Green',
+                score1: 36,
+                score2: 38,
+                date: new Date('2026-11-15T10:00:00'),
+                time: '10:00 AM',
+                location: 'Court 3',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '7th Grade',
+                team1: 'Humble Savage 2031',
+                team2: 'Blue Chip Elite UA Future Black',
+                score1: 19,
+                score2: 65,
+                date: new Date('2026-11-15T11:00:00'),
+                time: '11:00 AM',
+                location: 'Court 3',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '7th Grade',
+                team1: 'Blue Chip Elite UA Future Green',
+                team2: 'AZ Finest',
+                score1: 51,
+                score2: 74,
+                date: new Date('2026-11-15T12:00:00'),
+                time: '12:00 PM',
+                location: 'Court 3',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '7th Grade',
+                team1: 'PHX Fire',
+                team2: 'Blue Chip Elite UA Future Black',
+                score1: 43,
+                score2: 60,
+                date: new Date('2026-11-15T13:00:00'),
+                time: '1:00 PM',
+                location: 'Court 3',
+                status: 'completed',
+                week: 1
+            },
+            
+            // 8th Grade
+            { 
+                division: '8th Grade',
+                team1: 'PHX Fire',
+                team2: 'Humble Savage 2030',
+                score1: 48,
+                score2: 40,
+                date: new Date('2026-11-15T10:00:00'),
+                time: '10:00 AM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '8th Grade',
+                team1: 'AZ Phenoms',
+                team2: 'Dime Academy Red',
+                score1: 28,
+                score2: 63,
+                date: new Date('2026-11-15T11:00:00'),
+                time: '11:00 AM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '8th Grade',
+                team1: 'Forge Basketball Club',
+                team2: 'Dime Academy Red',
+                score1: 28,
+                score2: 56,
+                date: new Date('2026-11-15T12:00:00'),
+                time: '12:00 PM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '8th Grade',
+                team1: 'NV Jags',
+                team2: 'Dime Academy White',
+                score1: 23,
+                score2: 48,
+                date: new Date('2026-11-15T13:00:00'),
+                time: '1:00 PM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '8th Grade',
+                team1: 'NV Jags',
+                team2: 'Forge Basketball Club',
+                score1: 39,
+                score2: 68,
+                date: new Date('2026-11-15T14:00:00'),
+                time: '2:00 PM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '8th Grade',
+                team1: 'Dime Academy White',
+                team2: 'Skilled Game White',
+                score1: 23,
+                score2: 66,
+                date: new Date('2026-11-15T15:00:00'),
+                time: '3:00 PM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            },
+            { 
+                division: '8th Grade',
+                team1: 'AZ Flight Grind',
+                team2: 'Skilled Game White',
+                score1: 24,
+                score2: 51,
+                date: new Date('2026-11-15T16:00:00'),
+                time: '4:00 PM',
+                location: 'Court 4',
+                status: 'completed',
+                week: 1
+            }
+        ];
+
+        async function importAllData() {
+            log('🏀 IMPORTING Clash of the Barbarians 2026 DATA', 'info');
+            
+            try {
+                // STEP 1: Create Divisions
+                log('📋 Creating divisions...', 'info');
+                const divisions = ['3rd Grade', '4th Grade', '5th Grade', '7th Grade', '8th Grade', '7th-8th Girls'];
+                
+                for (const division of divisions) {
+                    await db.collection('divisions').doc(division).set({
+                        name: division,
+                        active: true,
+                        season: '2026 Winter',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                log(`✅ Created ${divisions.length} divisions`, 'success');
+                
+                // STEP 2: Import Teams
+                log('🏀 Importing teams...', 'info');
+                
+                for (const team of allTeams) {
+                    const teamData = {
+                        name: team.name,
+                        division: team.division,
+                        wins: team.wins,
+                        losses: team.losses,
+                        pointsFor: 0,
+                        pointsAgainst: 0,
+                        gamesPlayed: team.wins + team.losses,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    await db.collection('teams').add(teamData);
+                }
+                
+                log(`✅ Imported ${allTeams.length} teams`, 'success');
+                
+                // STEP 3: Import Games
+                log('🎮 Importing Week 1 games...', 'info');
+                
+                for (const game of week1Games) {
+                    const gameData = {
+                        division: game.division,
+                        team1: game.team1,
+                        team2: game.team2,
+                        score1: game.score1,
+                        score2: game.score2,
+                        date: game.date,
+                        time: game.time,
+                        location: game.location,
+                        status: game.status,
+                        week: game.week,
+                        season: '2026 Winter',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    await db.collection('games').add(gameData);
+                }
+                
+                log(`✅ Imported ${week1Games.length} Week 1 games`, 'success');
+                
+                log('═══════════════════════════════════════════════════', 'success');
+                log('✅ DATA IMPORT COMPLETE!', 'success');
+                log('═══════════════════════════════════════════════════', 'success');
+                log(`📊 Total Teams: ${allTeams.length}`, 'success');
+                log(`🎮 Total Games: ${week1Games.length}`, 'success');
+                log(`📋 Total Divisions: ${divisions.length}`, 'success');
+                log('', 'info');
+                log('🌐 Visit https://cotb26.netlify.app/', 'success');
+                log('   Schedule and standings should now display!', 'success');
+                
+            } catch (error) {
+                log(`❌ Error importing data: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

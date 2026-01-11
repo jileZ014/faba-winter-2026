@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scorekeeper Dashboard - AZ Flight Basketball League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* PROFESSIONAL SCOREKEEPER STYLES */
+        :root {
+            --primary-blue: #3b82f6;
+            --primary-blue-dark: #2563eb;
+            --primary-blue-light: #60a5fa;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --surface-hover: #475569;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #475569;
+            --border-light: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Styles */
+        .dashboard-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            letter-spacing: 2px;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--surface-hover);
+            color: var(--primary-blue);
+        }
+
+        .btn-end-game {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-end-game:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Game Info Section */
+        .game-info {
+            text-align: center;
+            padding: 2rem 0;
+            background: var(--surface);
+            border-radius: 16px;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .game-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .current-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .score-divider {
+            color: var(--text-muted);
+        }
+
+        .period-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .period-selector {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* Teams Container */
+        .teams-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Team Section */
+        .team-section {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .team-header h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .team-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .team-fouls {
+            background: var(--surface);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .fouls-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .fouls-count {
+            color: var(--danger);
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        .btn-add-player {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-player:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* Players List */
+        .players-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .player-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-blue);
+        }
+
+        .player-card.warning {
+            border-color: var(--warning);
+            background: linear-gradient(135deg, var(--surface), rgba(245, 158, 11, 0.05));
+        }
+
+        .player-card.fouled-out {
+            border-color: var(--danger);
+            background: linear-gradient(135deg, var(--surface), rgba(239, 68, 68, 0.05));
+            opacity: 0.7;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-number {
+            background: var(--primary-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        .player-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .foul-status {
+            background: var(--danger);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Player Stats Grid */
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.75rem;
+        }
+
+        .stat-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-group-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-btn {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 32px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-btn:hover {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .stat-btn.plus-three {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-color: #7c3aed;
+            color: white;
+            width: 36px;
+            font-weight: 900;
+        }
+
+        .stat-btn.plus-three:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            transform: scale(1.1);
+        }
+
+        .stat-btn.plus-two {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            width: 36px;
+            font-weight: 900;
+        }
+
+        .stat-btn.plus-two:hover {
+            background: #059669;
+            transform: scale(1.1);
+        }
+
+        .stat-btn.plus-one {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            width: 36px;
+            font-weight: 900;
+        }
+
+        .stat-btn.plus-one:hover {
+            background: var(--primary-blue-dark);
+            transform: scale(1.1);
+        }
+
+        .stat-value {
+            font-weight: 900;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            min-width: 30px;
+            text-align: center;
+            margin: 0.25rem 0;
+        }
+
+        /* Actions */
+        .scorekeeper-actions {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Add Player Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-submit {
+            flex: 1;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover {
+            background: var(--surface-hover);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 10001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .teams-container {
+                grid-template-columns: 1fr;
+            }
+
+            .player-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .current-score {
+                font-size: 3rem;
+            }
+
+            .player-stats {
+                grid-template-columns: repeat(3, 1fr);
+                font-size: 0.9rem;
+            }
+
+            .stat-btn {
+                width: 28px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <nav class="dashboard-nav">
+                <div class="logo">
+                    <i class="fas fa-basketball-ball"></i>
+                    <div class="brand-text">
+                        <h1>AZ FLIGHT</h1>
+                        <span>LIVE SCORING</span>
+                    </div>
+                </div>
+                <div class="nav-controls">
+                    <button class="btn-end-game" onclick="endGame()">
+                        <i class="fas fa-stop"></i> END GAME
+                    </button>
+                    <button class="btn-back" onclick="window.location.href='/'">
+                        <i class="fas fa-arrow-left"></i> EXIT
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Game Info -->
+        <div class="game-info">
+            <h2 id="gameTeams">SELECT GAME TO START</h2>
+            <div class="current-score">
+                <span id="homeScore">0</span>
+                <span class="score-divider">-</span>
+                <span id="awayScore">0</span>
+            </div>
+            <div class="period-info">
+                <select class="period-selector" id="periodSelector" onchange="updatePeriod()">
+                    <option value="Q1">Quarter 1</option>
+                    <option value="Q2">Quarter 2</option>
+                    <option value="Q3">Quarter 3</option>
+                    <option value="Q4">Quarter 4</option>
+                    <option value="OT">Overtime</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Teams Container -->
+        <div class="teams-container">
+            <!-- Home Team -->
+            <div class="team-section">
+                <div class="team-header">
+                    <h3 id="homeTeamName">HOME TEAM</h3>
+                    <div class="team-controls">
+                        <div class="team-fouls">
+                            <span class="fouls-label">TEAM FOULS</span>
+                            <span class="fouls-count" id="homeTeamFouls">0</span>
+                        </div>
+                        <button class="btn-add-player" onclick="showAddPlayerModal('home')">
+                            <i class="fas fa-user-plus"></i> ADD
+                        </button>
+                    </div>
+                </div>
+                <div class="players-list" id="homePlayers">
+                    <!-- Players will be populated here -->
+                </div>
+            </div>
+
+            <!-- Away Team -->
+            <div class="team-section">
+                <div class="team-header">
+                    <h3 id="awayTeamName">AWAY TEAM</h3>
+                    <div class="team-controls">
+                        <div class="team-fouls">
+                            <span class="fouls-label">TEAM FOULS</span>
+                            <span class="fouls-count" id="awayTeamFouls">0</span>
+                        </div>
+                        <button class="btn-add-player" onclick="showAddPlayerModal('away')">
+                            <i class="fas fa-user-plus"></i> ADD
+                        </button>
+                    </div>
+                </div>
+                <div class="players-list" id="awayPlayers">
+                    <!-- Players will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="scorekeeper-actions">
+            <div class="action-buttons">
+                <button class="btn-save" onclick="saveGame()">
+                    <i class="fas fa-save"></i> SAVE & SYNC
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Player Modal -->
+    <div id="addPlayerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Player</h3>
+                <button class="modal-close" onclick="hideAddPlayerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addPlayerForm" onsubmit="addNewPlayer(event)">
+                <div class="form-group">
+                    <label for="playerName">Player Name</label>
+                    <input type="text" id="playerName" required placeholder="Enter player name">
+                </div>
+                <div class="form-group">
+                    <label for="playerNumber">Jersey Number</label>
+                    <input type="number" id="playerNumber" required min="0" max="99" placeholder="00">
+                </div>
+                <input type="hidden" id="playerTeam" value="">
+                <div class="modal-actions">
+                    <button type="submit" class="btn-submit">Add Player</button>
+                    <button type="button" class="btn-cancel" onclick="hideAddPlayerModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+    apiKey: "AIzaSyCRo89Z-QYHHDWAjL60nyQ9otRju0m3NrI",
+    authDomain: "az-flight-fall-2025.firebaseapp.com",
+    projectId: "az-flight-fall-2025",
+    storageBucket: "az-flight-fall-2025.firebasestorage.app",
+    messagingSenderId: "1095331867257",
+    appId: "1:1095331867257:web:795836818d076851fc02a8"
+};
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Game State
+        let currentGame = {
+            id: null,
+            homeTeam: {
+                id: null,
+                name: 'Home Team',
+                players: [],
+                fouls: 0
+            },
+            awayTeam: {
+                id: null,
+                name: 'Away Team',
+                players: [],
+                fouls: 0
+            },
+            period: 'Q1',
+            startTime: null
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGameFromURL();
+            setupRealtimeListeners();
+        });
+
+        // Load game from URL parameters
+        function loadGameFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameId = urlParams.get('gameId');
+            
+            if (gameId) {
+                loadGame(gameId);
+            } else {
+                // Load today's games for selection
+                loadTodaysGames();
+            }
+        }
+
+        // Load specific game
+        async function loadGame(gameId) {
+            try {
+                const gameDoc = await db.collection('games').doc(gameId).get();
+                if (gameDoc.exists) {
+                    const gameData = gameDoc.data();
+                    currentGame.id = gameId;
+                    
+                    // Load teams
+                    await loadTeam(gameData.homeTeamId, 'home');
+                    await loadTeam(gameData.awayTeamId, 'away');
+                    
+                    // Update display
+                    updateGameDisplay();
+                    showToast('Game loaded successfully!');
+                }
+            } catch (error) {
+                console.error('Error loading game:', error);
+                showToast('Error loading game', 'error');
+            }
+        }
+
+        // Load team and players
+        async function loadTeam(teamId, side) {
+            try {
+                const teamDoc = await db.collection('teams').doc(teamId).get();
+                if (teamDoc.exists) {
+                    const teamData = teamDoc.data();
+                    const team = side === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+                    
+                    team.id = teamId;
+                    team.name = teamData.name;
+                    
+                    // Load players
+                    const playersSnapshot = await db.collection('players')
+                        .where('teamId', '==', teamId)
+                        .get();
+                    
+                    team.players = [];
+                    playersSnapshot.forEach(doc => {
+                        const playerData = doc.data();
+                        team.players.push({
+                            id: doc.id,
+                            name: playerData.name,
+                            number: playerData.jerseyNumber || 0,
+                            stats: {
+                                pts: 0,
+                                reb: 0,
+                                ast: 0,
+                                stl: 0,
+                                blk: 0,
+                                fls: 0
+                            }
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading team:', error);
+            }
+        }
+
+        // Setup real-time listeners
+        function setupRealtimeListeners() {
+            if (!currentGame.id) return;
+            
+            // Listen for player additions
+            if (currentGame.homeTeam.id) {
+                db.collection('players')
+                    .where('teamId', '==', currentGame.homeTeam.id)
+                    .onSnapshot(snapshot => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                const playerExists = currentGame.homeTeam.players.find(p => p.id === change.doc.id);
+                                if (!playerExists) {
+                                    const playerData = change.doc.data();
+                                    currentGame.homeTeam.players.push({
+                                        id: change.doc.id,
+                                        name: playerData.name,
+                                        number: playerData.jerseyNumber || 0,
+                                        stats: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, fls: 0 }
+                                    });
+                                    updateTeamDisplay('home');
+                                    showToast(`Player ${playerData.name} added to roster`);
+                                }
+                            }
+                        });
+                    });
+            }
+            
+            if (currentGame.awayTeam.id) {
+                db.collection('players')
+                    .where('teamId', '==', currentGame.awayTeam.id)
+                    .onSnapshot(snapshot => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === 'added') {
+                                const playerExists = currentGame.awayTeam.players.find(p => p.id === change.doc.id);
+                                if (!playerExists) {
+                                    const playerData = change.doc.data();
+                                    currentGame.awayTeam.players.push({
+                                        id: change.doc.id,
+                                        name: playerData.name,
+                                        number: playerData.jerseyNumber || 0,
+                                        stats: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, fls: 0 }
+                                    });
+                                    updateTeamDisplay('away');
+                                    showToast(`Player ${playerData.name} added to roster`);
+                                }
+                            }
+                        });
+                    });
+            }
+        }
+
+        // Update game display
+        function updateGameDisplay() {
+            // Update team names
+            document.getElementById('homeTeamName').textContent = currentGame.homeTeam.name;
+            document.getElementById('awayTeamName').textContent = currentGame.awayTeam.name;
+            document.getElementById('gameTeams').textContent = 
+                `${currentGame.homeTeam.name} vs ${currentGame.awayTeam.name}`;
+            
+            // Update scores
+            updateScores();
+            
+            // Update team displays
+            updateTeamDisplay('home');
+            updateTeamDisplay('away');
+        }
+
+        // Update scores
+        function updateScores() {
+            const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+            const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+            
+            document.getElementById('homeScore').textContent = homeScore;
+            document.getElementById('awayScore').textContent = awayScore;
+            
+            // Update team fouls
+            const homeFouls = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.fls, 0);
+            const awayFouls = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.fls, 0);
+            
+            document.getElementById('homeTeamFouls').textContent = homeFouls;
+            document.getElementById('awayTeamFouls').textContent = awayFouls;
+        }
+
+        // Update team display
+        function updateTeamDisplay(side) {
+            const team = side === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            const container = document.getElementById(side + 'Players');
+            
+            container.innerHTML = team.players.map(player => {
+                const foulClass = player.stats.fls >= 6 ? 'fouled-out' : 
+                                player.stats.fls >= 5 ? 'warning' : '';
+                const foulStatus = player.stats.fls >= 6 ? 'FOULED OUT' : 
+                                 player.stats.fls >= 5 ? '5 FOULS' : '';
+                
+                return `
+                    <div class="player-card ${foulClass}">
+                        <div class="player-info">
+                            <div class="player-number">${player.number}</div>
+                            <div class="player-name">${player.name}</div>
+                            ${foulStatus ? `<div class="foul-status">${foulStatus}</div>` : ''}
+                        </div>
+                        
+                        <div class="player-stats">
+                            <!-- Points -->
+                            <div class="stat-group">
+                                <div class="stat-group-label">PTS</div>
+                                <div class="stat-controls">
+                                    <button class="stat-btn plus-three" onclick="updateStat('${player.id}', 'pts', 3)">+3</button>
+                                    <button class="stat-btn plus-two" onclick="updateStat('${player.id}', 'pts', 2)">+2</button>
+                                    <button class="stat-btn plus-one" onclick="updateStat('${player.id}', 'pts', 1)">+1</button>
+                                    <div class="stat-value">${player.stats.pts}</div>
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'pts', -1)">-</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Rebounds -->
+                            <div class="stat-group">
+                                <div class="stat-group-label">REB</div>
+                                <div class="stat-controls">
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'reb', 1)">+</button>
+                                    <div class="stat-value">${player.stats.reb}</div>
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'reb', -1)">-</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Assists -->
+                            <div class="stat-group">
+                                <div class="stat-group-label">AST</div>
+                                <div class="stat-controls">
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'ast', 1)">+</button>
+                                    <div class="stat-value">${player.stats.ast}</div>
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'ast', -1)">-</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Steals -->
+                            <div class="stat-group">
+                                <div class="stat-group-label">STL</div>
+                                <div class="stat-controls">
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'stl', 1)">+</button>
+                                    <div class="stat-value">${player.stats.stl}</div>
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'stl', -1)">-</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blocks -->
+                            <div class="stat-group">
+                                <div class="stat-group-label">BLK</div>
+                                <div class="stat-controls">
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'blk', 1)">+</button>
+                                    <div class="stat-value">${player.stats.blk}</div>
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'blk', -1)">-</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Fouls -->
+                            <div class="stat-group">
+                                <div class="stat-group-label">FLS</div>
+                                <div class="stat-controls">
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'fls', 1)">+</button>
+                                    <div class="stat-value">${player.stats.fls}</div>
+                                    <button class="stat-btn" onclick="updateStat('${player.id}', 'fls', -1)">-</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update player stat
+        function updateStat(playerId, statType, change) {
+            // Find player in either team
+            let player = currentGame.homeTeam.players.find(p => p.id === playerId);
+            let team = 'home';
+            
+            if (!player) {
+                player = currentGame.awayTeam.players.find(p => p.id === playerId);
+                team = 'away';
+            }
+            
+            if (!player) return;
+            
+            // Don't allow negative stats
+            const newValue = Math.max(0, player.stats[statType] + change);
+            player.stats[statType] = newValue;
+            
+            // Update display
+            updateScores();
+            updateTeamDisplay(team);
+            
+            // Save to Firebase (debounced)
+            saveStatToFirebase(playerId, statType, newValue);
+            
+            // Show feedback
+            const statName = getStatName(statType);
+            if (change > 0) {
+                showToast(`${player.name}: +${change} ${statName}`);
+            }
+        }
+
+        // Save stat to Firebase
+        let saveTimeout = null;
+        function saveStatToFirebase(playerId, statType, value) {
+            // Clear previous timeout
+            if (saveTimeout) clearTimeout(saveTimeout);
+            
+            // Debounce saves by 1 second
+            saveTimeout = setTimeout(async () => {
+                try {
+                    // Save to game stats collection
+                    await db.collection('gameStats').doc(`${currentGame.id}_${playerId}`).set({
+                        gameId: currentGame.id,
+                        playerId: playerId,
+                        [statType]: value,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                } catch (error) {
+                    console.error('Error saving stat:', error);
+                }
+            }, 1000);
+        }
+
+        // Get stat name
+        function getStatName(stat) {
+            const names = {
+                pts: 'Points',
+                reb: 'Rebounds',
+                ast: 'Assists',
+                stl: 'Steals',
+                blk: 'Blocks',
+                fls: 'Fouls'
+            };
+            return names[stat] || stat;
+        }
+
+        // Show add player modal
+        function showAddPlayerModal(team) {
+            document.getElementById('playerTeam').value = team;
+            document.getElementById('addPlayerModal').classList.add('show');
+            document.getElementById('playerName').focus();
+        }
+
+        // Hide add player modal
+        function hideAddPlayerModal() {
+            document.getElementById('addPlayerModal').classList.remove('show');
+            document.getElementById('addPlayerForm').reset();
+        }
+
+        // Add new player
+        async function addNewPlayer(event) {
+            event.preventDefault();
+            
+            const team = document.getElementById('playerTeam').value;
+            const teamData = team === 'home' ? currentGame.homeTeam : currentGame.awayTeam;
+            
+            const playerData = {
+                name: document.getElementById('playerName').value,
+                jerseyNumber: document.getElementById('playerNumber').value,
+                teamId: teamData.id,
+                teamName: teamData.name,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                addedDuringGame: true,
+                gameId: currentGame.id
+            };
+            
+            try {
+                // Add to Firebase
+                const docRef = await db.collection('players').add(playerData);
+                
+                // Add to local state
+                const newPlayer = {
+                    id: docRef.id,
+                    name: playerData.name,
+                    number: playerData.jerseyNumber,
+                    stats: { pts: 0, reb: 0, ast: 0, stl: 0, blk: 0, fls: 0 }
+                };
+                
+                if (team === 'home') {
+                    currentGame.homeTeam.players.push(newPlayer);
+                } else {
+                    currentGame.awayTeam.players.push(newPlayer);
+                }
+                
+                // Update display
+                updateTeamDisplay(team);
+                hideAddPlayerModal();
+                showToast(`Player ${playerData.name} added successfully!`);
+                
+            } catch (error) {
+                console.error('Error adding player:', error);
+                showToast('Error adding player', 'error');
+            }
+        }
+
+        // Update period
+        function updatePeriod() {
+            currentGame.period = document.getElementById('periodSelector').value;
+            saveGame();
+        }
+
+        // Save game
+        async function saveGame() {
+            if (!currentGame.id) return;
+            
+            try {
+                // Calculate totals
+                const homeScore = currentGame.homeTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                const awayScore = currentGame.awayTeam.players.reduce((sum, p) => sum + p.stats.pts, 0);
+                
+                // Save game state
+                await db.collection('games').doc(currentGame.id).update({
+                    homeScore: homeScore,
+                    awayScore: awayScore,
+                    period: currentGame.period,
+                    status: 'in_progress',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Save all player stats
+                for (const player of [...currentGame.homeTeam.players, ...currentGame.awayTeam.players]) {
+                    await db.collection('gameStats').doc(`${currentGame.id}_${player.id}`).set({
+                        gameId: currentGame.id,
+                        playerId: player.id,
+                        ...player.stats,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                
+                showToast('Game saved successfully!');
+                
+            } catch (error) {
+                console.error('Error saving game:', error);
+                showToast('Error saving game', 'error');
+            }
+        }
+
+        // End game
+        async function endGame() {
+            if (!confirm('Are you sure you want to end this game?')) return;
+            
+            try {
+                await saveGame();
+                
+                // Update game status
+                await db.collection('games').doc(currentGame.id).update({
+                    status: 'completed',
+                    endTime: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showToast('Game ended successfully!');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error ending game:', error);
+                showToast('Error ending game', 'error');
+            }
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast show ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Load today's games for selection
+        async function loadTodaysGames() {
+            // This would load games from Firebase for selection
+            // For now, show message
+            document.getElementById('gameTeams').textContent = 'Please select a game from the schedule';
+        }
+    </script>
+<script src="/js/auth-check.js"></script>
+</body>
+</html>

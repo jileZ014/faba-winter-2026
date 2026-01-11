@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COTB26 Data Import Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        h1 { color: #FFD700; }
+        .btn {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+            border-radius: 5px;
+        }
+        .btn:hover { background: #e6c200; }
+        .btn:disabled { background: #666; cursor: not-allowed; }
+        .btn-danger { background: #ff4444; color: #fff; }
+        .btn-danger:hover { background: #cc0000; }
+        #log {
+            background: #16213e;
+            border: 1px solid #333;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .success { color: #44ff44; }
+        .error { color: #ff4444; }
+        .info { color: #4488ff; }
+        .warning { color: #ffaa00; }
+        .summary {
+            background: #16213e;
+            border: 2px solid #FFD700;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>COTB26 Data Import Tool</h1>
+    <p>This tool imports the real tournament data for Clash of the Barbarians 2026.</p>
+
+    <!-- Authentication Section -->
+    <div id="authSection" class="summary" style="border-color: #ff4444;">
+        <h3>Step 1: Sign In Required</h3>
+        <p id="authStatus">You must sign in to import data.</p>
+        <button id="signInBtn" class="btn" onclick="signInWithGoogle()">Sign in with Google</button>
+        <button id="signOutBtn" class="btn btn-danger" onclick="signOut()" style="display: none;">Sign Out</button>
+    </div>
+
+    <div class="summary">
+        <h3>Data Summary:</h3>
+        <ul>
+            <li><strong>Teams:</strong> 18 teams across 5 divisions</li>
+            <li><strong>Games:</strong> 23 games (Pool Play, Bracket, Championships)</li>
+            <li><strong>Venues:</strong> Tillman Middle School & Griffith Elementary</li>
+        </ul>
+    </div>
+
+    <div id="importButtons" style="margin-top: 20px; opacity: 0.5; pointer-events: none;">
+        <button class="btn btn-danger" onclick="deleteAllData()">1. Delete Old Data</button>
+        <button class="btn" onclick="importTeams()">2. Import Teams</button>
+        <button class="btn" onclick="importGames()">3. Import Games</button>
+        <button class="btn" onclick="importAll()" style="background: #44ff44;">Import All Data</button>
+    </div>
+
+    <div id="log"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        const logEl = document.getElementById('log');
+
+        // Authentication functions
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        function signInWithGoogle() {
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    log(`Signed in as: ${result.user.email}`, 'success');
+                })
+                .catch((error) => {
+                    log(`Sign-in error: ${error.message}`, 'error');
+                });
+        }
+
+        function signOut() {
+            auth.signOut()
+                .then(() => {
+                    log('Signed out', 'info');
+                })
+                .catch((error) => {
+                    log(`Sign-out error: ${error.message}`, 'error');
+                });
+        }
+
+        // Listen for auth state changes
+        auth.onAuthStateChanged((user) => {
+            const authStatus = document.getElementById('authStatus');
+            const signInBtn = document.getElementById('signInBtn');
+            const signOutBtn = document.getElementById('signOutBtn');
+            const importButtons = document.getElementById('importButtons');
+            const authSection = document.getElementById('authSection');
+
+            if (user) {
+                authStatus.textContent = `Signed in as: ${user.email}`;
+                authSection.style.borderColor = '#44ff44';
+                signInBtn.style.display = 'none';
+                signOutBtn.style.display = 'inline-block';
+                importButtons.style.opacity = '1';
+                importButtons.style.pointerEvents = 'auto';
+                log(`Authenticated: ${user.email}`, 'success');
+            } else {
+                authStatus.textContent = 'You must sign in to import data.';
+                authSection.style.borderColor = '#ff4444';
+                signInBtn.style.display = 'inline-block';
+                signOutBtn.style.display = 'none';
+                importButtons.style.opacity = '0.5';
+                importButtons.style.pointerEvents = 'none';
+            }
+        });
+
+        function log(message, type = '') {
+            const span = document.createElement('span');
+            span.className = type;
+            span.textContent = message + '\n';
+            logEl.appendChild(span);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        // ============================================
+        // TEAMS DATA - 18 Teams
+        // ============================================
+        const teams = [
+            // 10U (5th) Division - 3 teams
+            { name: "Wolves", division: "10U (5th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "ReZ Fire", division: "10U (5th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Rug Rats", division: "10U (5th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+
+            // 11U (5th) Division - 3 teams
+            { name: "Star Status", division: "11U (5th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "ReZ Fire", division: "11U (5th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Wolves", division: "11U (5th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+
+            // 12U (6th) Division - 4 teams
+            { name: "WBA", division: "12U (6th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Tigers", division: "12U (6th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Flight 12's", division: "12U (6th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Bomb Squad", division: "12U (6th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+
+            // 13U (7th) Division - 3 teams
+            { name: "WBA", division: "13U (7th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Barbarians", division: "13U (7th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Flight 13's", division: "13U (7th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+
+            // 14U (8th) Division - 5 teams
+            { name: "Flight 14's", division: "14U (8th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Mind over Matter", division: "14U (8th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "WBA", division: "14U (8th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Warriors", division: "14U (8th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 },
+            { name: "Tigers", division: "14U (8th)", wins: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 }
+        ];
+
+        // ============================================
+        // GAMES DATA - 23 Games
+        // ============================================
+        const games = [
+            // Court 1 - Tillman Middle School
+            { gameNumber: 1, time: "8:00 AM", court: "Court 1 - Tillman", division: "10U (5th)", gameType: "Pool Play", homeTeam: "Wolves", awayTeam: "ReZ Fire", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T08:00:00') },
+            { gameNumber: 2, time: "8:45 AM", court: "Court 1 - Tillman", division: "11U (5th)", gameType: "Pool Play", homeTeam: "Star Status", awayTeam: "ReZ Fire", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T08:45:00') },
+            { gameNumber: 3, time: "9:30 AM", court: "Court 1 - Tillman", division: "10U (5th)", gameType: "Pool Play", homeTeam: "ReZ Fire", awayTeam: "Rug Rats", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T09:30:00') },
+            { gameNumber: 4, time: "10:15 AM", court: "Court 1 - Tillman", division: "11U (5th)", gameType: "Pool Play", homeTeam: "Star Status", awayTeam: "Wolves", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T10:15:00') },
+            { gameNumber: 5, time: "11:00 AM", court: "Court 1 - Tillman", division: "10U (5th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T11:00:00') },
+            { gameNumber: 6, time: "11:45 AM", court: "Court 1 - Tillman", division: "11U (5th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T11:45:00') },
+            { gameNumber: 7, time: "12:30 PM", court: "Court 1 - Tillman", division: "10U (5th)", gameType: "Championship", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T12:30:00') },
+            { gameNumber: 8, time: "1:15 PM", court: "Court 1 - Tillman", division: "11U (5th)", gameType: "Championship", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T13:15:00') },
+            { gameNumber: 9, time: "2:00 PM", court: "Court 1 - Tillman", division: "12U (6th)", gameType: "Pool Play", homeTeam: "WBA", awayTeam: "Tigers", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T14:00:00') },
+            { gameNumber: 10, time: "2:45 PM", court: "Court 1 - Tillman", division: "12U (6th)", gameType: "Pool Play", homeTeam: "Flight 12's", awayTeam: "Bomb Squad", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T14:45:00') },
+            { gameNumber: 11, time: "3:30 PM", court: "Court 1 - Tillman", division: "12U (6th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T15:30:00') },
+            { gameNumber: 12, time: "4:15 PM", court: "Court 1 - Tillman", division: "12U (6th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T16:15:00') },
+            { gameNumber: 13, time: "5:00 PM", court: "Court 1 - Tillman", division: "12U (6th)", gameType: "Championship", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T17:00:00') },
+
+            // Court 2 - Griffith Elementary
+            { gameNumber: 14, time: "8:00 AM", court: "Court 2 - Griffith", division: "14U (8th)", gameType: "Pool Play", homeTeam: "Flight 14's", awayTeam: "Mind over Matter", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T08:00:00') },
+            { gameNumber: 15, time: "8:45 AM", court: "Court 2 - Griffith", division: "13U (7th)", gameType: "Pool Play", homeTeam: "WBA", awayTeam: "Barbarians", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T08:45:00') },
+            { gameNumber: 16, time: "9:30 AM", court: "Court 2 - Griffith", division: "14U (8th)", gameType: "Pool Play", homeTeam: "WBA", awayTeam: "Warriors", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T09:30:00') },
+            { gameNumber: 17, time: "10:15 AM", court: "Court 2 - Griffith", division: "13U (7th)", gameType: "Pool Play", homeTeam: "WBA", awayTeam: "Flight 13's", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T10:15:00') },
+            { gameNumber: 18, time: "11:00 AM", court: "Court 2 - Griffith", division: "14U (8th)", gameType: "Pool Play", homeTeam: "Tigers", awayTeam: "Warriors", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T11:00:00') },
+            { gameNumber: 19, time: "11:45 AM", court: "Court 2 - Griffith", division: "13U (7th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T11:45:00') },
+            { gameNumber: 20, time: "12:30 PM", court: "Court 2 - Griffith", division: "14U (8th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T12:30:00') },
+            { gameNumber: 21, time: "1:15 PM", court: "Court 2 - Griffith", division: "13U (7th)", gameType: "Championship", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T13:15:00') },
+            { gameNumber: 22, time: "2:00 PM", court: "Court 2 - Griffith", division: "14U (8th)", gameType: "Bracket", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T14:00:00') },
+            { gameNumber: 23, time: "2:45 PM", court: "Court 2 - Griffith", division: "14U (8th)", gameType: "Championship", homeTeam: "TBD", awayTeam: "TBD", homeScore: 0, awayScore: 0, status: "scheduled", scheduledFor: new Date('2026-01-10T14:45:00') }
+        ];
+
+        async function deleteAllData() {
+            log('Deleting all existing data...', 'warning');
+
+            // Delete teams
+            const teamsSnapshot = await db.collection('teams').get();
+            for (const doc of teamsSnapshot.docs) {
+                await doc.ref.delete();
+                log(`  Deleted team: ${doc.data().name}`, 'info');
+            }
+            log(`Deleted ${teamsSnapshot.size} teams`, 'success');
+
+            // Delete games
+            const gamesSnapshot = await db.collection('games').get();
+            for (const doc of gamesSnapshot.docs) {
+                await doc.ref.delete();
+                log(`  Deleted game: ${doc.id}`, 'info');
+            }
+            log(`Deleted ${gamesSnapshot.size} games`, 'success');
+
+            // Delete players
+            const playersSnapshot = await db.collection('players').get();
+            for (const doc of playersSnapshot.docs) {
+                await doc.ref.delete();
+            }
+            log(`Deleted ${playersSnapshot.size} players`, 'success');
+
+            log('All old data deleted!', 'success');
+        }
+
+        async function importTeams() {
+            log('\nImporting 18 teams...', 'info');
+
+            for (const team of teams) {
+                const docRef = await db.collection('teams').add({
+                    ...team,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                log(`  Added: ${team.name} (${team.division})`, 'success');
+            }
+
+            log(`\nSuccessfully imported ${teams.length} teams!`, 'success');
+        }
+
+        async function importGames() {
+            log('\nImporting 23 games...', 'info');
+
+            for (const game of games) {
+                const docRef = await db.collection('games').add({
+                    ...game,
+                    homeTeamName: game.homeTeam,
+                    awayTeamName: game.awayTeam,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                log(`  Added Game ${game.gameNumber}: ${game.homeTeam} vs ${game.awayTeam} @ ${game.time}`, 'success');
+            }
+
+            log(`\nSuccessfully imported ${games.length} games!`, 'success');
+        }
+
+        async function importAll() {
+            log('========================================', 'info');
+            log('COTB26 FULL DATA IMPORT', 'info');
+            log('========================================\n', 'info');
+
+            await deleteAllData();
+            await importTeams();
+            await importGames();
+
+            log('\n========================================', 'success');
+            log('IMPORT COMPLETE!', 'success');
+            log('========================================', 'success');
+            log(`Total Teams: ${teams.length}`, 'success');
+            log(`Total Games: ${games.length}`, 'success');
+            log('========================================', 'success');
+        }
+
+        log('COTB26 Data Import Tool Ready', 'info');
+        log('Click "Import All Data" to replace all placeholder data with real tournament data.\n', 'info');
+    </script>
+</body>
+</html>

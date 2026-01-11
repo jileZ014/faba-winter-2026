@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Organizations - Clash of the Barbarians 2026</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #0f172a; 
+            color: white; 
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        button { 
+            padding: 15px 30px; 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin: 10px; 
+        }
+        button:hover { 
+            background: #2563eb; 
+        }
+        .log { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            height: 400px; 
+            overflow-y: auto; 
+            font-family: monospace; 
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #06b6d4; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>West Valley Basketball League - Phase 1.1</h1>
+        <h2>Create Organizations Collection</h2>
+        
+        <div>
+            <button onclick="setupOrganizations()">Create Organizations Collection</button>
+            <button onclick="verifyOrganizations()">Verify Organizations</button>
+            <button onclick="clearLog()">Clear Log</button>
+        </div>
+        
+        <div id="log" class="log">
+            <div class="info">Ready to create organizations collection...</div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4QaqS8c0Yl3SlpaCgxA9PxvWAkg3cKRg",
+            authDomain: "az-flight-fall-league---2026.firebaseapp.com",
+            projectId: "az-flight-fall-league---2026",
+            storageBucket: "az-flight-fall-league---2026.firebasestorage.app",
+            messagingSenderId: "370360541933",
+            appId: "1:370360541933:web:53e7f2f4f70bd2b1bcf7a5"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<div class="info">Log cleared...</div>';
+        }
+        
+        async function setupOrganizations() {
+            log('🏢 Starting organizations setup...', 'info');
+            
+            try {
+                // Define all organizations as specified in the master prompt
+                const organizations = [
+                    {
+                        id: "az-flight",
+                        name: "AZ Flight",
+                        type: "multi-team",
+                        logo: "",
+                        primaryColor: "#FF6B00",
+                        contactEmail: "coach@azflight.com",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "build-Barbarian",
+                        name: "Build Barbarian",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "dark-sky-elite",
+                        name: "Dark Sky Elite",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "elite-valley-aces",
+                        name: "Elite Valley Aces",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "az-tigers",
+                        name: "AZ Tigers",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "born-2-ball",
+                        name: "Born 2 Ball",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "valleyhoopers",
+                        name: "ValleyHoopers",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "snc",
+                        name: "SNC",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "team-forge",
+                        name: "Team Forge",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "wolves",
+                        name: "Wolves",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "hoopsquad",
+                        name: "HoopSquad",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "phx-twist",
+                        name: "PhX Twist",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "lockdown",
+                        name: "Lockdown",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    },
+                    {
+                        id: "homemade-hoops",
+                        name: "HomeMade Hoops",
+                        type: "single-team",
+                        logo: "",
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: "home-team-division"
+                        }
+                    }
+                ];
+                
+                log(`📝 Creating ${organizations.length} organizations...`, 'info');
+                
+                // Create each organization
+                for (const org of organizations) {
+                    try {
+                        // Add createdAt timestamp
+                        const orgData = {
+                            ...org,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+                        
+                        // Set document with specific ID
+                        await db.collection('organizations').doc(org.id).set(orgData);
+                        log(`✅ Created: ${org.name} (${org.type})`, 'success');
+                        
+                    } catch (error) {
+                        log(`❌ Error creating ${org.name}: ${error.message}`, 'error');
+                    }
+                }
+                
+                log('🎉 Organizations setup complete!', 'success');
+                log('➡️ Next: Run verification to confirm all organizations exist', 'info');
+                
+            } catch (error) {
+                log(`❌ Setup failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function verifyOrganizations() {
+            log('🔍 Verifying organizations collection...', 'info');
+            
+            try {
+                const snapshot = await db.collection('organizations').get();
+                
+                if (snapshot.empty) {
+                    log('❌ No organizations found!', 'error');
+                    return;
+                }
+                
+                log(`📊 Found ${snapshot.size} organizations:`, 'success');
+                
+                const multiTeam = [];
+                const singleTeam = [];
+                
+                snapshot.forEach(doc => {
+                    const org = doc.data();
+                    const entry = `${org.name} (${doc.id})`;
+                    
+                    if (org.type === 'multi-team') {
+                        multiTeam.push(entry);
+                    } else {
+                        singleTeam.push(entry);
+                    }
+                });
+                
+                log('🏢 Multi-team organizations:', 'info');
+                multiTeam.forEach(org => log(`  • ${org}`, 'success'));
+                
+                log('🏀 Single-team organizations:', 'info');
+                singleTeam.forEach(org => log(`  • ${org}`, 'success'));
+                
+                if (snapshot.size >= 13) {
+                    log('✅ Phase 1.1 COMPLETE: Organizations collection ready!', 'success');
+                } else {
+                    log(`⚠️ Only ${snapshot.size} organizations found (expected 13+)`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Verification failed: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

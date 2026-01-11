@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Teams - Clash of the Barbarians 2026</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #0f172a; 
+            color: white; 
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        button { 
+            padding: 15px 30px; 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin: 10px; 
+        }
+        button:hover { 
+            background: #2563eb; 
+        }
+        .log { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            height: 500px; 
+            overflow-y: auto; 
+            font-family: monospace; 
+            font-size: 12px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #06b6d4; }
+        .warning { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>West Valley Basketball League - Phase 1.2</h1>
+        <h2>Update Teams Collection Structure</h2>
+        
+        <div>
+            <button onclick="analyzeExistingTeams()">Analyze Existing Teams</button>
+            <button onclick="updateTeamsStructure()">Update Teams Structure</button>
+            <button onclick="verifyTeamsUpdate()">Verify Teams Update</button>
+            <button onclick="clearLog()">Clear Log</button>
+        </div>
+        
+        <div id="log" class="log">
+            <div class="info">Ready to analyze and update teams collection...</div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4QaqS8c0Yl3SlpaCgxA9PxvWAkg3cKRg",
+            authDomain: "az-flight-fall-league---2026.firebaseapp.com",
+            projectId: "az-flight-fall-league---2026",
+            storageBucket: "az-flight-fall-league---2026.firebasestorage.app",
+            messagingSenderId: "370360541933",
+            appId: "1:370360541933:web:53e7f2f4f70bd2b1bcf7a5"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<div class="info">Log cleared...</div>';
+        }
+        
+        // Team mapping based on the master prompt requirements
+        const teamMappings = {
+            // AZ Flight teams (multi-team organization)
+            'AZ Flight 10s': {
+                organizationId: 'az-flight',
+                name: '10s',
+                ageGroup: '10U',
+                primaryDivision: '4th',
+                eligibleDivisions: ['4th', '5th']
+            },
+            'AZ Flight 11s': {
+                organizationId: 'az-flight',
+                name: '11s',
+                ageGroup: '11U',
+                primaryDivision: '7th',
+                eligibleDivisions: ['6th', '7th']
+            },
+            'AZ Flight 12s': {
+                organizationId: 'az-flight',
+                name: '12s',
+                ageGroup: '12U',
+                primaryDivision: '6th',
+                eligibleDivisions: ['5th', '6th', '7th']
+            },
+            'AZ Flight 13s': {
+                organizationId: 'az-flight',
+                name: '13s',
+                ageGroup: '13U',
+                primaryDivision: '7th',
+                eligibleDivisions: ['6th', '7th', '8th']
+            },
+            'AZ Flight 14s': {
+                organizationId: 'az-flight',
+                name: '14s',
+                ageGroup: '14U',
+                primaryDivision: '8th',
+                eligibleDivisions: ['7th', '8th']
+            },
+            'AZFlight5th': {
+                organizationId: 'az-flight',
+                name: '5th',
+                ageGroup: '11U',
+                primaryDivision: '5th',
+                eligibleDivisions: ['4th', '5th', '6th']
+            },
+            
+            // Single-team organizations - will be mapped based on existing data
+            'Build Barbarian': {
+                organizationId: 'build-Barbarian',
+                name: 'Build Barbarian',
+                ageGroup: null, // Will determine from existing data
+                primaryDivision: null, // Will determine from existing data
+                eligibleDivisions: null // Will calculate based on primary
+            },
+            'Dark Sky Elite': {
+                organizationId: 'dark-sky-elite',
+                name: 'Dark Sky Elite',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'Elite Valley Aces': {
+                organizationId: 'elite-valley-aces',
+                name: 'Elite Valley Aces',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'AZ Tigers': {
+                organizationId: 'az-tigers',
+                name: 'AZ Tigers',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'Born 2 Ball': {
+                organizationId: 'born-2-ball',
+                name: 'Born 2 Ball',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'ValleyHoopers': {
+                organizationId: 'valleyhoopers',
+                name: 'ValleyHoopers',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'SNC': {
+                organizationId: 'snc',
+                name: 'SNC',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'Team Forge': {
+                organizationId: 'team-forge',
+                name: 'Team Forge',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'Wolves': {
+                organizationId: 'wolves',
+                name: 'Wolves',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'HoopSquad': {
+                organizationId: 'hoopsquad',
+                name: 'HoopSquad',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'PhX Twist': {
+                organizationId: 'phx-twist',
+                name: 'PhX Twist',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'Lockdown': {
+                organizationId: 'lockdown',
+                name: 'Lockdown',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            },
+            'HomeMade Hoops': {
+                organizationId: 'homemade-hoops',
+                name: 'HomeMade Hoops',
+                ageGroup: null,
+                primaryDivision: null,
+                eligibleDivisions: null
+            }
+        };
+        
+        function calculateEligibleDivisions(primaryDivision) {
+            const divisionOrder = ['4th', '5th', '6th', '7th', '8th'];
+            const primaryIndex = divisionOrder.indexOf(primaryDivision);
+            
+            if (primaryIndex === -1) return [primaryDivision];
+            
+            // Can play in adjacent divisions (one below, one above)
+            const eligible = [primaryDivision];
+            
+            if (primaryIndex > 0) {
+                eligible.unshift(divisionOrder[primaryIndex - 1]);
+            }
+            if (primaryIndex < divisionOrder.length - 1) {
+                eligible.push(divisionOrder[primaryIndex + 1]);
+            }
+            
+            return eligible;
+        }
+        
+        async function analyzeExistingTeams() {
+            log('📊 Analyzing existing teams collection...', 'info');
+            
+            try {
+                const snapshot = await db.collection('teams').get();
+                
+                if (snapshot.empty) {
+                    log('❌ No teams found in database!', 'error');
+                    return;
+                }
+                
+                log(`📋 Found ${snapshot.size} teams:`, 'info');
+                
+                const duplicates = {};
+                const unknownTeams = [];
+                
+                snapshot.forEach(doc => {
+                    const team = doc.data();
+                    const teamName = team.name;
+                    
+                    log(`  • ${teamName} (${team.division || 'no division'}) - ID: ${doc.id}`, 'info');
+                    
+                    // Check for duplicates
+                    if (duplicates[teamName]) {
+                        duplicates[teamName].push({ id: doc.id, data: team });
+                    } else {
+                        duplicates[teamName] = [{ id: doc.id, data: team }];
+                    }
+                    
+                    // Check if team is in our mapping
+                    if (!teamMappings[teamName]) {
+                        unknownTeams.push(teamName);
+                    }
+                });
+                
+                // Report duplicates
+                const duplicateNames = Object.keys(duplicates).filter(name => duplicates[name].length > 1);
+                if (duplicateNames.length > 0) {
+                    log('⚠️ DUPLICATE TEAMS FOUND:', 'warning');
+                    duplicateNames.forEach(name => {
+                        log(`  🔍 ${name}: ${duplicates[name].length} entries`, 'warning');
+                        duplicates[name].forEach((entry, idx) => {
+                            log(`    ${idx + 1}. Division: ${entry.data.division || 'N/A'}, Wins: ${entry.data.wins || 0}, ID: ${entry.id}`, 'warning');
+                        });
+                    });
+                }
+                
+                // Report unknown teams
+                if (unknownTeams.length > 0) {
+                    log('⚠️ UNKNOWN TEAMS (not in mapping):', 'warning');
+                    unknownTeams.forEach(name => log(`  • ${name}`, 'warning'));
+                }
+                
+                log('✅ AnaBarbarian Sportsis complete', 'success');
+                
+            } catch (error) {
+                log(`❌ AnaBarbarian Sportsis failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function updateTeamsStructure() {
+            log('🔄 Starting teams structure update...', 'info');
+            
+            try {
+                const snapshot = await db.collection('teams').get();
+                
+                if (snapshot.empty) {
+                    log('❌ No teams found to update!', 'error');
+                    return;
+                }
+                
+                log(`📝 Updating ${snapshot.size} teams...`, 'info');
+                
+                let updated = 0;
+                let skipped = 0;
+                let errors = 0;
+                
+                for (const doc of snapshot.docs) {
+                    const team = doc.data();
+                    const teamName = team.name;
+                    
+                    try {
+                        // Get mapping for this team
+                        const mapping = teamMappings[teamName];
+                        
+                        if (!mapping) {
+                            log(`⚠️ Skipping unknown team: ${teamName}`, 'warning');
+                            skipped++;
+                            continue;
+                        }
+                        
+                        // Prepare update data
+                        const updateData = {
+                            organizationId: mapping.organizationId
+                        };
+                        
+                        // Handle AZ Flight teams (have complete mapping)
+                        if (mapping.organizationId === 'az-flight') {
+                            updateData.name = mapping.name;
+                            updateData.fullName = `AZ Flight ${mapping.name}`;
+                            updateData.ageGroup = mapping.ageGroup;
+                            updateData.primaryDivision = mapping.primaryDivision;
+                            updateData.eligibleDivisions = mapping.eligibleDivisions;
+                        } else {
+                            // Single-team organizations - use existing data
+                            updateData.name = teamName;
+                            updateData.fullName = teamName;
+                            updateData.ageGroup = team.ageGroup || 'Unknown';
+                            updateData.primaryDivision = team.division || '7th'; // Default to 7th if no division
+                            updateData.eligibleDivisions = calculateEligibleDivisions(updateData.primaryDivision);
+                        }
+                        
+                        // Initialize division records
+                        updateData.divisionRecords = {};
+                        updateData.eligibleDivisions.forEach(div => {
+                            updateData.divisionRecords[div] = { wins: 0, losses: 0 };
+                        });
+                        
+                        // Set primary division record to current wins/losses
+                        if (updateData.divisionRecords[updateData.primaryDivision]) {
+                            updateData.divisionRecords[updateData.primaryDivision] = {
+                                wins: team.wins || 0,
+                                losses: team.losses || 0
+                            };
+                        }
+                        
+                        // Update the document
+                        await db.collection('teams').doc(doc.id).update(updateData);
+                        
+                        log(`✅ Updated: ${teamName} → Org: ${updateData.organizationId}, Primary: ${updateData.primaryDivision}`, 'success');
+                        updated++;
+                        
+                    } catch (error) {
+                        log(`❌ Error updating ${teamName}: ${error.message}`, 'error');
+                        errors++;
+                    }
+                }
+                
+                log(`🎉 Update complete! Updated: ${updated}, Skipped: ${skipped}, Errors: ${errors}`, 'success');
+                
+            } catch (error) {
+                log(`❌ Update failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function verifyTeamsUpdate() {
+            log('🔍 Verifying teams update...', 'info');
+            
+            try {
+                const snapshot = await db.collection('teams').get();
+                
+                if (snapshot.empty) {
+                    log('❌ No teams found!', 'error');
+                    return;
+                }
+                
+                let withOrgId = 0;
+                let withEligibleDivs = 0;
+                let withDivisionRecords = 0;
+                
+                snapshot.forEach(doc => {
+                    const team = doc.data();
+                    
+                    if (team.organizationId) withOrgId++;
+                    if (team.eligibleDivisions && Array.isArray(team.eligibleDivisions)) withEligibleDivs++;
+                    if (team.divisionRecords && typeof team.divisionRecords === 'object') withDivisionRecords++;
+                    
+                    log(`📋 ${team.fullName || team.name}: Org=${team.organizationId}, Primary=${team.primaryDivision}, Eligible=[${(team.eligibleDivisions || []).join(', ')}]`, 'info');
+                });
+                
+                log(`📊 Summary:`, 'info');
+                log(`  • Total teams: ${snapshot.size}`, 'info');
+                log(`  • With organizationId: ${withOrgId}`, withOrgId === snapshot.size ? 'success' : 'error');
+                log(`  • With eligibleDivisions: ${withEligibleDivs}`, withEligibleDivs === snapshot.size ? 'success' : 'error');
+                log(`  • With divisionRecords: ${withDivisionRecords}`, withDivisionRecords === snapshot.size ? 'success' : 'error');
+                
+                if (withOrgId === snapshot.size && withEligibleDivs === snapshot.size && withDivisionRecords === snapshot.size) {
+                    log('✅ Phase 1.2 COMPLETE: All teams updated successfully!', 'success');
+                } else {
+                    log('⚠️ Some teams missing required fields', 'warning');
+                }
+                
+            } catch (error) {
+                log(`❌ Verification failed: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

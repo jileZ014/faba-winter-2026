@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login - Clash of the Barbarians 2026</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Dark theme styles matching the site */
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .login-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f1f5f9;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #2563eb;
+        }
+
+        .btn-login:disabled {
+            background: #64748b;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #f87171;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            color: #86efac;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link a:hover {
+            color: #3b82f6;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #94a3b8;
+            margin-top: 1rem;
+        }
+
+        /* Admin setup section */
+        .admin-setup {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .admin-setup h3 {
+            color: #3b82f6;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-setup p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+        }
+
+        .admin-setup button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .admin-setup button:hover {
+            background: #2563eb;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 16px;
+                padding: 1.5rem;
+                border-radius: 8px;
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .login-header h2 {
+                font-size: 1.25rem;
+            }
+
+            input[type="text"],
+            input[type="password"] {
+                padding: 1rem;
+                font-size: 16px; /* Prevents iOS zoom */
+                min-height: 48px;
+            }
+
+            .btn-login {
+                padding: 1rem;
+                font-size: 1rem;
+                min-height: 52px;
+            }
+
+            .form-group {
+                margin-bottom: 1.25rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn-login:active {
+                transform: scale(0.98);
+                opacity: 0.9;
+            }
+
+            input, button {
+                min-height: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen to Prevent Content Flash -->
+    <div id="authLoadingScreen" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0f172a;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #FFFFFF;
+    ">
+        <div style="
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        ">
+            <div style="
+                width: 40px;
+                height: 40px;
+                background: #3b82f6;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                animation: spin 2s linear infinite;
+            ">🏀</div>
+            <div style="
+                font-family: 'Arial Black', sans-serif;
+                font-size: 1.5rem;
+                font-weight: 900;
+                letter-spacing: 2px;
+            ">AZ FLIGHT</div>
+        </div>
+        <div style="
+            font-size: 1rem;
+            color: #94a3b8;
+            animation: pulse 2s ease-in-out infinite;
+        ">Loading...</div>
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 0.6; }
+                50% { opacity: 1; }
+            }
+        </style>
+    </div>
+
+    <div class="login-container" style="display: none;">
+        <div class="login-header">
+            <div class="logo">
+                <div class="logo-icon">🏀</div>
+                <div class="logo-text">AZ FLIGHT</div>
+            </div>
+            <div class="role-badge" id="roleBadge">STAFF LOGIN</div>
+            <h2>Welcome Back</h2>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username" placeholder="username@westvalley.basketball">
+                <small style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px; display: block;">
+                    Enter the username provided by your administrator
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+            </div>
+
+            <button type="submit" class="btn-login" id="loginBtn">Sign In</button>
+        </form>
+
+        <div class="loading" id="loadingMessage">
+            Authenticating...
+        </div>
+
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
+        </div>
+
+        <!-- Admin Setup Section (only shows when no users exist) -->
+        <div class="admin-setup" id="adminSetup">
+            <h3>First Time Setup</h3>
+            <p>No admin account exists. Click below to create the default admin account.</p>
+            <button onclick="createInitialAdmin()">Create Admin Account</button>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        // Initialize Firebase ONCE
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Persistence will be set in form handler
+
+        // Get selected role from sessionStorage
+        let selectedRole = sessionStorage.getItem('selectedRole') || 'staff';
+        
+        // NEW CODE: Check if role was passed in URL (from auth redirect)
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleFromURL = urlParams.get('role');
+        if (roleFromURL && !sessionStorage.getItem('selectedRole')) {
+            // Restore role from URL parameter
+            sessionStorage.setItem('selectedRole', roleFromURL);
+            selectedRole = roleFromURL;
+            
+            // Update the role badge immediately
+            const roleBadge = document.getElementById('roleBadge');
+            if (roleBadge) {
+                roleBadge.textContent = roleFromURL.toUpperCase() + ' LOGIN';
+            }
+        } else if (roleFromURL) {
+            // If we have both URL and session, use URL as it's more recent
+            sessionStorage.setItem('selectedRole', roleFromURL);
+            selectedRole = roleFromURL;
+            const roleBadge = document.getElementById('roleBadge');
+            if (roleBadge) {
+                roleBadge.textContent = roleFromURL.toUpperCase() + ' LOGIN';
+            }
+        }
+        
+        // Update role badge with whatever role we have
+        const roleBadge = document.getElementById('roleBadge');
+        if (selectedRole && roleBadge) {
+            roleBadge.textContent = selectedRole.toUpperCase() + ' LOGIN';
+        }
+
+        // Form elements
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const loginBtn = document.getElementById('loginBtn');
+        const adminSetup = document.getElementById('adminSetup');
+
+        // Check if any users exist
+        async function checkForUsers() {
+            try {
+                const usersSnapshot = await db.collection('users').limit(1).get();
+                if (usersSnapshot.empty) {
+                    adminSetup.style.display = 'block';
+                }
+            } catch (error) {
+                console.log('Error checking users:', error);
+            }
+        }
+
+        // Check for users on page load
+        checkForUsers();
+
+        // Create initial admin account
+        async function createInitialAdmin() {
+            try {
+                successMessage.style.display = 'block';
+                successMessage.textContent = 'Creating admin account...';
+                
+                // Create user with email/password
+                const email = 'admin@azflight.com';
+                const password = 'Admin2024!';
+                
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // Create user document in Firestore
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    username: 'admin',
+                    email: email,
+                    role: 'admin',
+                    displayName: 'League Administrator',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                successMessage.textContent = 'Admin account created! Username: admin, Password: Admin2024!';
+                adminSetup.style.display = 'none';
+                
+                // Auto-fill the form
+                document.getElementById('username').value = 'admin';
+                document.getElementById('password').value = 'Admin2024!';
+                
+            } catch (error) {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Error creating admin: ' + error.message;
+                successMessage.style.display = 'none';
+            }
+        }
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Show loading
+            loadingMessage.style.display = 'block';
+            loginBtn.disabled = true;
+            
+            try {
+                // In the new system, username IS the email (username@domain format)
+                // For backward compatibility, check both email field and Barbarian username field
+                let userQuery = db.collection('users').where('email', '==', username).limit(1);
+                let usersSnapshot = await userQuery.get();
+                
+                // If not found by email, try Barbarian username field for backward compatibility
+                if (usersSnapshot.empty) {
+                    userQuery = db.collection('users').where('username', '==', username).limit(1);
+                    usersSnapshot = await userQuery.get();
+                }
+                
+                if (usersSnapshot.empty) {
+                    throw new Error('Invalid username or password');
+                }
+                
+                const userData = usersSnapshot.docs[0].data();
+                const email = userData.email || username; // Use email field or fall back to username
+                
+                // Set persistence BEFORE authentication
+                await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+                console.log('✅ Persistence set to SESSION');
+                
+                // Authenticate with Firebase Auth
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                console.log('✅ Login successful:', userCredential.user.email);
+                
+                // === SARAH WILLIAMS: Password Change Check ===
+                // Check if password change is required
+                const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
+                const fullUserData = userDoc.data();
+                
+                // Skip password change requirement - proceed with normal login
+                
+                // EMERGENCY FIX (Oct 24, 2026): Commented out due to permissions error
+                // TODO: Restore via Cloud Function after games - see technical debt log
+                // await db.collection('users').doc(userCredential.user.uid).set({
+                //     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                // }, { merge: true });
+                
+                // Store user info in sessionStorage
+                sessionStorage.setItem('userRole', userData.role);
+                sessionStorage.setItem('userName', userData.displayName || userData.username);
+                sessionStorage.setItem('userId', userCredential.user.uid);
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                successMessage.textContent = 'Login successful! Redirecting...';
+                
+                // Get the role from URL params
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlRole = urlParams.get('role');
+                
+                // Map role to correct HTML file
+                const rolePages = {
+                    'admin': '/admin.html',
+                    'coach': '/coach.html',
+                    'scorekeeper': '/scorekeeper-v2.html'
+                };
+                
+                // Use URL role if provided, otherwise use user's role
+                const targetRole = urlRole || userData.role;
+                const redirectPage = rolePages[targetRole] || '/admin.html';
+                
+                console.log('✅ Role detected:', targetRole);
+                console.log('✅ Redirecting to:', redirectPage);
+                
+                // Redirect based on role
+                setTimeout(() => {
+                    window.location.href = redirectPage;
+                }, 1500);
+                
+            } catch (error) {
+                // Show error message
+                errorMessage.style.display = 'block';
+                
+                if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                    errorMessage.textContent = 'Invalid username or password';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage.textContent = 'Too many failed attempts. Please try again later.';
+                } else {
+                    errorMessage.textContent = error.message || 'Login failed. Please try again.';
+                }
+                
+                // Hide loading
+                loadingMessage.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Enhanced authentication state check with loading screen
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                console.log('📝 User already authenticated:', user.email);
+                
+                try {
+                    // Get user's role from Firestore
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    const userData = userDoc.data();
+                    
+                    if (userData && userData.role) {
+                        console.log('🔄 Redirecting authenticated user to dashboard...');
+                        
+                        // Get the role from URL params or use user's default role
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const urlRole = urlParams.get('role');
+                        
+                        // Map role to correct HTML file
+                        const rolePages = {
+                            'admin': '/admin.html',
+                            'coach': '/coach.html',
+                            'scorekeeper': '/scorekeeper-v2.html'
+                        };
+                        
+                        // Use URL role if provided, otherwise use user's role
+                        const targetRole = urlRole || userData.role;
+                        const redirectPage = rolePages[targetRole] || '/admin.html';
+                        
+                        window.location.href = redirectPage;
+                        return; // Exit early - don't show login form
+                    }
+                } catch (error) {
+                    console.log('Error getting user role:', error);
+                }
+            }
+            
+            // User is not authenticated OR error occurred - show login form
+            console.log('📝 No user authenticated - showing login form');
+            
+            // Hide loading screen and show login container
+            const loadingScreen = document.getElementById('authLoadingScreen');
+            const loginContainer = document.querySelector('.login-container');
+            
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+            
+            if (loginContainer) {
+                loginContainer.style.display = 'block';
+            }
+        });
+        
+        // Timeout fallback - show login form if auth check takes too long
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('authLoadingScreen');
+            const loginContainer = document.querySelector('.login-container');
+            
+            if (loadingScreen && loadingScreen.style.display !== 'none') {
+                console.log('⚠️ Auth check timeout - showing login form');
+                loadingScreen.style.display = 'none';
+                if (loginContainer) {
+                    loginContainer.style.display = 'block';
+                }
+            }
+        }, 3000);
+
+        // Add Enter key support for form
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+    </script>
+    
+    <!-- Load Account Manager -->
+    <script src="/js/account-manager.js"></script>
+</body>
+</html>
+

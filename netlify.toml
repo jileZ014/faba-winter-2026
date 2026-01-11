@@ -1,0 +1,27 @@
+[build]
+  publish = "public"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# FABA Division Pages
+[[redirects]]
+  from = "/open"
+  to = "/open.html"
+  status = 200
+
+[[redirects]]
+  from = "/38plus"
+  to = "/38plus.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+# Catch-all redirect to handle SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Test - Clash of the Barbarians 2026</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #3b82f6; margin-bottom: 2rem; }
+        .section {
+            background: #1e293b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+        .btn:hover { background: #2563eb; }
+        .btn.danger { background: #ef4444; }
+        .btn.danger:hover { background: #dc2626; }
+        .btn.success { background: #10b981; }
+        .btn.success:hover { background: #059669; }
+        .test-result {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #334155;
+        }
+        .test-result.pass {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .test-result.fail {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .log {
+            font-family: monospace;
+            font-size: 0.875rem;
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-card {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 AZ Flight System Test & Migration Suite</h1>
+
+    <!-- Migration Section -->
+    <div class="section">
+        <h2>📊 Data Migration</h2>
+        <p>Fix missing division fields in existing data</p>
+        <button class="btn" onclick="runMigration()">Run Data Migration</button>
+        <button class="btn danger" onclick="clearMigrationLog()">Clear Log</button>
+        <div id="migrationLog" class="log"></div>
+    </div>
+
+    <!-- Testing Section -->
+    <div class="section">
+        <h2>🧪 Comprehensive Testing</h2>
+        <p>Test all system components and workflows</p>
+        <button class="btn" onclick="runAllTests()">Run All Tests</button>
+        <button class="btn" onclick="testDataModel()">Test Data Model</button>
+        <button class="btn" onclick="testWorkflows()">Test Workflows</button>
+        <button class="btn" onclick="testSync()">Test Data Sync</button>
+        <div id="testResults"></div>
+    </div>
+
+    <!-- System Stats -->
+    <div class="section">
+        <h2>📈 System Statistics</h2>
+        <div class="stats" id="systemStats">
+            <div class="stat-card">
+                <div class="stat-value" id="teamCount">-</div>
+                <div class="stat-label">Teams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="playerCount">-</div>
+                <div class="stat-label">Players</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="gameCount">-</div>
+                <div class="stat-label">Games</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="divisionCount">-</div>
+                <div class="stat-label">Divisions</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyALvbjQWt6TD5b8Eyip70lxwFp-cPQFVCE",
+            authDomain: "az-flight-fall-league---2026.firebaseapp.com",
+            projectId: "az-flight-fall-league---2026",
+            storageBucket: "az-flight-fall-league---2026.firebasestorage.app",
+            messagingSenderId: "226341211772",
+            appId: "1:226341211772:web:cad086b20d0f582e17a9e1"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Load system stats on page load
+        document.addEventListener('DOMContentLoaded', loadSystemStats);
+
+        // === DATA MIGRATION ===
+        async function runMigration() {
+            const log = document.getElementById('migrationLog');
+            log.innerHTML = '<div>🔄 Starting migration...</div>';
+            
+            let updateCount = 0;
+            const batch = db.batch();
+            const batchLimit = 500; // Firestore batch limit
+            let batchCount = 0;
+
+            try {
+                // Step 1: Migrate players without divisions
+                log.innerHTML += '<div>📋 Checking players...</div>';
+                const players = await db.collection('players').get();
+                
+                for (const doc of players.docs) {
+                    const data = doc.data();
+                    
+                    // If player doesn't have division but has teamId
+                    if (!data.division && data.teamId) {
+                        // Get team to find division
+                        const teamDoc = await db.collection('teams').doc(data.teamId).get();
+                        
+                        if (teamDoc.exists && teamDoc.data().division) {
+                            batch.update(doc.ref, { 
+                                division: teamDoc.data().division 
+                            });
+                            updateCount++;
+                            batchCount++;
+                            log.innerHTML += `<div>✅ Updated player: ${data.name} (${teamDoc.data().division})</div>`;
+                            
+                            // Commit batch if limit reached
+                            if (batchCount >= batchLimit - 10) {
+                                await batch.commit();
+                                batchCount = 0;
+                            }
+                        }
+                    }
+                }
+
+                // Step 2: Migrate games without divisions
+                log.innerHTML += '<div>📅 Checking games...</div>';
+                const games = await db.collection('games').get();
+                
+                for (const doc of games.docs) {
+                    const data = doc.data();
+                    
+                    // If game doesn't have division
+                    if (!data.division && data.homeTeamName) {
+                        // Try to get division from home team
+                        const teamQuery = await db.collection('teams')
+                            .where('name', '==', data.homeTeamName)
+                            .limit(1)
+                            .get();
+                        
+                        if (!teamQuery.empty && teamQuery.docs[0].data().division) {
+                            batch.update(doc.ref, {
+                                division: teamQuery.docs[0].data().division
+                            });
+                            updateCount++;
+                            batchCount++;
+                            log.innerHTML += `<div>✅ Updated game: ${data.homeTeamName} vs ${data.awayTeamName}</div>`;
+                            
+                            // Commit batch if limit reached
+                            if (batchCount >= batchLimit - 10) {
+                                await batch.commit();
+                                batchCount = 0;
+                            }
+                        }
+                    }
+                }
+
+                // Final commit
+                if (batchCount > 0) {
+                    await batch.commit();
+                }
+
+                log.innerHTML += `<div style="color: #10b981; font-weight: bold; margin-top: 1rem;">✅ Migration complete: ${updateCount} records updated</div>`;
+                
+                // Refresh stats
+                loadSystemStats();
+                
+            } catch (error) {
+                console.error('Migration error:', error);
+                log.innerHTML += `<div style="color: #ef4444;">❌ Migration error: ${error.message}</div>`;
+            }
+        }
+
+        function clearMigrationLog() {
+            document.getElementById('migrationLog').innerHTML = '';
+        }
+
+        // === COMPREHENSIVE TESTING ===
+        const testResults = [];
+
+        async function runAllTests() {
+            testResults.length = 0;
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div>🧪 Running all tests...</div>';
+            
+            await testDataModel();
+            await testWorkflows();
+            await testSync();
+            
+            displayTestResults();
+        }
+
+        async function testDataModel() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div>🔍 Testing data model...</div>';
+
+            // Test 1: Check if games have divisions
+            try {
+                const games = await db.collection('games').limit(10).get();
+                let gamesHaveDivisions = true;
+                let missingDivisionGames = [];
+                
+                games.forEach(doc => {
+                    if (!doc.data().division) {
+                        gamesHaveDivisions = false;
+                        missingDivisionGames.push(doc.id);
+                    }
+                });
+                
+                testResults.push({
+                    name: 'Games have divisions',
+                    passed: gamesHaveDivisions,
+                    details: missingDivisionGames.length > 0 ? 
+                        `Missing in: ${missingDivisionGames.join(', ')}` : 'All games have divisions'
+                });
+            } catch (error) {
+                testResults.push({
+                    name: 'Games have divisions',
+                    passed: false,
+                    details: error.message
+                });
+            }
+
+            // Test 2: Check if players have divisions
+            try {
+                const players = await db.collection('players').limit(20).get();
+                let playersHaveDivisions = true;
+                let missingDivisionPlayers = [];
+                
+                players.forEach(doc => {
+                    if (!doc.data().division) {
+                        playersHaveDivisions = false;
+                        missingDivisionPlayers.push(doc.data().name || doc.id);
+                    }
+                });
+                
+                testResults.push({
+                    name: 'Players have divisions',
+                    passed: playersHaveDivisions,
+                    details: missingDivisionPlayers.length > 0 ? 
+                        `Missing in: ${missingDivisionPlayers.join(', ')}` : 'All players have divisions'
+                });
+            } catch (error) {
+                testResults.push({
+                    name: 'Players have divisions',
+                    passed: false,
+                    details: error.message
+                });
+            }
+
+            // Test 3: Check if teams have divisions
+            try {
+                const teams = await db.collection('teams').get();
+                let teamsHaveDivisions = true;
+                let missingDivisionTeams = [];
+                
+                teams.forEach(doc => {
+                    if (!doc.data().division) {
+                        teamsHaveDivisions = false;
+                        missingDivisionTeams.push(doc.data().name || doc.id);
+                    }
+                });
+                
+                testResults.push({
+                    name: 'Teams have divisions',
+                    passed: teamsHaveDivisions,
+                    details: missingDivisionTeams.length > 0 ? 
+                        `Missing in: ${missingDivisionTeams.join(', ')}` : 'All teams have divisions'
+                });
+            } catch (error) {
+                testResults.push({
+                    name: 'Teams have divisions',
+                    passed: false,
+                    details: error.message
+                });
+            }
+
+            displayTestResults();
+        }
+
+        async function testWorkflows() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML += '<div>⚙️ Testing workflows...</div>';
+
+            // Test: Can create and delete test team
+            try {
+                const testTeam = {
+                    name: `Test Team ${Date.now()}`,
+                    division: '5th',
+                    coach: 'Test Coach',
+                    wins: 0,
+                    losses: 0,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                const teamRef = await db.collection('teams').add(testTeam);
+                await teamRef.delete();
+                
+                testResults.push({
+                    name: 'Create and delete team',
+                    passed: true,
+                    details: 'Successfully created and deleted test team'
+                });
+            } catch (error) {
+                testResults.push({
+                    name: 'Create and delete team',
+                    passed: false,
+                    details: error.message
+                });
+            }
+
+            // Test: Can create game with division
+            try {
+                const testGame = {
+                    division: '6th',
+                    homeTeamName: 'Test Home',
+                    awayTeamName: 'Test Away',
+                    gameDate: firebase.firestore.Timestamp.now(),
+                    location: 'Test Gym',
+                    status: 'scheduled'
+                };
+                
+                const gameRef = await db.collection('games').add(testGame);
+                await gameRef.delete();
+                
+                testResults.push({
+                    name: 'Create game with division',
+                    passed: true,
+                    details: 'Successfully created game with division'
+                });
+            } catch (error) {
+                testResults.push({
+                    name: 'Create game with division',
+                    passed: false,
+                    details: error.message
+                });
+            }
+
+            displayTestResults();
+        }
+
+        async function testSync() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML += '<div>🔄 Testing data sync...</div>';
+
+            // Test: Division filtering works
+            try {
+                const fourthGradePlayers = await db.collection('players')
+                    .where('division', '==', '4th')
+                    .limit(5)
+                    .get();
+                
+                const fifthGradePlayers = await db.collection('players')
+                    .where('division', '==', '5th')
+                    .limit(5)
+                    .get();
+                
+                testResults.push({
+                    name: 'Division filtering',
+                    passed: true,
+                    details: `Found ${fourthGradePlayers.size} 4th grade, ${fifthGradePlayers.size} 5th grade players`
+                });
+            } catch (error) {
+                testResults.push({
+                    name: 'Division filtering',
+                    passed: false,
+                    details: error.message
+                });
+            }
+
+            displayTestResults();
+        }
+
+        function displayTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            
+            const passed = testResults.filter(t => t.passed).length;
+            const failed = testResults.filter(t => !t.passed).length;
+            const passRate = testResults.length > 0 ? 
+                ((passed / testResults.length) * 100).toFixed(1) : 0;
+            
+            let html = `
+                <div style="margin: 1.5rem 0; padding: 1rem; background: #0f172a; border-radius: 6px;">
+                    <h3>Test Results Summary</h3>
+                    <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+                        <div>✅ Passed: <strong>${passed}</strong></div>
+                        <div>❌ Failed: <strong>${failed}</strong></div>
+                        <div>📊 Pass Rate: <strong>${passRate}%</strong></div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+            `;
+            
+            testResults.forEach(test => {
+                const className = test.passed ? 'pass' : 'fail';
+                const icon = test.passed ? '✅' : '❌';
+                html += `
+                    <div class="test-result ${className}">
+                        <strong>${icon} ${test.name}</strong>
+                        <div style="font-size: 0.875rem; margin-top: 0.25rem; color: #94a3b8;">
+                            ${test.details}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        // === SYSTEM STATS ===
+        async function loadSystemStats() {
+            try {
+                // Count teams
+                const teams = await db.collection('teams').get();
+                document.getElementById('teamCount').textContent = teams.size;
+                
+                // Count players
+                const players = await db.collection('players').get();
+                document.getElementById('playerCount').textContent = players.size;
+                
+                // Count games
+                const games = await db.collection('games').get();
+                document.getElementById('gameCount').textContent = games.size;
+                
+                // Count divisions
+                const divisions = new Set();
+                teams.forEach(doc => {
+                    if (doc.data().division) {
+                        divisions.add(doc.data().division);
+                    }
+                });
+                document.getElementById('divisionCount').textContent = divisions.size;
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+    </script>
+</body>
+</html>

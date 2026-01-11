@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Data - FABA Winter 2026</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0a0a0a; color: #fff; padding: 40px; }
+        h1 { color: #fbbf24; }
+        .btn { background: #dc2626; color: #fff; border: none; padding: 15px 30px; font-size: 18px; cursor: pointer; margin: 10px 5px 10px 0; border-radius: 8px; }
+        .btn:hover { background: #f97316; }
+        .btn-success { background: #22c55e; }
+        #log { background: #1a1a1a; padding: 20px; border-radius: 10px; max-height: 500px; overflow-y: auto; font-family: monospace; white-space: pre-wrap; }
+        .success { color: #22c55e; }
+        .error { color: #dc2626; }
+    </style>
+</head>
+<body>
+    <h1>FABA Winter 2026 - Data Seeder</h1>
+    <p>Use this page to seed the initial teams and Week 1 schedule data.</p>
+
+    <button class="btn" onclick="seedTeams()">1. Seed All Teams</button>
+    <button class="btn" onclick="seedWeek1Games()">2. Seed Week 1 Games</button>
+    <button class="btn btn-success" onclick="seedAll()">Seed Everything</button>
+
+    <h3 style="margin-top: 30px;">Log:</h3>
+    <div id="log">Ready to seed data...\n</div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const FABA_BASE = 'faba-leagues/winter-2026';
+
+        function log(msg, type = 'info') {
+            const logEl = document.getElementById('log');
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : '';
+            logEl.innerHTML += `<span class="${className}">${msg}</span>\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        // Open Division Teams (9 teams)
+        const openTeams = [
+            'Hoop Squad',
+            'Shift Team',
+            'The Introduction Runs',
+            'Valley Hoopers',
+            'Playhouse',
+            'Yauckey Buckets',
+            'Makulit',
+            'Jaballers',
+            'Team Unknown'
+        ];
+
+        // 38+ Division Teams (15 teams)
+        const seniorTeams = [
+            'Freedom Waters',
+            'Wolves',
+            'Takuza',
+            'Hoop Squad', // Note: Same name as Open division
+            'AZ Flight',
+            'TKSI',
+            'Playhouse', // Note: Same name as Open division
+            'Motown',
+            'Hoopaholic',
+            'Digong',
+            'Dream Capture',
+            'Call Xtina Now.com',
+            'Goutstar',
+            'Cebu Chorizo',
+            'FABA O.G'
+        ];
+
+        // Week 1 Open Division Games
+        const week1OpenGames = [
+            { time: '11:00 AM', homeTeam: 'Hoop Squad', awayTeam: 'Shift Team', court: 'CT-1' },
+            { time: '11:00 AM', homeTeam: 'The Introduction Runs', awayTeam: 'Valley Hoopers', court: 'CT-2' },
+            { time: '1:00 PM', homeTeam: 'Playhouse', awayTeam: 'Yauckey Buckets', court: 'CT-1' },
+            { time: '4:00 PM', homeTeam: 'Makulit', awayTeam: 'Jaballers', court: 'CT-2' }
+            // BYE: Team Unknown
+        ];
+
+        // Week 1 38+ Division Games
+        const week1SeniorGames = [
+            { time: '12:00 PM', homeTeam: 'Freedom Waters', awayTeam: 'Wolves', court: 'CT-2' },
+            { time: '12:00 PM', homeTeam: 'Takuza', awayTeam: 'Hoop Squad', court: 'CT-1' },
+            { time: '1:00 PM', homeTeam: 'AZ Flight', awayTeam: 'TKSI', court: 'CT-2' },
+            { time: '2:00 PM', homeTeam: 'Playhouse', awayTeam: 'Motown', court: 'CT-2' },
+            { time: '2:00 PM', homeTeam: 'Hoopaholic', awayTeam: 'Digong', court: 'CT-1' },
+            { time: '3:00 PM', homeTeam: 'Dream Capture', awayTeam: 'Call Xtina Now.com', court: 'CT-1' },
+            { time: '3:00 PM', homeTeam: 'Goutstar', awayTeam: 'Cebu Chorizo', court: 'CT-2' },
+            { time: '4:00 PM', homeTeam: 'FABA O.G', awayTeam: 'Goutstar', court: 'CT-1' }
+        ];
+
+        async function seedTeams() {
+            log('--- Starting Team Seeding ---');
+
+            // First, create the league document if it doesn't exist
+            try {
+                await db.collection('faba-leagues').doc('winter-2026').set({
+                    name: 'FABA Winter 2026',
+                    season: 'Winter 2026',
+                    startDate: '2026-01-11',
+                    endDate: '2026-03-29',
+                    location: 'Compass Sports Performance Gym',
+                    address: '255 W. Warner Rd, Chandler AZ 85225',
+                    divisions: ['Open', '38+'],
+                    weeks: 8
+                }, { merge: true });
+                log('League document created/updated', 'success');
+            } catch (e) {
+                log('Error creating league doc: ' + e.message, 'error');
+            }
+
+            // Add Open Division teams
+            log('Adding Open Division teams...');
+            for (const name of openTeams) {
+                try {
+                    // Use team name as doc ID for easier lookup
+                    await db.collection(FABA_BASE + '/teams').doc('open-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-')).set({
+                        name: name,
+                        division: 'Open',
+                        wins: 0,
+                        losses: 0,
+                        pointsFor: 0,
+                        pointsAgainst: 0
+                    });
+                    log(`  Added: ${name} (Open)`, 'success');
+                } catch (e) {
+                    log(`  Error adding ${name}: ${e.message}`, 'error');
+                }
+            }
+
+            // Add 38+ Division teams
+            log('Adding 38+ Division teams...');
+            for (const name of seniorTeams) {
+                try {
+                    await db.collection(FABA_BASE + '/teams').doc('38plus-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-')).set({
+                        name: name,
+                        division: '38+',
+                        wins: 0,
+                        losses: 0,
+                        pointsFor: 0,
+                        pointsAgainst: 0
+                    });
+                    log(`  Added: ${name} (38+)`, 'success');
+                } catch (e) {
+                    log(`  Error adding ${name}: ${e.message}`, 'error');
+                }
+            }
+
+            log('--- Team Seeding Complete ---\n', 'success');
+        }
+
+        async function seedWeek1Games() {
+            log('--- Starting Week 1 Games Seeding ---');
+
+            // Add Open Division games
+            log('Adding Open Division Week 1 games...');
+            for (const game of week1OpenGames) {
+                try {
+                    await db.collection(FABA_BASE + '/games').add({
+                        week: 1,
+                        division: 'Open',
+                        time: game.time,
+                        court: game.court,
+                        homeTeam: game.homeTeam,
+                        awayTeam: game.awayTeam,
+                        homeScore: 0,
+                        awayScore: 0,
+                        status: 'scheduled',
+                        date: '2026-01-11'
+                    });
+                    log(`  Added: ${game.homeTeam} vs ${game.awayTeam} @ ${game.time}`, 'success');
+                } catch (e) {
+                    log(`  Error: ${e.message}`, 'error');
+                }
+            }
+
+            // Add 38+ Division games
+            log('Adding 38+ Division Week 1 games...');
+            for (const game of week1SeniorGames) {
+                try {
+                    await db.collection(FABA_BASE + '/games').add({
+                        week: 1,
+                        division: '38+',
+                        time: game.time,
+                        court: game.court,
+                        homeTeam: game.homeTeam,
+                        awayTeam: game.awayTeam,
+                        homeScore: 0,
+                        awayScore: 0,
+                        status: 'scheduled',
+                        date: '2026-01-11'
+                    });
+                    log(`  Added: ${game.homeTeam} vs ${game.awayTeam} @ ${game.time}`, 'success');
+                } catch (e) {
+                    log(`  Error: ${e.message}`, 'error');
+                }
+            }
+
+            log('--- Week 1 Games Seeding Complete ---\n', 'success');
+        }
+
+        async function seedAll() {
+            await seedTeams();
+            await seedWeek1Games();
+            log('=== ALL DATA SEEDED SUCCESSFULLY ===', 'success');
+        }
+    </script>
+</body>
+</html>

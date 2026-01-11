@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Dashboard - Clash of the Barbarians 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Auth Check Script - MUST load before page content -->
+    <script src="/js/auth-check.js" defer></script>
+    
+    <style>
+        /* PROFESSIONAL COACH DASHBOARD STYLES */
+        :root {
+            --primary-blue: #3b82f6;
+            --primary-blue-dark: #2563eb;
+            --primary-blue-light: #60a5fa;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --surface-hover: #475569;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #475569;
+            --border-light: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            letter-spacing: 2px;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .team-selector {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        .team-selector option {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--surface-hover);
+            color: var(--primary-blue);
+        }
+
+        .btn-settings {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 48px;
+            height: 48px;
+        }
+
+        .btn-settings:hover {
+            background: var(--surface-hover);
+            color: var(--primary-blue);
+        }
+
+        .settings-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem 0;
+            min-width: 200px;
+            z-index: 1000;
+            margin-top: 5px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .settings-item:hover {
+            background: var(--surface-hover);
+        }
+
+        .settings-item.logout {
+            color: var(--danger);
+            border-top: 1px solid var(--border);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .settings-item.logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Team Header */
+        .team-header-section {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .team-logo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .team-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background: var(--surface-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid var(--border);
+        }
+
+        .team-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-logo i {
+            font-size: 3rem;
+            color: var(--text-muted);
+        }
+
+        .logo-upload-btn {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .logo-upload-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: scale(1.1);
+        }
+
+        .team-info {
+            flex: 1;
+        }
+
+        .team-name {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .team-details {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .team-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--surface);
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            background: var(--surface-light);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .dashboard-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-section-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Performance Grid */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .performance-card {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .performance-card:hover {
+            background: var(--surface-hover);
+        }
+
+        .perf-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .perf-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Players Table */
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .players-table th {
+            background: var(--surface-light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .players-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .players-table tr:hover {
+            background: var(--surface-light);
+        }
+
+        .player-photo-cell {
+            width: 60px;
+        }
+
+        .player-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .player-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .player-photo i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .photo-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .player-photo:hover .photo-upload-overlay {
+            display: flex;
+        }
+
+        .photo-upload-overlay i {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Buttons */
+        .btn-add {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Forms */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--surface-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-blue);
+            background: var(--surface-hover);
+        }
+
+        .file-upload-area.drag-over {
+            border-color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .file-upload-area i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-area p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-area small {
+            color: var(--text-muted);
+        }
+
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            margin: 1rem auto;
+            overflow: hidden;
+            display: none;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Modal Actions */
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-submit {
+            flex: 1;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: var(--surface-hover);
+        }
+
+        /* Schedule List */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .game-card {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            background: var(--surface-hover);
+        }
+
+        .game-info {
+            flex: 1;
+        }
+
+        .game-teams {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-details {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .game-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-upcoming {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--success);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 10001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .team-header-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .performance-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ==========================================
+           AUTH-FIRST ARCHITECTURE - BUG #2 FIX
+           By: Marcus Rodriguez (Auth Expert)
+           ========================================== */
+
+        /* Hide ALL content by default */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Loading screen - ONLY visible element initially */
+        #authLoadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+        
+        /* Hide main content initially */
+        .coach-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+        
+        /* Show content only when authenticated */
+        body.authenticated .coach-container {
+            display: block;
+            opacity: 1;
+        }
+        
+        body.authenticated #authLoadingScreen {
+            display: none;
+        }
+        
+        /* Spinner animation */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===================================
+           MOBILE RESPONSIVE DESIGN - PHASE 2
+           =================================== */
+
+        /* Tablet and below */
+        @media (max-width: 768px) {
+            /* Stats grid becomes 2 columns */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+            }
+            
+            /* All buttons meet 48px minimum touch target */
+            .btn, button, .admin-tabs button, .tab-btn, .action-btn {
+                min-height: 48px !important;
+                min-width: 48px !important;
+                font-size: 16px !important;
+                padding: 12px 20px !important;
+            }
+            
+            /* Tables scroll horizontally */
+            .data-table, .table-container {
+                font-size: 14px !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                display: block !important;
+            }
+            
+            .data-table table {
+                min-width: 600px !important;
+            }
+            
+            /* Tab navigation scrolls horizontally */
+            .admin-tabs, .tab-navigation {
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                -webkit-overflow-scrolling: touch !important;
+                display: flex !important;
+                gap: 0.5rem !important;
+            }
+            
+            .admin-tabs button, .tab-btn {
+                flex-shrink: 0 !important;
+                min-width: 120px !important;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 480px) {
+            /* Stats grid becomes 1 column */
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Larger text for readability */
+            .stat-card h3 {
+                font-size: 2rem !important;
+            }
+            
+            .stat-card p {
+                font-size: 0.9rem !important;
+            }
+            
+            /* Full width buttons */
+            .btn-group {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            
+            .btn {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Loading Screen - ONLY visible element initially -->
+    <div id="authLoadingScreen">
+        <div style="text-align: center; color: white;">
+            <div class="spinner"></div>
+            <h2 style="margin-top: 1.5rem; font-weight: 600;">Verifying Coach Access</h2>
+            <p style="margin-top: 0.5rem; opacity: 0.9;">Please wait while we confirm your coaching credentials...</p>
+        </div>
+    </div>
+
+    <!-- ALL COACH CONTENT WRAPPED -->
+    <div class="coach-container">
+        <!-- Navigation header -->
+        <header class="dashboard-header">
+        <div class="container">
+            <nav class="dashboard-nav">
+                <div class="logo">
+                    <i class="fas fa-basketball-ball"></i>
+                    <div class="brand-text">
+                        <h1>AZ FLIGHT</h1>
+                        <span>COACH PORTAL</span>
+                    </div>
+                </div>
+                <div class="nav-controls">
+                    <select class="team-selector" id="teamSelector" onchange="switchTeam()">
+                        <option value="">Select Your Team</option>
+                    </select>
+                    <div class="settings-dropdown" style="position: relative;">
+                        <button class="btn-settings" id="settingsBtn" onclick="toggleSettingsMenu()">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <div class="settings-menu" id="settingsMenu" style="display: none;">
+                            <button onclick="handleLogout()" class="settings-item logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Team Header -->
+        <div class="team-header-section" id="teamHeaderSection" style="display: none;">
+            <div class="team-logo-container">
+                <div class="team-logo" id="teamLogoDisplay">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <button class="logo-upload-btn" onclick="document.getElementById('teamLogoInput').click()">
+                    <i class="fas fa-camera"></i>
+                </button>
+                <input type="file" id="teamLogoInput" accept="image/*" style="display: none;" onchange="handleTeamLogoUpload(event)">
+            </div>
+            <div class="team-info">
+                <h2 class="team-name" id="teamNameDisplay">Select a Team</h2>
+                <div class="team-details">
+                    <div class="team-detail">
+                        <i class="fas fa-layer-group"></i>
+                        <span id="teamDivisionDisplay">Division</span>
+                    </div>
+                    <div class="team-detail">
+                        <i class="fas fa-users"></i>
+                        <span id="teamPlayerCountDisplay">0 Players</span>
+                    </div>
+                    <div class="team-detail">
+                        <i class="fas fa-trophy"></i>
+                        <span id="teamRecordDisplay">0-0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav" id="tabNav" style="display: none;">
+            <button class="tab-btn active" onclick="switchTab('roster')">
+                <i class="fas fa-users"></i> Roster
+            </button>
+            <button class="tab-btn" onclick="switchTab('schedule')">
+                <i class="fas fa-calendar"></i> Schedule
+            </button>
+            <button class="tab-btn" onclick="switchTab('stats')">
+                <i class="fas fa-chart-bar"></i> Stats
+            </button>
+        </div>
+
+        <!-- Roster Tab -->
+        <div id="rosterTab" class="tab-content active">
+            <!-- Performance Overview -->
+            <div class="dashboard-section" id="performanceSection" style="display: none;">
+                <div class="dashboard-section-header">
+                    <h3>Team Performance</h3>
+                </div>
+                <div class="performance-grid">
+                    <div class="performance-card">
+                        <div class="perf-value" id="teamWins">0</div>
+                        <div class="perf-label">Wins</div>
+                    </div>
+                    <div class="performance-card">
+                        <div class="perf-value" id="teamLosses">0</div>
+                        <div class="perf-label">Losses</div>
+                    </div>
+                    <div class="performance-card">
+                        <div class="perf-value" id="avgPoints">0</div>
+                        <div class="perf-label">Avg Points</div>
+                    </div>
+                    <div class="performance-card">
+                        <div class="perf-value" id="avgRebounds">0</div>
+                        <div class="perf-label">Avg Rebounds</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Management -->
+            <div class="dashboard-section" id="playerSection" style="display: none;">
+                <div class="dashboard-section-header">
+                    <h3>Player Roster</h3>
+                    <button class="btn-add" onclick="showAddPlayerModal()">
+                        <i class="fas fa-plus"></i> Add Player
+                    </button>
+                </div>
+                <table class="players-table">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Grade</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playersTableBody">
+                        <!-- Players will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div class="dashboard-section" id="emptyState">
+                <div style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-users" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 1rem;">No Team Selected</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Waiting for team assignment from admin</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="scheduleTab" class="tab-content">
+            <div class="dashboard-section">
+                <div class="dashboard-section-header">
+                    <h3>Team Schedule</h3>
+                </div>
+                <div class="schedule-list" id="scheduleList">
+                    <!-- Games will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Tab -->
+        <div id="statsTab" class="tab-content">
+            <div class="dashboard-section">
+                <div class="dashboard-section-header">
+                    <h3>Player Statistics</h3>
+                </div>
+                <table class="players-table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>GP</th>
+                            <th>PTS</th>
+                            <th>REB</th>
+                            <th>AST</th>
+                            <th>STL</th>
+                            <th>BLK</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsTableBody">
+                        <!-- Stats will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Player Modal -->
+    <div id="addPlayerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Player</h3>
+                <button class="modal-close" onclick="hideAddPlayerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addPlayerForm" onsubmit="addPlayer(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="playerName">Player Name</label>
+                        <input type="text" id="playerName" required placeholder="First Last">
+                    </div>
+                    <div class="form-group">
+                        <label for="jerseyNumber">Jersey Number</label>
+                        <input type="number" id="jerseyNumber" required min="0" max="99" placeholder="00">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="playerPosition">Position</label>
+                        <select id="playerPosition">
+                            <option value="">Select Position</option>
+                            <option value="PG">Point Guard</option>
+                            <option value="SG">Shooting Guard</option>
+                            <option value="SF">Small Forward</option>
+                            <option value="PF">Power Forward</option>
+                            <option value="C">Center</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="playerGrade">Grade</label>
+                        <input type="text" id="playerGrade" placeholder="e.g., 7th">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="parentEmail">Parent Email</label>
+                    <input type="email" id="parentEmail" placeholder="parent@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Player Photo</label>
+                    <div class="file-upload-area" onclick="document.getElementById('playerPhotoFile').click()">
+                        <i class="fas fa-camera"></i>
+                        <p>Click to upload player photo</p>
+                        <small>PNG, JPG up to 2MB</small>
+                    </div>
+                    <div class="image-preview" id="playerPhotoPreview">
+                        <img id="playerPhotoPreviewImg" src="" alt="Player photo">
+                    </div>
+                    <input type="file" id="playerPhotoFile" accept="image/*" style="display: none;" onchange="previewPlayerPhoto(event)">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-submit">Add Player</button>
+                    <button type="button" class="btn-cancel" onclick="hideAddPlayerModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Player Modal -->
+    <div id="editPlayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
+            <h2 style="margin-bottom: 20px;">Edit Player</h2>
+            
+            <input type="hidden" id="editPlayerId">
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Player Name *</label>
+                <input type="text" id="editPlayerName" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Jersey Number *</label>
+                <input type="text" id="editPlayerJersey" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Position</label>
+                <select id="editPlayerPosition" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <option value="">Select Position</option>
+                    <option value="Point Guard">Point Guard</option>
+                    <option value="Shooting Guard">Shooting Guard</option>
+                    <option value="Small Forward">Small Forward</option>
+                    <option value="Power Forward">Power Forward</option>
+                    <option value="Center">Center</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Grade</label>
+                <input type="text" id="editPlayerGrade" placeholder="e.g., 8th" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button onclick="closeEditPlayerModal()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer;">Cancel</button>
+                <button onclick="savePlayerEdit()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+    <script>
+        // Firebase configuration - FABA Winter 2026
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+        
+        // Initialize Firebase only once
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log('Firebase initialized in coach.html');
+        } else {
+            console.log('Using existing Firebase instance');
+        }
+        
+        // Global database and auth references - MUST be accessible to all functions
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+        
+        // Enable offline persistence
+        db.enablePersistence({ synchronizeTabs: true })
+            .then(() => console.log('Offline persistence enabled'))
+            .catch((err) => console.log('⚠️ Persistence warning:', err.code));
+
+        // ========================================
+        // AUTH-FIRST INITIALIZATION
+        // By: Marcus Rodriguez (Auth Expert)
+        // ========================================
+
+        console.log('🔐 Auth Check Script v4.0 - Auth-First Architecture');
+
+        // NO OTHER CODE RUNS UNTIL THIS COMPLETES
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (!user) {
+                console.log('No authenticated user');
+                console.log('🔀 Redirecting to login');
+                // Immediate redirect - no initialization
+                window.location.href = '/login.html?role=coach';
+                return;
+            }
+
+            console.log('User authenticated:', user.email);
+            
+            // Verify coach role
+            try {
+                // RACE CONDITION FIX: Wait for auth token to propagate to Firestore
+                await user.getIdToken(true);
+                
+                // Small delay to ensure Firestore SDK has the token
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const userData = userDoc.data();
+                
+                if (!userData || userData.role !== 'coach') {
+                    console.log('Insufficient permissions');
+                    await firebase.auth().signOut();
+                    window.location.href = '/login.html?role=coach&error=unauthorized';
+                    return;
+                }
+                
+                console.log('Coach role verified');
+                
+                // CHECK FOR MANDATORY PASSWORD CHANGE
+                // Skip password change requirement check
+                
+                console.log('🎨 Revealing coach interface');
+                
+                // ONLY NOW reveal content
+                document.body.classList.add('authenticated');
+                
+                // ONLY NOW initialize coach functionality
+                console.log('🏀 Coach Panel Initializing...');
+                
+                // Small delay to ensure smooth transition
+                setTimeout(() => {
+                    console.log('🏀 Coach Dashboard Starting...');
+                    
+                    // Initialize coach functionality
+                    if (typeof loadCoachData === 'function') {
+                        loadCoachData();
+                    }
+                    if (typeof setupDragAndDrop === 'function') {
+                        setupDragAndDrop();
+                    }
+                    
+                    console.log('Coach dashboard ready');
+                }, 100);
+                
+            } catch (error) {
+                console.error('Auth verification error:', error);
+                window.location.href = '/login.html?role=coach&error=auth_failed';
+            }
+        });
+
+        // State
+        let currentCoach = null;
+        let currentTeam = null;
+        let teams = [];
+        let players = [];
+        
+        // Real-time listener unsubscribe functions
+        let playersUnsubscribe = null;
+        let gamesUnsubscribe = null;
+
+        // Initialization now handled by auth-first pattern above
+        // This ensures no coach functionality runs until authenticated
+
+        // Load coach data
+        // Phase 3.1: Organization/Team Selector - Updated for new structure
+        async function loadCoachData() {
+            try {
+                // Get current authenticated user and their data
+                const user = firebase.auth().currentUser;
+                if (!user) throw new Error('No authenticated user');
+                
+                // RACE CONDITION FIX: Wait for auth token to propagate to Firestore
+                await user.getIdToken(true);
+                
+                // Small delay to ensure Firestore SDK has the token
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const userData = userDoc.data();
+                if (!userData || !userData.teamId) {
+                    throw new Error('Coach has no assigned team');
+                }
+                
+                // Load coach's assigned team using teamId from user data
+                const teamDoc = await db.collection('teams').doc(userData.teamId).get();
+                if (!teamDoc.exists) {
+                    throw new Error('Assigned team not found');
+                }
+                
+                const team = { id: teamDoc.id, ...teamDoc.data() };
+                teams = [team]; // Coach has only one assigned team
+                
+                // Get organization info for display
+                const orgDoc = await db.collection('organizations').doc(team.organizationId).get();
+                const org = orgDoc.exists ? orgDoc.data() : { name: 'Unknown Org' };
+                
+                // Setup team selector with coach's assigned team
+                const teamSelector = document.getElementById('teamSelector');
+                teamSelector.innerHTML = '<option value="">Select Your Team</option>';
+                
+                const option = document.createElement('option');
+                option.value = team.id;
+                option.textContent = `${team.name} ${team.primaryDivision || team.division}`;
+                teamSelector.appendChild(option);
+                
+                // Auto-select the assigned team
+                teamSelector.value = team.id;
+                switchTeam();
+                
+                console.log(`Loaded ${teams.length} team for coach ${userData.username || user.email}`);
+                
+            } catch (error) {
+                console.error('Error loading coach data:', error);
+                showToast('Error loading teams', 'error');
+            }
+        }
+
+        // Switch team
+        async function switchTeam() {
+            const teamId = document.getElementById('teamSelector').value;
+
+            if (!teamId) {
+                // Show empty state
+                document.getElementById('teamHeaderSection').style.display = 'none';
+                document.getElementById('tabNav').style.display = 'none';
+                document.getElementById('performanceSection').style.display = 'none';
+                document.getElementById('playerSection').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+            
+            // Hide empty state, show team content
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('teamHeaderSection').style.display = 'flex';
+            document.getElementById('tabNav').style.display = 'flex';
+            document.getElementById('performanceSection').style.display = 'block';
+            document.getElementById('playerSection').style.display = 'block';
+            
+            // Load team data
+            currentTeam = teams.find(t => t.id === teamId);
+            if (currentTeam) {
+                updateTeamDisplay();
+                loadPlayers();
+                loadSchedule();
+                loadStats();
+            }
+        }
+
+        // Update team display
+        function updateTeamDisplay() {
+            document.getElementById('teamNameDisplay').textContent = currentTeam.name;
+            document.getElementById('teamDivisionDisplay').textContent = currentTeam.division;
+            document.getElementById('teamRecordDisplay').textContent = `${currentTeam.wins || 0}-${currentTeam.losses || 0}`;
+            document.getElementById('teamWins').textContent = currentTeam.wins || 0;
+            document.getElementById('teamLosses').textContent = currentTeam.losses || 0;
+            
+            // Load team logo if exists
+            if (currentTeam.logoUrl) {
+                document.getElementById('teamLogoDisplay').innerHTML = 
+                    `<img src="${currentTeam.logoUrl}" alt="Team logo">`;
+            } else {
+                document.getElementById('teamLogoDisplay').innerHTML = 
+                    '<i class="fas fa-shield-alt"></i>';
+            }
+        }
+
+        // Load players with real-time listener
+        function loadPlayers() {
+            if (!currentTeam) return;
+            
+            // Unsubscribe from previous listener
+            if (playersUnsubscribe) {
+                playersUnsubscribe();
+                playersUnsubscribe = null;
+            }
+            
+            try {
+                // Setup real-time listener for players
+                playersUnsubscribe = db.collection('players')
+                    .where('teamId', '==', currentTeam.id)
+                    .onSnapshot(playersSnapshot => {
+                        players = [];
+                        const tbody = document.getElementById('playersTableBody');
+                        tbody.innerHTML = '';
+                        
+                        playersSnapshot.forEach(doc => {
+                            const player = { id: doc.id, ...doc.data() };
+                            players.push(player);
+                            
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td class="player-photo-cell">
+                                    <div class="player-photo" onclick="uploadPlayerPhoto('${player.id}')">
+                                        ${player.photoUrl ? 
+                                            `<img src="${player.photoUrl}" alt="${player.name}">` : 
+                                            '<i class="fas fa-user"></i>'}
+                                        <div class="photo-upload-overlay">
+                                            <i class="fas fa-camera"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><strong>${player.jerseyNumber || '-'}</strong></td>
+                                <td>${player.name}</td>
+                                <td>${player.position || '-'}</td>
+                                <td>${player.grade || '-'}</td>
+                                <td>
+                                    <div class="player-actions">
+                                        <button class="btn-icon btn-edit" onclick="editPlayer('${player.id}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" onclick="deletePlayer('${player.id}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                        
+                        // Update player count
+                        document.getElementById('teamPlayerCountDisplay').textContent = `${players.length} Players`;
+                        
+                    }, error => {
+                        console.error('Error loading players:', error);
+                        showToast('Error loading players', 'error');
+                    });
+                
+            } catch (error) {
+                console.error('Error setting up players listener:', error);
+            }
+        }
+
+        // Cleanup function for unsubscribing from all listeners
+        function cleanupListeners() {
+            if (playersUnsubscribe) {
+                playersUnsubscribe();
+                playersUnsubscribe = null;
+            }
+            if (gamesUnsubscribe) {
+                gamesUnsubscribe();
+                gamesUnsubscribe = null;
+            }
+        }
+
+        // Create team
+        // Phase 3.2: Add New Team Modal - Updated for organization structure
+        async function createTeam(event) {
+            event.preventDefault();
+            
+            const coachId = localStorage.getItem('coachId');
+            
+            // Get form values
+            const name = document.getElementById('teamName').value;
+            const ageGroup = document.getElementById('teamAgeGroup').value;
+            const primaryDivision = document.getElementById('teamPrimaryDivision').value;
+            const colors = document.getElementById('teamColors').value;
+            
+            // Get eligible divisions from checkboxes
+            const eligibleDivs = [];
+            document.querySelectorAll('input[name="eligibleDiv"]:checked').forEach(cb => {
+                eligibleDivs.push(cb.value);
+            });
+            
+            // Ensure primary division is included in eligible divisions
+            if (!eligibleDivs.includes(primaryDivision)) {
+                eligibleDivs.push(primaryDivision);
+            }
+            
+            try {
+                // Get coach's existing organization or create new one
+                let organizationId;
+                
+                // Check if coach already has teams (to determine organization)
+                const existingTeamsSnapshot = await db.collection('teams')
+                    .where('coachIds', 'array-contains', coachId)
+                    .limit(1)
+                    .get();
+                
+                if (!existingTeamsSnapshot.empty) {
+                    // Use existing organization
+                    organizationId = existingTeamsSnapshot.docs[0].data().organizationId;
+                } else {
+                    // Create new organization for this coach
+                    const orgRef = await db.collection('organizations').add({
+                        name: name, // Use team name as organization name for single-team orgs
+                        type: 'single-team',
+                        settings: {
+                            allowCrossDivision: true,
+                            standingsRule: 'home-team-division'
+                        },
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    organizationId = orgRef.id;
+                }
+                
+                // Get organization for full name
+                const orgDoc = await db.collection('organizations').doc(organizationId).get();
+                const org = orgDoc.data();
+                
+                // Create team data
+                const teamData = {
+                    organizationId: organizationId,
+                    name: name,
+                    fullName: org.type === 'multi-team' ? `${org.name} ${name}` : name,
+                    ageGroup: ageGroup,
+                    primaryDivision: primaryDivision,
+                    eligibleDivisions: eligibleDivs,
+                    coachIds: [coachId],
+                    players: [],
+                    wins: 0,
+                    losses: 0,
+                    colors: colors,
+                    
+                    // Initialize division records
+                    divisionRecords: {},
+                    
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                // Initialize division records for all eligible divisions
+                eligibleDivs.forEach(div => {
+                    teamData.divisionRecords[div] = { wins: 0, losses: 0 };
+                });
+                
+                // Upload logo if selected
+                const logoFile = document.getElementById('teamLogoFile').files[0];
+                if (logoFile) {
+                    const logoUrl = await uploadImage(logoFile, 'team-logos');
+                    teamData.logoUrl = logoUrl;
+                }
+                
+                // Create team in Firestore
+                const docRef = await db.collection('teams').add(teamData);
+                
+                showToast('Team created successfully!');
+                hideCreateTeamModal();
+                
+                // Reload teams and select new team
+                await loadCoachData();
+                document.getElementById('teamSelector').value = docRef.id;
+                switchTeam();
+                
+            } catch (error) {
+                console.error('Error creating team:', error);
+                showToast('Error creating team: ' + error.message, 'error');
+            }
+        }
+
+        // Add player
+        async function addPlayer(event) {
+            event.preventDefault();
+            
+            if (!currentTeam) return;
+            
+            const playerData = {
+                name: document.getElementById('playerName').value,
+                jerseyNumber: document.getElementById('jerseyNumber').value,
+                position: document.getElementById('playerPosition').value,
+                grade: document.getElementById('playerGrade').value,
+                parentEmail: document.getElementById('parentEmail').value,
+                teamId: currentTeam.id,
+                teamName: currentTeam.name,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            try {
+                // Upload photo if selected
+                const photoFile = document.getElementById('playerPhotoFile').files[0];
+                if (photoFile) {
+                    const photoUrl = await uploadImage(photoFile, 'player-photos');
+                    playerData.photoUrl = photoUrl;
+                }
+                
+                // Add player to Firestore
+                await db.collection('players').add(playerData);
+                
+                showToast('Player added successfully!');
+                hideAddPlayerModal();
+                loadPlayers();
+                
+            } catch (error) {
+                console.error('Error adding player:', error);
+                showToast('Error adding player', 'error');
+            }
+        }
+
+        // Upload image to Firebase Storage
+        async function uploadImage(file, folder) {
+            const timestamp = Date.now();
+            const fileName = `${timestamp}_${file.name}`;
+            const storageRef = storage.ref(`${folder}/${fileName}`);
+            
+            const snapshot = await storageRef.put(file);
+            const downloadUrl = await snapshot.ref.getDownloadURL();
+            
+            return downloadUrl;
+        }
+
+        // Handle team logo upload
+        async function handleTeamLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file || !currentTeam) return;
+            
+            try {
+                showToast('Uploading logo...');
+                const logoUrl = await uploadImage(file, 'team-logos');
+                
+                // Update team in Firestore
+                await db.collection('teams').doc(currentTeam.id).update({ logoUrl });
+                
+                // Update display
+                document.getElementById('teamLogoDisplay').innerHTML = 
+                    `<img src="${logoUrl}" alt="Team logo">`;
+                
+                currentTeam.logoUrl = logoUrl;
+                showToast('Logo uploaded successfully!');
+                
+            } catch (error) {
+                console.error('Error uploading logo:', error);
+                showToast('Error uploading logo', 'error');
+            }
+        }
+
+        // Upload player photo
+        async function uploadPlayerPhoto(playerId) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                try {
+                    showToast('Uploading photo...');
+                    const photoUrl = await uploadImage(file, 'player-photos');
+                    
+                    // Update player in Firestore
+                    await db.collection('players').doc(playerId).update({ photoUrl });
+                    
+                    showToast('Photo uploaded successfully!');
+                    loadPlayers();
+                    
+                } catch (error) {
+                    console.error('Error uploading photo:', error);
+                    showToast('Error uploading photo', 'error');
+                }
+            };
+            
+            input.click();
+        }
+
+        // Delete player
+        async function deletePlayer(playerId) {
+            if (!confirm('Are you sure you want to remove this player?')) return;
+            
+            try {
+                await db.collection('players').doc(playerId).delete();
+                showToast('Player removed successfully!');
+                loadPlayers();
+            } catch (error) {
+                console.error('Error deleting player:', error);
+                showToast('Error deleting player', 'error');
+            }
+        }
+
+        // Preview logo
+        function previewLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('logoPreviewImg').src = e.target.result;
+                    document.getElementById('logoPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Preview player photo
+        function previewPlayerPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('playerPhotoPreviewImg').src = e.target.result;
+                    document.getElementById('playerPhotoPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Switch tab
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        // Load schedule with real-time listener
+        async function loadSchedule() {
+            if (!currentTeam) return;
+            
+            // Unsubscribe from previous listener
+            if (gamesUnsubscribe) {
+                gamesUnsubscribe();
+                gamesUnsubscribe = null;
+            }
+            
+            try {
+                let homeGames = [];
+                let awayGames = [];
+                
+                async function updateScheduleDisplay() {
+                    const scheduleList = document.getElementById('scheduleList');
+                    scheduleList.innerHTML = '';
+                    
+                    const allGames = [...homeGames, ...awayGames];
+                    
+                    for (const game of allGames) {
+                        const gameCard = document.createElement('div');
+                        gameCard.className = 'game-card';
+                        
+                        // Fetch team names from teams collection
+                        let homeTeamName = 'Home Team';
+                        let awayTeamName = 'Away Team';
+                        
+                        try {
+                            if (game.homeTeamId) {
+                                const homeTeamDoc = await db.collection('teams').doc(game.homeTeamId).get();
+                                if (homeTeamDoc.exists) {
+                                    homeTeamName = homeTeamDoc.data().name || 'Home Team';
+                                }
+                            }
+                            if (game.awayTeamId) {
+                                const awayTeamDoc = await db.collection('teams').doc(game.awayTeamId).get();
+                                if (awayTeamDoc.exists) {
+                                    awayTeamName = awayTeamDoc.data().name || 'Away Team';
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Error fetching team names for coach schedule:', error);
+                            // Fall back to existing stored names if available
+                            homeTeamName = game.homeTeamName || 'Home Team';
+                            awayTeamName = game.awayTeamName || 'Away Team';
+                        }
+                        
+                        gameCard.innerHTML = `
+                            <div class="game-info">
+                                <div class="game-teams">${homeTeamName} vs ${awayTeamName}</div>
+                                <div class="game-details">
+                                    <span><i class="fas fa-calendar"></i> ${game.gameDate || 'TBD'}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> ${game.location || 'TBD'}</span>
+                                </div>
+                            </div>
+                            <div class="game-status status-${game.status || 'upcoming'}">
+                                ${game.status === 'completed' ? 'Completed' : 'Upcoming'}
+                            </div>
+                        `;
+                        scheduleList.appendChild(gameCard);
+                    }
+                    
+                    if (allGames.length === 0) {
+                        scheduleList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No games scheduled</p>';
+                    }
+                }
+                
+                // Setup real-time listener for home games
+                const homeGamesUnsubscribe = db.collection('games')
+                    .where('homeTeamId', '==', currentTeam.id)
+                    .onSnapshot(async gamesSnapshot => {
+                        homeGames = [];
+                        gamesSnapshot.forEach(doc => homeGames.push({ id: doc.id, ...doc.data() }));
+                        await updateScheduleDisplay();
+                    }, error => {
+                        console.error('Error loading home games:', error);
+                        showToast('Error loading schedule', 'error');
+                    });
+                
+                // Setup real-time listener for away games
+                const awayGamesUnsubscribe = db.collection('games')
+                    .where('awayTeamId', '==', currentTeam.id)
+                    .onSnapshot(async gamesSnapshot => {
+                        awayGames = [];
+                        gamesSnapshot.forEach(doc => awayGames.push({ id: doc.id, ...doc.data() }));
+                        await updateScheduleDisplay();
+                    }, error => {
+                        console.error('Error loading away games:', error);
+                        showToast('Error loading schedule', 'error');
+                    });
+                
+                // Combined unsubscribe function
+                gamesUnsubscribe = () => {
+                    homeGamesUnsubscribe();
+                    awayGamesUnsubscribe();
+                };
+                
+            } catch (error) {
+                console.error('Error setting up schedule listener:', error);
+            }
+        }
+
+        // Load stats
+        async function loadStats() {
+            if (!currentTeam) return;
+            
+            // This would load actual stats from games
+            // For now, show placeholder
+            const tbody = document.getElementById('statsTableBody');
+            tbody.innerHTML = players.map(player => `
+                <tr>
+                    <td>${player.name}</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            `).join('');
+        }
+
+        // Setup drag and drop
+        function setupDragAndDrop() {
+            const logoArea = document.getElementById('logoUploadArea');
+            if (logoArea) {
+                logoArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    logoArea.classList.add('drag-over');
+                });
+                
+                logoArea.addEventListener('dragleave', () => {
+                    logoArea.classList.remove('drag-over');
+                });
+                
+                logoArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    logoArea.classList.remove('drag-over');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        document.getElementById('teamLogoFile').files = files;
+                        previewLogo({ target: { files } });
+                    }
+                });
+            }
+        }
+
+        // Modal functions
+
+        function showAddPlayerModal() {
+            document.getElementById('addPlayerModal').classList.add('show');
+        }
+
+        function hideAddPlayerModal() {
+            document.getElementById('addPlayerModal').classList.remove('show');
+            document.getElementById('addPlayerForm').reset();
+            document.getElementById('playerPhotoPreview').style.display = 'none';
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast show ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Edit player (placeholder)
+        async function editPlayer(playerId) {
+            try {
+                // Get player data
+                const playerDoc = await db.collection('players').doc(playerId).get();
+                
+                if (!playerDoc.exists) {
+                    showToast('Player not found', 'error');
+                    return;
+                }
+
+                const player = playerDoc.data();
+
+                // Populate edit modal fields
+                document.getElementById('editPlayerId').value = playerId;
+                document.getElementById('editPlayerName').value = player.name || '';
+                document.getElementById('editPlayerJersey').value = player.jerseyNumber || '';
+                document.getElementById('editPlayerPosition').value = player.position || '';
+                document.getElementById('editPlayerGrade').value = player.grade || '';
+
+                // Show modal
+                document.getElementById('editPlayerModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error loading player for edit:', error);
+                showToast('Failed to load player data', 'error');
+            }
+        }
+
+        async function savePlayerEdit() {
+            const playerId = document.getElementById('editPlayerId').value;
+            const name = document.getElementById('editPlayerName').value.trim();
+            const jerseyNumber = document.getElementById('editPlayerJersey').value.trim();
+            const position = document.getElementById('editPlayerPosition').value;
+            const grade = document.getElementById('editPlayerGrade').value.trim();
+
+            // Validation
+            if (!name) {
+                showToast('Player name is required', 'error');
+                return;
+            }
+
+            if (!jerseyNumber) {
+                showToast('Jersey number is required', 'error');
+                return;
+            }
+
+            try {
+                // Update player in Firestore
+                await db.collection('players').doc(playerId).update({
+                    name: name,
+                    jerseyNumber: jerseyNumber,
+                    position: position || '',
+                    grade: grade || '',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                console.log('Player updated successfully');
+                showToast('Player updated successfully!', 'success');
+                
+                // Close modal
+                closeEditPlayerModal();
+
+                // Real-time listener will automatically update the UI
+            } catch (error) {
+                console.error('Error updating player:', error);
+                showToast('Failed to update player: ' + error.message, 'error');
+            }
+        }
+
+        function closeEditPlayerModal() {
+            document.getElementById('editPlayerModal').style.display = 'none';
+        }
+
+        /* ===================================
+           COACH SECURITY ENHANCEMENTS - PHASE 3
+           =================================== */
+
+        // Input validation with enhanced security
+        function validateInput(value, type, options = {}) {
+            // Sanitize input
+            if (typeof value !== 'string') {
+                value = String(value);
+            }
+            
+            // Trim whitespace
+            value = value.trim();
+            
+            // Check required
+            if (options.required !== false && (!value || value.toString().trim() === '')) {
+                return { valid: false, error: 'This field is required' };
+            }
+            
+            switch(type) {
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        return { valid: false, error: 'Invalid email format' };
+                    }
+                    break;
+                case 'number':
+                    if (isNaN(value) || value < 0) {
+                        return { valid: false, error: 'Must be a positive number' };
+                    }
+                    break;
+                case 'text':
+                    if (value.length < 2) {
+                        return { valid: false, error: 'Must be at least 2 characters' };
+                    }
+                    // Prevent HTML injection
+                    if (/<[^>]*>/g.test(value)) {
+                        return { valid: false, error: 'HTML tags are not allowed' };
+                    }
+                    break;
+                case 'name':
+                    // Names should only contain letters, spaces, hyphens, apostrophes
+                    const nameRegex = /^[a-zA-Z\s\-']+$/;
+                    if (!nameRegex.test(value)) {
+                        return { valid: false, error: 'Names can only contain letters, spaces, hyphens, and apostrophes' };
+                    }
+                    break;
+            }
+            
+            return { valid: true, sanitized: value };
+        }
+
+        // Enhanced save with authentication and validation
+        async function saveCoachData(data, operation = 'update') {
+            try {
+                console.log('🔐 Starting secure save operation:', operation);
+                
+                // Verify authentication
+                const user = auth.currentUser;
+                if (!user) {
+                    throw new Error('Authentication required. Please log in again.');
+                }
+                
+                // Verify coach permissions
+                if (!window.currentUser || window.currentUser.role !== 'coach') {
+                    throw new Error('Insufficient permissions. Coach access required.');
+                }
+                
+                // Validate team ownership
+                if (data.teamId && window.currentUser.teamId && data.teamId !== window.currentUser.teamId) {
+                    throw new Error('Access denied. You can only modify your own team data.');
+                }
+                
+                // Validate required data
+                if (data.teamName) {
+                    const validation = validateInput(data.teamName, 'text');
+                    if (!validation.valid) {
+                        throw new Error(`Team name: ${validation.error}`);
+                    }
+                    data.teamName = validation.sanitized;
+                }
+                
+                if (data.playerName) {
+                    const validation = validateInput(data.playerName, 'name');
+                    if (!validation.valid) {
+                        throw new Error(`Player name: ${validation.error}`);
+                    }
+                    data.playerName = validation.sanitized;
+                }
+                
+                if (data.email) {
+                    const validation = validateInput(data.email, 'email');
+                    if (!validation.valid) {
+                        throw new Error(`Email: ${validation.error}`);
+                    }
+                    data.email = validation.sanitized;
+                }
+                
+                // Add security metadata
+                data.lastModified = firebase.firestore.FieldValue.serverTimestamp();
+                data.modifiedBy = user.uid;
+                data.modifiedByEmail = user.email;
+                
+                // Execute save operation
+                let result;
+                if (operation === 'create') {
+                    result = await db.collection('teams').add(data);
+                } else {
+                    result = await db.collection('teams').doc(data.teamId).update(data);
+                }
+                
+                console.log('Secure save completed successfully');
+                showSuccess('Data saved successfully!');
+                
+                return result;
+                
+            } catch (error) {
+                console.error('Secure save failed:', error);
+                showError(`Failed to save: ${error.message}`);
+                throw error;
+            }
+        }
+
+        // Enhanced success notification
+        function showSuccess(message) {
+            console.log('🎉 Success:', message);
+            showToast(message, 'success');
+        }
+
+        // Enhanced error notification
+        function showError(message) {
+            console.error('🚨 Error:', message);
+            showToast(`Error: ${message}`, 'error');
+        }
+
+        // Authentication check for sensitive operations
+        function requireAuthForAction(actionName) {
+            if (!auth.currentUser) {
+                showError('You must be logged in to perform this action');
+                return false;
+            }
+            
+            if (!window.currentUser || window.currentUser.role !== 'coach') {
+                showError('Coach privileges required for this action');
+                return false;
+            }
+            
+            console.log(`🔐 Authentication verified for: ${actionName}`);
+            return true;
+        }
+
+        console.log('🛡️ Coach Security Enhancements loaded - Phase 3 Complete');
+
+        // ========================================
+        // SECURE LOGOUT FUNCTIONALITY
+        // ========================================
+        
+        async function handleLogout() {
+            try {
+                console.log('🚪 Logout initiated by coach');
+                
+                // Clean up listeners before logout
+                cleanupListeners();
+                
+                // Sign out from Firebase
+                await firebase.auth().signOut();
+                console.log('Firebase signOut completed');
+                
+                // Clear any session data
+                sessionStorage.clear();
+                localStorage.clear();
+                console.log('Session storage cleared');
+                
+                // Clear any cached user data
+                window.currentUser = null;
+                currentCoach = null;
+                currentTeam = null;
+                teams = [];
+                players = [];
+                
+                // Navigate to login page
+                console.log('🔀 Redirecting to login page');
+                window.location.href = '/login.html?role=coach';
+                
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Error logging out. Please try again.');
+                
+                // If logout fails, at least try to redirect
+                window.location.href = '/login.html?role=coach';
+            }
+        }
+
+        // ============ SETTINGS MENU AND PASSWORD CHANGE FUNCTIONS ============
+
+        // Initialize Firebase Functions
+        const functions = firebase.functions();
+        const coachChangePassword = functions.httpsCallable('coachChangePassword');
+
+        // Toggle settings menu
+        function toggleSettingsMenu() {
+            const menu = document.getElementById('settingsMenu');
+            const isVisible = menu.style.display !== 'none';
+            
+            if (isVisible) {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        }
+
+        // Close settings menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const settingsDropdown = event.target.closest('.settings-dropdown');
+            if (!settingsDropdown) {
+                document.getElementById('settingsMenu').style.display = 'none';
+            }
+        });
+
+        // FIXED: Cleanup listeners on page unload to prevent memory leaks
+        window.addEventListener('beforeunload', function() {
+            cleanupListeners();
+        });
+
+        // Also cleanup when visibility changes (tab switches/closes)
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden') {
+                cleanupListeners();
+            }
+        });
+
+        }
+    </script>
+    
+    </div> <!-- End coach-container -->
+</body>
+</html>
+
