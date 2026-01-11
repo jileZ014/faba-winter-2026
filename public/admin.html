@@ -349,12 +349,12 @@
             <h2>FABA Admin Login</h2>
             <div id="loginStatus" class="status-message"></div>
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="loginEmail" placeholder="admin@faba.com">
+                <label>Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter username">
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="Password">
+                <input type="password" id="loginPassword" placeholder="Enter password">
             </div>
             <button class="btn btn-primary" style="width: 100%;" onclick="login()">Login</button>
             <p style="text-align: center; margin-top: 20px; color: #666;">
@@ -523,12 +523,16 @@
         </div>
     </div>
 
-    <!-- Firebase -->
+    <!-- Firebase (Firestore only - no Auth) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <script>
+        // Hardcoded Admin Credentials
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'faba26';
+        const SESSION_KEY = 'faba26_admin_auth';
+
         // Firebase configuration - FABA Winter 2026
         const firebaseConfig = {
             apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
@@ -541,14 +545,13 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth();
 
         // Base path for FABA data
         const FABA_BASE = 'faba-leagues/winter-2026';
 
-        // Check auth state
-        auth.onAuthStateChanged(user => {
-            if (user) {
+        // Check session on page load
+        function checkSession() {
+            if (sessionStorage.getItem(SESSION_KEY) === 'true') {
                 document.getElementById('loginContent').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
                 loadGamesForScoring();
@@ -558,27 +561,34 @@
                 document.getElementById('loginContent').style.display = 'block';
                 document.getElementById('adminContent').style.display = 'none';
             }
-        });
+        }
 
-        // Login
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
+        // Run session check on page load
+        checkSession();
+
+        // Login with hardcoded credentials
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
             const statusEl = document.getElementById('loginStatus');
 
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                sessionStorage.setItem(SESSION_KEY, 'true');
                 statusEl.className = 'status-message success';
                 statusEl.textContent = 'Login successful!';
-            } catch (error) {
+                setTimeout(() => {
+                    checkSession();
+                }, 500);
+            } else {
                 statusEl.className = 'status-message error';
-                statusEl.textContent = 'Login failed: ' + error.message;
+                statusEl.textContent = 'Invalid username or password';
             }
         }
 
         // Logout
         function logout() {
-            auth.signOut();
+            sessionStorage.removeItem(SESSION_KEY);
+            checkSession();
         }
 
         // Show status message
