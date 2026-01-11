@@ -40,28 +40,21 @@
     <!-- Loading Screen & Inline Styles -->
     <style>
         :root {
-            /* FABA Arizona Sun Theme */
-            --faba-red: #c41e3a;
-            --faba-orange: #f97316;
-            --faba-yellow: #fbbf24;
-            --faba-gold: #f59e0b;
+            /* Philippine Flag Colors */
+            --faba-blue: #0038a8;
+            --faba-red: #ce1126;
+            --faba-gold: #fcd116;
             --faba-white: #ffffff;
 
             /* Dark Theme */
             --faba-dark: #0a0a0a;
-            --faba-dark-secondary: #1a1a1a;
-            --faba-dark-card: #141414;
+            --faba-dark-secondary: #1a1a2e;
+            --faba-dark-card: #141428;
 
             /* Glassmorphism */
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: rgba(249, 115, 22, 0.2);
-
-            /* Gradients */
-            --gradient-warm: linear-gradient(135deg, #c41e3a 0%, #f97316 50%, #fbbf24 100%);
-            --gradient-header: linear-gradient(135deg, #c41e3a, #f97316);
-            --glow-orange: 0 0 20px rgba(249, 115, 22, 0.4);
-            --glow-yellow: 0 0 20px rgba(251, 191, 36, 0.4);
+            --glass-shadow: rgba(0, 56, 168, 0.2);
         }
 
         * {
@@ -108,14 +101,14 @@
         .loading-logo {
             width: 70px;
             height: 70px;
-            background: var(--gradient-warm);
+            background: linear-gradient(135deg, var(--faba-blue) 0%, var(--faba-red) 50%, var(--faba-gold) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
             animation: spin 2s linear infinite;
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 4px 30px rgba(252, 209, 22, 0.4);
         }
 
         .loading-text {
@@ -150,12 +143,12 @@
             background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 3px solid var(--faba-red);
+            border-bottom: 3px solid var(--faba-blue);
             padding: 15px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 30px rgba(196, 30, 58, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 56, 168, 0.3);
         }
 
         .header-container {
@@ -186,7 +179,7 @@
         .site-title h1 {
             font-family: 'Anton', sans-serif;
             font-size: 1.8rem;
-            background: linear-gradient(90deg, var(--faba-yellow), var(--faba-orange));
+            background: linear-gradient(90deg, var(--faba-gold), var(--faba-white));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -195,7 +188,7 @@
 
         .site-tagline {
             font-size: 0.85rem;
-            color: var(--faba-orange);
+            color: var(--faba-gold);
             letter-spacing: 1px;
             opacity: 0.9;
         }
@@ -219,15 +212,15 @@
         }
 
         .main-nav a:hover {
-            background: rgba(249, 115, 22, 0.2);
-            color: var(--faba-yellow);
+            background: rgba(0, 56, 168, 0.2);
+            color: var(--faba-gold);
             transform: translateY(-2px);
         }
 
         .main-nav a.active {
-            background: var(--gradient-header);
+            background: linear-gradient(135deg, var(--faba-blue), var(--faba-red));
             color: #fff;
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 4px 15px rgba(0, 56, 168, 0.4);
         }
 
         /* Mobile Navigation */
@@ -320,24 +313,25 @@
             font-family: 'Anton', sans-serif;
             font-size: 2.5rem;
             text-align: center;
-            background: linear-gradient(90deg, var(--faba-red), var(--faba-orange), var(--faba-yellow));
+            background: linear-gradient(90deg, var(--faba-gold), var(--faba-red));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 10px;
             letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(252, 209, 22, 0.3);
         }
 
         /* League Info Ticker */
         .ticker-container {
-            background: var(--gradient-warm);
+            background: linear-gradient(90deg, var(--faba-blue), var(--faba-red), var(--faba-gold));
             padding: 14px 0;
             overflow: hidden;
             white-space: nowrap;
             position: relative;
             border-radius: 12px;
             margin: 20px 0;
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 4px 20px rgba(0, 56, 168, 0.4);
         }
 
         .ticker-wrapper {
@@ -392,22 +386,22 @@
         }
 
         .week-btn:hover {
-            border-color: var(--faba-orange);
-            color: var(--faba-yellow);
+            border-color: var(--faba-gold);
+            color: var(--faba-gold);
             transform: translateY(-2px);
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 4px 15px rgba(252, 209, 22, 0.2);
         }
 
         .week-btn.active {
-            background: var(--gradient-header);
-            border-color: var(--faba-red);
+            background: linear-gradient(135deg, var(--faba-blue), var(--faba-red));
+            border-color: var(--faba-blue);
             color: #fff;
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 4px 20px rgba(0, 56, 168, 0.4);
         }
 
         .week-btn.playoffs {
-            background: linear-gradient(135deg, var(--faba-yellow), var(--faba-orange));
-            border-color: var(--faba-yellow);
+            background: linear-gradient(135deg, var(--faba-gold), var(--faba-red));
+            border-color: var(--faba-gold);
             color: var(--faba-dark);
             font-weight: 700;
         }
@@ -436,16 +430,16 @@
         }
 
         .division-tab:hover {
-            border-color: var(--faba-orange);
+            border-color: var(--faba-gold);
             transform: translateY(-3px);
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 6px 20px rgba(252, 209, 22, 0.3);
         }
 
         .division-tab.active {
-            background: linear-gradient(135deg, var(--faba-yellow), var(--faba-orange));
-            border-color: var(--faba-yellow);
+            background: linear-gradient(135deg, var(--faba-gold), var(--faba-red));
+            border-color: var(--faba-gold);
             color: var(--faba-dark);
-            box-shadow: var(--glow-yellow);
+            box-shadow: 0 6px 25px rgba(252, 209, 22, 0.4);
         }
 
         /* Section Headers */
@@ -457,7 +451,7 @@
         .section-header h2 {
             font-family: 'Anton', sans-serif;
             font-size: 2rem;
-            background: linear-gradient(90deg, var(--faba-yellow), var(--faba-orange), var(--faba-red));
+            background: linear-gradient(90deg, var(--faba-gold), var(--faba-white));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -480,7 +474,7 @@
         }
 
         .time-slot-header {
-            background: var(--gradient-header);
+            background: linear-gradient(90deg, var(--faba-blue), var(--faba-red));
             color: #fff;
             padding: 12px 20px;
             border-radius: 12px 12px 0 0;
@@ -489,7 +483,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: var(--glow-orange);
+            box-shadow: 0 4px 15px rgba(0, 56, 168, 0.3);
         }
 
         .games-grid {
@@ -515,8 +509,8 @@
 
         .game-card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--glow-orange);
-            border-color: var(--faba-orange);
+            box-shadow: 0 8px 32px rgba(0, 56, 168, 0.3);
+            border-color: var(--faba-gold);
             background: rgba(255, 255, 255, 0.08);
         }
 
@@ -532,8 +526,8 @@
         }
 
         @keyframes pulse-border {
-            0%, 100% { border-color: var(--faba-red); box-shadow: 0 0 20px rgba(196, 30, 58, 0.5); }
-            50% { border-color: var(--faba-orange); box-shadow: 0 0 25px rgba(249, 115, 22, 0.6); }
+            0%, 100% { border-color: var(--faba-red); box-shadow: 0 0 20px rgba(206, 17, 38, 0.4); }
+            50% { border-color: var(--faba-gold); box-shadow: 0 0 25px rgba(252, 209, 22, 0.5); }
         }
 
         .game-header {
@@ -545,23 +539,23 @@
         }
 
         .game-court {
-            background: linear-gradient(135deg, var(--faba-yellow), var(--faba-orange));
+            background: linear-gradient(135deg, var(--faba-gold), var(--faba-red));
             color: var(--faba-dark);
             padding: 5px 12px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 12px;
-            box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+            box-shadow: 0 2px 8px rgba(252, 209, 22, 0.3);
         }
 
         .game-division {
-            background: linear-gradient(135deg, var(--faba-red), rgba(196, 30, 58, 0.8));
+            background: linear-gradient(135deg, var(--faba-blue), rgba(0, 56, 168, 0.8));
             color: var(--faba-white);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
-            box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 56, 168, 0.3);
         }
 
         .game-status {
@@ -629,7 +623,7 @@
         }
 
         .standings-table th {
-            background: var(--gradient-header);
+            background: linear-gradient(90deg, var(--faba-blue), var(--faba-red));
             color: #fff;
             padding: 16px 12px;
             text-align: left;
@@ -646,11 +640,11 @@
         }
 
         .standings-table tr:hover {
-            background: rgba(249, 115, 22, 0.1);
+            background: rgba(0, 56, 168, 0.1);
         }
 
         .standings-table tr:first-child td {
-            background: rgba(251, 191, 36, 0.15);
+            background: rgba(252, 209, 22, 0.1);
         }
 
         .rank {
@@ -684,7 +678,7 @@
         /* Footer */
         .site-footer {
             background: linear-gradient(180deg, var(--faba-dark-secondary), var(--faba-dark));
-            border-top: 3px solid var(--faba-red);
+            border-top: 3px solid var(--faba-blue);
             padding: 40px 20px;
             margin-top: 60px;
             text-align: center;
@@ -703,7 +697,7 @@
         }
 
         .footer-tagline {
-            background: linear-gradient(90deg, var(--faba-yellow), var(--faba-orange), var(--faba-red));
+            background: linear-gradient(90deg, var(--faba-gold), var(--faba-white));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
