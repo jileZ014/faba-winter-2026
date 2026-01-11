@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FABA Winter 2026 | Filipino American Basketball Arizona</title>
+    <title>38+ Division | FABA Winter 2026</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="FABA Winter 2026 - Filipino American Basketball Arizona league with Open and 38+ divisions. Live scoring, standings, and schedule.">
+    <meta name="description" content="FABA Winter 2026 38+ Division - Filipino American Basketball Arizona league for players 38 and over. Live scoring, standings, and schedule.">
     <meta name="keywords" content="FABA, Filipino American Basketball Arizona, basketball league, Arizona basketball, Winter 2026, Chandler AZ">
     <meta name="author" content="FABA">
     <meta name="robots" content="index, follow">
@@ -821,9 +821,9 @@
             </button>
             <nav class="main-nav" id="mainNav">
                 <ul>
-                    <li><a href="index.html" class="active">HOME</a></li>
+                    <li><a href="index.html">HOME</a></li>
                     <li><a href="open.html">OPEN DIVISION</a></li>
-                    <li><a href="38plus.html">38+ DIVISION</a></li>
+                    <li><a href="38plus.html" class="active">38+ DIVISION</a></li>
                 </ul>
             </nav>
         </div>
@@ -832,7 +832,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="page-title">
-            <h1>FABA WINTER 2026</h1>
+            <h1>38+ DIVISION</h1>
         </div>
 
         <!-- League Info Ticker -->
@@ -878,11 +878,11 @@
             <button class="week-btn playoffs" data-week="8" onclick="selectWeek(8)">Week 8 - Finals</button>
         </div>
 
-        <!-- Division Tabs -->
-        <div class="division-tabs">
-            <button class="division-tab active" data-division="all" onclick="selectDivision('all')">ALL</button>
+        <!-- Division Tabs (hidden on division-specific page) -->
+        <div class="division-tabs" style="display: none;">
+            <button class="division-tab" data-division="all" onclick="selectDivision('all')">ALL</button>
             <button class="division-tab" data-division="Open" onclick="selectDivision('Open')">OPEN</button>
-            <button class="division-tab" data-division="38+" onclick="selectDivision('38+')">38+</button>
+            <button class="division-tab active" data-division="38+" onclick="selectDivision('38+')">38+</button>
         </div>
 
         <!-- Schedule Section -->
@@ -964,7 +964,7 @@
 
         // Global state
         let currentWeek = 1;
-        let currentDivision = 'all';
+        let currentDivision = '38+';
         let allGamesData = [];
         let allTeamsData = [];
 

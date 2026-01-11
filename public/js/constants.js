@@ -3,7 +3,7 @@
 // Season Configuration
 window.SEASON_CONFIG = {
     NAME: 'FABA Winter 2026',
-    FULL_NAME: 'Filipino American Basketball Association Winter 2026',
+    FULL_NAME: 'Filipino American Basketball Arizona Winter 2026',
     START_DATE: '2026-01-11',
     END_DATE: '2026-03-29',
     PLAYOFFS_START: '2026-03-22',

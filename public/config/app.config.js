@@ -4,7 +4,7 @@
 const APP_CONFIG = {
     // Application Info
     name: 'FABA Winter 2026',
-    fullName: 'Filipino American Basketball Association Winter 2026',
+    fullName: 'Filipino American Basketball Arizona Winter 2026',
     version: '1.0.0',
     build: new Date().toISOString().split('T')[0].replace(/-/g, ''),
 
@@ -55,8 +55,8 @@ const APP_CONFIG = {
 
     // SEO Configuration
     seo: {
-        title: 'FABA Winter 2026 - Filipino American Basketball Association',
-        description: 'Filipino American Basketball Association Winter 2026 League - 8-week basketball season featuring Open and 38+ divisions at Compass Sports Performance Gym in Chandler, AZ.',
+        title: 'FABA Winter 2026 - Filipino American Basketball Arizona',
+        description: 'Filipino American Basketball Arizona Winter 2026 League - 8-week basketball season featuring Open and 38+ divisions at Compass Sports Performance Gym in Chandler, AZ.',
         keywords: 'FABA, Filipino basketball, Arizona basketball league, adult basketball, Chandler AZ, basketball tournament',
         author: 'FABA',
         ogImage: '/images/faba-logo.png'
