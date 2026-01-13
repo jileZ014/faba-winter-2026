@@ -340,6 +340,77 @@
         #loginContent {
             display: block;
         }
+
+        /* Week Dates Management */
+        .week-dates-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .week-date-row {
+            display: grid;
+            grid-template-columns: 140px 1fr 150px;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: var(--faba-dark-secondary);
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+
+        .week-date-row.bye-week {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: var(--faba-gold);
+        }
+
+        .week-date-row.playoff-week {
+            background: rgba(220, 38, 38, 0.1);
+            border-color: var(--faba-red);
+        }
+
+        .week-label {
+            font-weight: 600;
+            color: var(--faba-gold);
+        }
+
+        .week-date-input {
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            background: var(--faba-dark);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .week-date-input:focus {
+            border-color: var(--faba-gold);
+            outline: none;
+        }
+
+        .bye-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bye-checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .bye-checkbox-container label {
+            color: #aaa;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .week-date-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -380,6 +451,7 @@
                 <button class="admin-tab" onclick="showPanel('games')">Manage Games</button>
                 <button class="admin-tab" onclick="showPanel('teams')">Manage Teams</button>
                 <button class="admin-tab" onclick="showPanel('standings')">Recalculate Standings</button>
+                <button class="admin-tab" onclick="showPanel('weekDates')">Week Dates</button>
             </div>
 
             <!-- Scores Panel -->
@@ -398,8 +470,9 @@
                             <option value="4">Week 4</option>
                             <option value="5">Week 5</option>
                             <option value="6">Week 6</option>
-                            <option value="7">Week 7 - Playoffs</option>
-                            <option value="8">Week 8 - Finals</option>
+                            <option value="7">Week 7</option>
+                            <option value="8">Week 8 - Playoffs</option>
+                            <option value="9">Week 9 - Finals</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -407,7 +480,7 @@
                         <select id="scoreDivisionFilter" onchange="loadGamesForScoring()">
                             <option value="all">All</option>
                             <option value="Open">Open</option>
-                            <option value="38+">38+</option>
+                            <option value="40+">40+</option>
                         </select>
                     </div>
                 </div>
@@ -434,14 +507,15 @@
                             <option value="5">Week 5</option>
                             <option value="6">Week 6</option>
                             <option value="7">Week 7</option>
-                            <option value="8">Week 8</option>
+                            <option value="8">Week 8 - Playoffs</option>
+                            <option value="9">Week 9 - Finals</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Division</label>
                         <select id="newGameDivision" onchange="loadTeamsForGame()">
                             <option value="Open">Open</option>
-                            <option value="38+">38+</option>
+                            <option value="40+">40+</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -486,7 +560,7 @@
                         <label>Division</label>
                         <select id="newTeamDivision">
                             <option value="Open">Open</option>
-                            <option value="38+">38+</option>
+                            <option value="40+">40+</option>
                         </select>
                     </div>
                 </div>
@@ -514,11 +588,28 @@
                     <select id="recalcDivision">
                         <option value="all">All Divisions</option>
                         <option value="Open">Open</option>
-                        <option value="38+">38+</option>
+                        <option value="40+">40+</option>
                     </select>
                 </div>
 
                 <button class="btn btn-success" onclick="recalculateStandings()">Recalculate Standings</button>
+            </div>
+
+            <!-- Week Dates Panel -->
+            <div id="weekDatesPanel" class="admin-panel">
+                <div class="panel-header">
+                    <h2>Week Date Management</h2>
+                </div>
+
+                <p style="color: #888; margin-bottom: 20px;">
+                    Adjust week dates for bye weeks or schedule changes. Changes are reflected on the public site.
+                </p>
+
+                <div id="weekDatesContainer" class="week-dates-grid">
+                    <p style="color: #888; text-align: center; padding: 40px;">Loading week configuration...</p>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveWeekDates()" style="margin-top: 20px;">Save All Changes</button>
             </div>
         </div>
     </div>
@@ -611,6 +702,7 @@
 
             if (panelName === 'scores') loadGamesForScoring();
             if (panelName === 'teams') loadTeamsList();
+            if (panelName === 'weekDates') loadWeekConfig();
         }
 
         // Load games for scoring
@@ -904,6 +996,130 @@
                 showStatus('Standings recalculated successfully!');
             } catch (error) {
                 showStatus('Error recalculating standings: ' + error.message, 'error');
+            }
+        }
+
+        // =====================
+        // Week Dates Management
+        // =====================
+
+        // Default week configuration
+        function getDefaultWeeks() {
+            return {
+                week1: { date: '2026-01-11', label: 'Week 1', isBye: false, isPlayoff: false },
+                week2: { date: '2026-01-18', label: 'Week 2', isBye: false, isPlayoff: false },
+                week3: { date: '2026-01-25', label: 'Week 3', isBye: false, isPlayoff: false },
+                week4: { date: '2026-02-01', label: 'Week 4', isBye: false, isPlayoff: false },
+                week5: { date: '2026-02-08', label: 'Week 5', isBye: false, isPlayoff: false },
+                week6: { date: '2026-02-15', label: 'Week 6', isBye: false, isPlayoff: false },
+                week7: { date: '2026-02-22', label: 'Week 7', isBye: false, isPlayoff: false },
+                week8: { date: '2026-03-01', label: 'Week 8 - Playoffs', isBye: false, isPlayoff: true },
+                week9: { date: '2026-03-08', label: 'Week 9 - Finals', isBye: false, isPlayoff: true }
+            };
+        }
+
+        // Load week configuration from Firebase
+        async function loadWeekConfig() {
+            const container = document.getElementById('weekDatesContainer');
+
+            try {
+                const docRef = db.collection(FABA_BASE).doc('config');
+                const doc = await docRef.get();
+
+                let weeks;
+                if (doc.exists && doc.data().weeks) {
+                    weeks = doc.data().weeks;
+                } else {
+                    weeks = getDefaultWeeks();
+                    // Initialize default config in Firebase
+                    await docRef.set({ weeks }, { merge: true });
+                }
+
+                renderWeekDates(weeks);
+            } catch (error) {
+                console.error('Error loading week config:', error);
+                // Use default weeks if Firebase fails
+                renderWeekDates(getDefaultWeeks());
+            }
+        }
+
+        // Render week date inputs
+        function renderWeekDates(weeks) {
+            const container = document.getElementById('weekDatesContainer');
+            container.innerHTML = '';
+
+            const sortedKeys = Object.keys(weeks).sort((a, b) => {
+                const numA = parseInt(a.replace('week', ''));
+                const numB = parseInt(b.replace('week', ''));
+                return numA - numB;
+            });
+
+            sortedKeys.forEach(weekKey => {
+                const week = weeks[weekKey];
+                const weekNum = weekKey.replace('week', '');
+
+                const rowClasses = ['week-date-row'];
+                if (week.isBye) rowClasses.push('bye-week');
+                if (week.isPlayoff) rowClasses.push('playoff-week');
+
+                const row = document.createElement('div');
+                row.className = rowClasses.join(' ');
+                row.dataset.week = weekKey;
+
+                row.innerHTML = `
+                    <span class="week-label">${week.label}</span>
+                    <input type="date"
+                           class="week-date-input"
+                           value="${week.date}"
+                           data-week="${weekKey}">
+                    <div class="bye-checkbox-container">
+                        <input type="checkbox"
+                               id="bye-${weekKey}"
+                               ${week.isBye ? 'checked' : ''}
+                               onchange="toggleByeWeek('${weekKey}', this.checked)">
+                        <label for="bye-${weekKey}">Bye Week</label>
+                    </div>
+                `;
+
+                container.appendChild(row);
+            });
+        }
+
+        // Toggle bye week styling
+        function toggleByeWeek(weekKey, isBye) {
+            const row = document.querySelector(`[data-week="${weekKey}"]`);
+            if (isBye) {
+                row.classList.add('bye-week');
+            } else {
+                row.classList.remove('bye-week');
+            }
+        }
+
+        // Save all week dates to Firebase
+        async function saveWeekDates() {
+            const rows = document.querySelectorAll('.week-date-row');
+            const weeks = {};
+
+            rows.forEach(row => {
+                const weekKey = row.dataset.week;
+                const dateInput = row.querySelector('.week-date-input');
+                const byeCheckbox = row.querySelector('input[type="checkbox"]');
+                const labelSpan = row.querySelector('.week-label');
+
+                weeks[weekKey] = {
+                    date: dateInput.value,
+                    label: labelSpan.textContent,
+                    isBye: byeCheckbox.checked,
+                    isPlayoff: row.classList.contains('playoff-week')
+                };
+            });
+
+            try {
+                await db.collection(FABA_BASE).doc('config').set({ weeks }, { merge: true });
+                showStatus('Week dates saved successfully!');
+            } catch (error) {
+                console.error('Error saving week dates:', error);
+                showStatus('Error saving week dates: ' + error.message, 'error');
             }
         }
     </script>

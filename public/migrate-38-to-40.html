@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FABA - Migration: 38+ to 40+</title>
+    <style>
+        :root {
+            --faba-red: #dc2626;
+            --faba-gold: #fbbf24;
+            --faba-dark: #0a0a0a;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--faba-dark);
+            color: #fff;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: var(--faba-gold);
+            margin-bottom: 30px;
+        }
+        .info {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--faba-gold);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid var(--faba-red);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        button {
+            background: var(--faba-gold);
+            color: var(--faba-dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button.danger {
+            background: var(--faba-red);
+            color: #fff;
+        }
+        #output {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #22c55e; }
+        .error { color: #dc2626; }
+        .info-text { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>FABA Migration: 38+ Division to 40+ Division</h1>
+
+    <div class="info">
+        <h3>What This Script Does:</h3>
+        <ul>
+            <li>Updates all teams with division "38+" to "40+"</li>
+            <li>Updates all games with division "38+" to "40+"</li>
+            <li>Creates a backup log of all changes made</li>
+        </ul>
+    </div>
+
+    <div class="warning">
+        <h3>Important:</h3>
+        <ul>
+            <li>Run this script ONLY ONCE</li>
+            <li>Make sure you have backed up your Firebase data before running</li>
+            <li>Use "Check Status" first to see current data before migrating</li>
+        </ul>
+    </div>
+
+    <button onclick="checkStatus()">Check Status</button>
+    <button onclick="runMigration()" class="danger">Run Migration</button>
+
+    <div id="output">Click "Check Status" to see current division data...</div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTKErNXWVIFsEGhqYqQ2XE7eZGLTyoK_M",
+            authDomain: "faba-winter-2026.firebaseapp.com",
+            projectId: "faba-winter-2026",
+            storageBucket: "faba-winter-2026.firebasestorage.app",
+            messagingSenderId: "932225692280",
+            appId: "1:932225692280:web:c56fde51eef1f246adf38d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const FABA_BASE = 'faba-leagues/winter-2026';
+
+        const output = document.getElementById('output');
+
+        function log(message, type = '') {
+            const timestamp = new Date().toLocaleTimeString();
+            let className = '';
+            if (type === 'success') className = 'success';
+            if (type === 'error') className = 'error';
+            if (type === 'info') className = 'info-text';
+
+            output.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        async function checkStatus() {
+            output.innerHTML = '';
+            log('Checking current division status...', 'info');
+
+            try {
+                // Check teams
+                const teamsSnapshot = await db.collection(FABA_BASE + '/teams').get();
+                let teams38 = 0;
+                let teams40 = 0;
+                let teamsOpen = 0;
+
+                teamsSnapshot.forEach(doc => {
+                    const division = doc.data().division;
+                    if (division === '38+') teams38++;
+                    else if (division === '40+') teams40++;
+                    else if (division === 'Open') teamsOpen++;
+                });
+
+                log(`\n--- TEAMS ---`);
+                log(`Open Division: ${teamsOpen} teams`);
+                log(`38+ Division: ${teams38} teams`);
+                log(`40+ Division: ${teams40} teams`);
+
+                // Check games
+                const gamesSnapshot = await db.collection(FABA_BASE + '/games').get();
+                let games38 = 0;
+                let games40 = 0;
+                let gamesOpen = 0;
+
+                gamesSnapshot.forEach(doc => {
+                    const division = doc.data().division;
+                    if (division === '38+') games38++;
+                    else if (division === '40+') games40++;
+                    else if (division === 'Open') gamesOpen++;
+                });
+
+                log(`\n--- GAMES ---`);
+                log(`Open Division: ${gamesOpen} games`);
+                log(`38+ Division: ${games38} games`);
+                log(`40+ Division: ${games40} games`);
+
+                if (teams38 > 0 || games38 > 0) {
+                    log(`\n>>> Migration NEEDED: Found ${teams38} teams and ${games38} games with "38+" division`, 'info');
+                } else if (teams40 > 0 || games40 > 0) {
+                    log(`\n>>> Migration COMPLETE: All records already use "40+" division`, 'success');
+                } else {
+                    log(`\n>>> No 38+ or 40+ data found yet.`);
+                }
+
+            } catch (error) {
+                log(`Error checking status: ${error.message}`, 'error');
+            }
+        }
+
+        async function runMigration() {
+            if (!confirm('Are you sure you want to run the migration? This will update all "38+" records to "40+".')) {
+                return;
+            }
+
+            output.innerHTML = '';
+            log('Starting migration: 38+ -> 40+', 'info');
+            log('==========================================');
+
+            try {
+                // Migrate teams
+                log('\n--- Migrating TEAMS ---');
+                const teamsSnapshot = await db.collection(FABA_BASE + '/teams')
+                    .where('division', '==', '38+')
+                    .get();
+
+                if (teamsSnapshot.empty) {
+                    log('No teams with "38+" division found.');
+                } else {
+                    const teamsBatch = db.batch();
+                    teamsSnapshot.forEach(doc => {
+                        log(`  Updating team: ${doc.data().name}`);
+                        teamsBatch.update(doc.ref, { division: '40+' });
+                    });
+                    await teamsBatch.commit();
+                    log(`Updated ${teamsSnapshot.size} teams to "40+" division`, 'success');
+                }
+
+                // Migrate games
+                log('\n--- Migrating GAMES ---');
+                const gamesSnapshot = await db.collection(FABA_BASE + '/games')
+                    .where('division', '==', '38+')
+                    .get();
+
+                if (gamesSnapshot.empty) {
+                    log('No games with "38+" division found.');
+                } else {
+                    const gamesBatch = db.batch();
+                    gamesSnapshot.forEach(doc => {
+                        const game = doc.data();
+                        log(`  Updating game: ${game.homeTeam} vs ${game.awayTeam} (Week ${game.week})`);
+                        gamesBatch.update(doc.ref, { division: '40+' });
+                    });
+                    await gamesBatch.commit();
+                    log(`Updated ${gamesSnapshot.size} games to "40+" division`, 'success');
+                }
+
+                log('\n==========================================');
+                log('MIGRATION COMPLETE!', 'success');
+                log('You can run "Check Status" to verify the changes.');
+
+            } catch (error) {
+                log(`\nMigration error: ${error.message}`, 'error');
+                log('Some changes may have been applied. Please check the status.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

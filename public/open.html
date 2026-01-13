@@ -13,7 +13,7 @@
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="FABA Winter 2026 - Filipino American Basketball Arizona">
-    <meta property="og:description" content="FABA Winter 2026 Basketball League - Open and 38+ divisions. 8-week season from January 11 to March 29, 2026.">
+    <meta property="og:description" content="FABA Winter 2026 Basketball League - Open and 40+ divisions. 9-week season from January 11 to April 5, 2026.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://faba-league.netlify.app">
     <meta property="og:image" content="https://faba-league.netlify.app/images/faba-logo.png">
@@ -823,7 +823,7 @@
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="open.html" class="active">OPEN DIVISION</a></li>
-                    <li><a href="38plus.html">38+ DIVISION</a></li>
+                    <li><a href="40plus.html">40+ DIVISION</a></li>
                 </ul>
             </nav>
         </div>
@@ -841,9 +841,9 @@
                 <div class="ticker-content">
                     <span class="ticker-item">&#127936; FABA WINTER 2026 BASKETBALL LEAGUE</span>
                     <span class="ticker-separator">|</span>
-                    <span class="ticker-item">&#128197; Season: Jan 11 - Mar 29, 2026 (8 Weeks)</span>
+                    <span class="ticker-item">&#128197; Season: Jan 11 - Apr 5, 2026 (9 Weeks)</span>
                     <span class="ticker-separator">|</span>
-                    <span class="ticker-item">&#127942; 2 Divisions: Open & 38+</span>
+                    <span class="ticker-item">&#127942; 2 Divisions: Open & 40+</span>
                     <span class="ticker-separator">|</span>
                     <span class="ticker-item">&#128205; Compass Sports Performance Gym</span>
                     <span class="ticker-separator">|</span>
@@ -853,9 +853,9 @@
                     <span class="ticker-separator">|</span>
                     <span class="ticker-item">&#127936; FABA WINTER 2026 BASKETBALL LEAGUE</span>
                     <span class="ticker-separator">|</span>
-                    <span class="ticker-item">&#128197; Season: Jan 11 - Mar 29, 2026 (8 Weeks)</span>
+                    <span class="ticker-item">&#128197; Season: Jan 11 - Apr 5, 2026 (9 Weeks)</span>
                     <span class="ticker-separator">|</span>
-                    <span class="ticker-item">&#127942; 2 Divisions: Open & 38+</span>
+                    <span class="ticker-item">&#127942; 2 Divisions: Open & 40+</span>
                     <span class="ticker-separator">|</span>
                     <span class="ticker-item">&#128205; Compass Sports Performance Gym</span>
                     <span class="ticker-separator">|</span>
@@ -874,15 +874,16 @@
             <button class="week-btn" data-week="4" onclick="selectWeek(4)">Week 4</button>
             <button class="week-btn" data-week="5" onclick="selectWeek(5)">Week 5</button>
             <button class="week-btn" data-week="6" onclick="selectWeek(6)">Week 6</button>
-            <button class="week-btn playoffs" data-week="7" onclick="selectWeek(7)">Week 7 - Playoffs</button>
-            <button class="week-btn playoffs" data-week="8" onclick="selectWeek(8)">Week 8 - Finals</button>
+            <button class="week-btn" data-week="7" onclick="selectWeek(7)">Week 7</button>
+            <button class="week-btn playoffs" data-week="8" onclick="selectWeek(8)">Week 8 - Playoffs</button>
+            <button class="week-btn playoffs" data-week="9" onclick="selectWeek(9)">Week 9 - Finals</button>
         </div>
 
         <!-- Division Tabs (hidden on division-specific page) -->
         <div class="division-tabs" style="display: none;">
             <button class="division-tab" data-division="all" onclick="selectDivision('all')">ALL</button>
             <button class="division-tab active" data-division="Open" onclick="selectDivision('Open')">OPEN</button>
-            <button class="division-tab" data-division="38+" onclick="selectDivision('38+')">38+</button>
+            <button class="division-tab" data-division="40+" onclick="selectDivision('40+')">40+</button>
         </div>
 
         <!-- Schedule Section -->
@@ -942,7 +943,7 @@
             address: '255 W. Warner Rd, Chandler AZ 85225',
             divisions: [
                 { id: 'open', name: 'Open', displayName: 'OPEN DIVISION' },
-                { id: '38plus', name: '38+', displayName: '38+ DIVISION' }
+                { id: '40plus', name: '40+', displayName: '40+ DIVISION' }
             ],
             weeks: [
                 { week: 1, date: '2026-01-11', label: 'January 11, 2026' },
@@ -951,8 +952,9 @@
                 { week: 4, date: '2026-02-01', label: 'February 1, 2026' },
                 { week: 5, date: '2026-02-08', label: 'February 8, 2026' },
                 { week: 6, date: '2026-02-15', label: 'February 15, 2026' },
-                { week: 7, date: '2026-03-22', label: 'March 22, 2026 - PLAYOFFS', isPlayoff: true },
-                { week: 8, date: '2026-03-29', label: 'March 29, 2026 - FINALS', isPlayoff: true }
+                { week: 7, date: '2026-02-22', label: 'February 22, 2026' },
+                { week: 8, date: '2026-03-01', label: 'March 1, 2026 - PLAYOFFS', isPlayoff: true },
+                { week: 9, date: '2026-03-08', label: 'March 8, 2026 - FINALS', isPlayoff: true }
             ],
             colors: {
                 primary: '#dc2626',
@@ -1189,7 +1191,7 @@
             if (currentDivision === 'all') {
                 // Group by division
                 const openTeams = teams.filter(t => t.division === 'Open');
-                const seniorTeams = teams.filter(t => t.division === '38+');
+                const seniorTeams = teams.filter(t => t.division === '40+');
 
                 if (openTeams.length > 0) {
                     html += '<h3 style="color: var(--faba-gold); margin: 20px 0 10px; font-family: Anton;">OPEN DIVISION</h3>';
@@ -1197,7 +1199,7 @@
                 }
 
                 if (seniorTeams.length > 0) {
-                    html += '<h3 style="color: var(--faba-gold); margin: 30px 0 10px; font-family: Anton;">38+ DIVISION</h3>';
+                    html += '<h3 style="color: var(--faba-gold); margin: 30px 0 10px; font-family: Anton;">40+ DIVISION</h3>';
                     html += createStandingsTable(seniorTeams);
                 }
             } else {

@@ -5,9 +5,9 @@ window.SEASON_CONFIG = {
     NAME: 'FABA Winter 2026',
     FULL_NAME: 'Filipino American Basketball Arizona Winter 2026',
     START_DATE: '2026-01-11',
-    END_DATE: '2026-03-29',
-    PLAYOFFS_START: '2026-03-22',
-    TOTAL_WEEKS: 8,
+    END_DATE: '2026-04-05',
+    PLAYOFFS_START: '2026-03-01',
+    TOTAL_WEEKS: 9,
     VENUE: {
         name: 'Compass Sports Performance Gym',
         address: '255 W. Warner Rd, Chandler AZ 85225'
@@ -17,7 +17,7 @@ window.SEASON_CONFIG = {
 // Division Configuration
 window.DIVISIONS = [
     { id: 'open', name: 'Open', displayName: 'Open Division', order: 1 },
-    { id: '38plus', name: '38+', displayName: '38+ Division', order: 2 }
+    { id: '40plus', name: '40+', displayName: '40+ Division', order: 2 }
 ];
 
 // Week Schedule
@@ -28,8 +28,9 @@ window.WEEKS = [
     { week: 4, date: '2026-02-01', label: 'February 1, 2026' },
     { week: 5, date: '2026-02-08', label: 'February 8, 2026' },
     { week: 6, date: '2026-02-15', label: 'February 15, 2026' },
-    { week: 7, date: '2026-03-22', label: 'March 22, 2026 - PLAYOFFS', isPlayoff: true },
-    { week: 8, date: '2026-03-29', label: 'March 29, 2026 - FINALS', isPlayoff: true }
+    { week: 7, date: '2026-02-22', label: 'February 22, 2026' },
+    { week: 8, date: '2026-03-01', label: 'March 1, 2026 - PLAYOFFS', isPlayoff: true },
+    { week: 9, date: '2026-03-08', label: 'March 8, 2026 - FINALS', isPlayoff: true }
 ];
 
 // League Settings
@@ -74,8 +75,8 @@ window.OPEN_TEAMS = [
     'Team Unknown'
 ];
 
-// 38+ Division Teams (15 teams)
-window.PLUS38_TEAMS = [
+// 40+ Division Teams (15 teams)
+window.PLUS40_TEAMS = [
     'Freedom Waters',
     'Wolves',
     'Takuza',
